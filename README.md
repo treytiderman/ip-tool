@@ -38,11 +38,13 @@ npm run tauri build
 ### TODO
 
 - [ ] alternating colors shift with contextmenu
-- [ ] Interface friendly name change
 - [ ] row moving
 - [ ] table sorting
 - [ ] routes page
+- [ ] Hide interface
+- [ ] More options to add presets
 - [ ] Network Scan page
+- [x] Interface friendly name change
 
 ### Network Scan
 
