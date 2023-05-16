@@ -103,3 +103,21 @@ pub fn set_interface_name(interface: &str, interface_new_name: &str) -> bool {
     let output = netsh::set_interface_name(interface, interface_new_name);
     output
 }
+
+#[tauri::command]
+pub fn release() {
+    println!("release");
+    netsh::release();
+}
+
+#[tauri::command]
+pub fn renew() {
+    println!("renew");
+    netsh::renew();
+}
+
+#[tauri::command]
+pub fn flushdns() {
+    println!("flushdns");
+    netsh::flushdns();
+}

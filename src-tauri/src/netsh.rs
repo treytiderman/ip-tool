@@ -46,9 +46,9 @@ fn cmd(program: &str, args: &str) -> Result<Vec<String>, Error> {
     let lines: Vec<String> = reader.lines().filter_map(|line| line.ok()).collect();
     Ok(lines)
 }
-fn netsh_cmd(args: &str) -> Result<Vec<String>, Error> {
+fn windows_cmd(program: &str, args: &str) -> Result<Vec<String>, Error> {
     if env::consts::OS == "windows" {
-        let lines = cmd("netsh", args);
+        let lines = cmd(program, args);
         return lines;
     }
     else {
@@ -56,7 +56,7 @@ fn netsh_cmd(args: &str) -> Result<Vec<String>, Error> {
     }
 }
 fn netsh_cmd_bool(args: &str) -> bool {
-    let lines = netsh_cmd(args).unwrap();
+    let lines = windows_cmd("netsh", args).unwrap();
     let first_line = lines.get(0).unwrap();
     
     let mut success = false;
@@ -93,7 +93,7 @@ pub fn is_Ipv4Addr(ip: &str) -> bool {
 }
 pub fn get_interfaces() -> Vec<Interface> {
     // netsh interface ipv4 show config
-    let lines = netsh_cmd("interface ipv4 show config").unwrap();
+    let lines = windows_cmd("netsh", "interface ipv4 show config").unwrap();
 
     let mut nics: Vec<Interface> = vec![];
     let mut new_interface = false;
@@ -262,6 +262,21 @@ pub fn set_interface_name(interface: &str, interface_new_name: &str) -> bool {
     let args = format!("interface set interface name=\"{interface}\" newname=\"{interface_new_name}\"");
     let success = netsh_cmd_bool(args.as_str());
     success
+}
+pub fn release() {
+    // ipconfig /release
+    let args = format!("/release");
+    let lines = windows_cmd("ipconfig", args.as_str()).unwrap();
+}
+pub fn renew() {
+    // ipconfig /renew
+    let args = format!("/renew");
+    let lines = windows_cmd("ipconfig", args.as_str()).unwrap();
+}
+pub fn flushdns() {
+    // ipconfig /flushdns
+    let args = format!("/flushdns");
+    let lines = windows_cmd("ipconfig", args.as_str()).unwrap();
 }
 
 #[cfg(test)]

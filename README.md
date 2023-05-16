@@ -33,6 +33,12 @@ npm run tauri dev
 npm run tauri build
 ```
 
+### Svelte Only
+
+```
+npm run dev
+```
+
 # Notes
 
 ### TODO

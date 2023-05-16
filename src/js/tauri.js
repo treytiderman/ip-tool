@@ -115,3 +115,12 @@ export async function set_interface_name(nic, new_name) {
     });
     return output;
 }
+export async function release() {
+    await invoke("release")
+}
+export async function renew() {
+    await invoke("renew")
+}
+export async function flushdns() {
+    await invoke("flushdns")
+}

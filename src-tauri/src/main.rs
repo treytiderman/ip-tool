@@ -33,6 +33,9 @@ fn main() {
             invoke::set_metric,
             invoke::set_metric_auto,
             invoke::set_interface_name,
+            invoke::release,
+            invoke::renew,
+            invoke::flushdns,
         ])
         .plugin(tauri_plugin_autostart::init(
             MacosLauncher::LaunchAgent,

@@ -42,7 +42,6 @@ html {
   
   /*  Border, Border Radius, Outline */
   --border-thickness: 1px;
-  --border-thickness: 2px;
   --border: var(--border-thickness) solid var(--color-border);
   --radius: 0.4rem;
   --radius-lg: 0.8rem;
