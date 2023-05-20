@@ -5,7 +5,7 @@ html {
   --color-grey-100: hsl(220, 10%,  8%);
   --color-grey-200: hsl(220, 10%, 10%);
   --color-grey-300: hsl(220, 10%, 16%);
-  --color-grey-400: hsl(220, 10%, 35%);
+  --color-grey-400: hsl(220, 10%, 20%);
   --color-grey-500: hsl(220, 10%, 55%);
   --color-grey-600: hsl(220, 10%, 65%);
   --color-grey-700: hsl(220, 10%, 78%);
@@ -21,8 +21,8 @@ html {
   --color-red-500: hsl(5, 90%, 62%);
   --color-red-600: hsl(5, 85%, 65%);
   --color-red-700: hsl(5, 90%, 78%);
-  --color-red-800: hsl(5, 90%, 85%);
-  --color-red-900: hsl(5, 99%, 94%);
+  --color-red-800: hsl(5, 90%, 88%);
+  --color-red-900: hsl(5, 99%, 90%);
 
   /* Orange */
   --color-orange-100: hsl(30, 99%,  4%);
@@ -32,8 +32,8 @@ html {
   --color-orange-500: hsl(30, 90%, 62%);
   --color-orange-600: hsl(30, 85%, 65%);
   --color-orange-700: hsl(30, 90%, 75%);
-  --color-orange-800: hsl(30, 90%, 85%);
-  --color-orange-900: hsl(30, 99%, 94%);
+  --color-orange-800: hsl(30, 90%, 88%);
+  --color-orange-900: hsl(30, 99%, 90%);
 
   /* Yellow */
   --color-yellow-100: hsl(60, 99%,  4%);
@@ -43,8 +43,8 @@ html {
   --color-yellow-500: hsl(60, 90%, 62%);
   --color-yellow-600: hsl(60, 85%, 65%);
   --color-yellow-700: hsl(60, 82%, 76%);
-  --color-yellow-800: hsl(60, 90%, 85%);
-  --color-yellow-900: hsl(60, 99%, 94%);
+  --color-yellow-800: hsl(60, 90%, 88%);
+  --color-yellow-900: hsl(60, 99%, 90%);
 
   /* Lime */
   --color-lime-100: hsl(95, 99%,  4%);
@@ -54,8 +54,8 @@ html {
   --color-lime-500: hsl(95, 90%, 62%);
   --color-lime-600: hsl(95, 85%, 65%);
   --color-lime-700: hsl(95, 90%, 78%);
-  --color-lime-800: hsl(95, 90%, 85%);
-  --color-lime-900: hsl(95, 99%, 94%);
+  --color-lime-800: hsl(95, 90%, 88%);
+  --color-lime-900: hsl(95, 99%, 90%);
 
   /* Green */
   --color-green-100: hsl(130, 99%,  4%);
@@ -65,8 +65,8 @@ html {
   --color-green-500: hsl(130, 90%, 62%);
   --color-green-600: hsl(130, 85%, 65%);
   --color-green-700: hsl(130, 90%, 78%);
-  --color-green-800: hsl(130, 90%, 85%);
-  --color-green-900: hsl(130, 99%, 94%);
+  --color-green-800: hsl(130, 90%, 88%);
+  --color-green-900: hsl(130, 99%, 90%);
 
   /* Cyan */
   --color-cyan-100: hsl(180, 99%,  4%);
@@ -76,8 +76,8 @@ html {
   --color-cyan-500: hsl(180, 90%, 62%);
   --color-cyan-600: hsl(180, 85%, 65%);
   --color-cyan-700: hsl(180, 90%, 78%);
-  --color-cyan-800: hsl(180, 90%, 85%);
-  --color-cyan-900: hsl(180, 99%, 94%);
+  --color-cyan-800: hsl(180, 90%, 88%);
+  --color-cyan-900: hsl(180, 99%, 90%);
 
   /* Blue */
   --color-blue-100: hsl(220, 99%,  4%);
@@ -87,8 +87,8 @@ html {
   --color-blue-500: hsl(220, 90%, 62%);
   --color-blue-600: hsl(220, 85%, 65%);
   --color-blue-700: hsl(220, 90%, 78%);
-  --color-blue-800: hsl(220, 90%, 85%);
-  --color-blue-900: hsl(220, 99%, 94%);
+  --color-blue-800: hsl(220, 90%, 88%);
+  --color-blue-900: hsl(220, 99%, 90%);
 
   /* Purple */
   --color-purple-100: hsl(265, 99%,  4%);
@@ -98,8 +98,8 @@ html {
   --color-purple-500: hsl(265, 95%, 75%);
   --color-purple-600: hsl(265, 95%, 78%);
   --color-purple-700: hsl(265, 95%, 82%);
-  --color-purple-800: hsl(265, 95%, 85%);
-  --color-purple-900: hsl(265, 99%, 94%);
+  --color-purple-800: hsl(265, 95%, 88%);
+  --color-purple-900: hsl(265, 99%, 90%);
 
   /* Pink */
   --color-pink-100: hsl(315, 99%,  4%);

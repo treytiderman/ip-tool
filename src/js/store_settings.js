@@ -15,7 +15,7 @@ export const default_settings = {
     "windowDecorations": false,
     "startOnBoot": false,
     "ipPollRate_ms": 1000,
-    "colored_headers": true,
+    "coloredHeaders": true,
 };
 let settingsLocalStorage = localStorage.getItem("settings");
 if (settingsLocalStorage == null || settingsLocalStorage === "") {

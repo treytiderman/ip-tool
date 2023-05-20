@@ -47,26 +47,26 @@ html.light {
   --radius-lg: 0.8rem;
 
   /* Other colors */
-  --color-bg-grey:     var(--color-grey-500);
-  --color-bg-red:      var(--color-red-500);
-  --color-bg-orange:   var(--color-orange-200);
-  --color-bg-yellow:   var(--color-yellow-500);
-  --color-bg-lime:     var(--color-lime-500);
-  --color-bg-green:    var(--color-green-500);
-  --color-bg-cyan:     var(--color-cyan-500);
-  --color-bg-blue:     var(--color-blue-500);
-  --color-bg-purple:   var(--color-purple-200);
-  --color-bg-pink:     var(--color-pink-500);
+  --color-bg-grey:     var(--color-grey-600);
+  --color-bg-red:      var(--color-red-600);
+  --color-bg-orange:   var(--color-orange-600);
+  --color-bg-yellow:   var(--color-yellow-600);
+  --color-bg-lime:     var(--color-lime-600);
+  --color-bg-green:    var(--color-green-600);
+  --color-bg-cyan:     var(--color-cyan-600);
+  --color-bg-blue:     var(--color-blue-600);
+  --color-bg-purple:   var(--color-purple-600);
+  --color-bg-pink:     var(--color-pink-600);
 
-  --color-text-grey:   var(--color-grey-800);
-  --color-text-red:    var(--color-red-800);
-  --color-text-yellow: var(--color-yellow-800);
-  --color-text-orange: var(--color-orange-800);
-  --color-text-lime:   var(--color-lime-800);
-  --color-text-green:  var(--color-green-800);
-  --color-text-cyan:   var(--color-cyan-800);
-  --color-text-blue:   var(--color-blue-800);
-  --color-text-purple: var(--color-purple-800);
-  --color-text-pink:   var(--color-pink-800);
+  --color-text-grey:   var(--color-grey-900);
+  --color-text-red:    var(--color-red-900);
+  --color-text-yellow: var(--color-yellow-900);
+  --color-text-orange: var(--color-orange-900);
+  --color-text-lime:   var(--color-lime-900);
+  --color-text-green:  var(--color-green-900);
+  --color-text-cyan:   var(--color-cyan-900);
+  --color-text-blue:   var(--color-blue-900);
+  --color-text-purple: var(--color-purple-900);
+  --color-text-pink:   var(--color-pink-900);
 
 }

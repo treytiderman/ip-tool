@@ -85,7 +85,7 @@
         {/each}
     </td>
     <td>
-        <button on:click={(event) => contextMenu.showAtEvent(event)}>
+        <button style="color: currentcolor;" on:click={(event) => contextMenu.showAtEvent(event)}>
             <i class="fa-solid fa-ellipsis-vertical" />
         </button>
     </td>
@@ -139,6 +139,9 @@
     tr.selected td {
         background-color: var(--color-text-orange);
         color: var(--color-bg-orange);
+    }
+    html.light tr.selected td {
+        color: var(--color-text-bright);
     }
     /* tr.selected > td:first-child > div > div {
         padding: calc(var(--pad)/2) calc(3*var(--pad)/4);

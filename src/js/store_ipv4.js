@@ -51,17 +51,17 @@ const default_interface_table_sort = {
     dns_servers: "NONE",
 }
 export const default_preset = {
-    name: "edit me",
-    gateway: "192.168.1.1",
+    name: "Home 🏠",
+    gateway: "192.168.1.254",
     ip_is_dhcp: false,
     ip_and_masks: [
         {
-            ip_address: "192.168.1.7",
+            ip_address: "192.168.1.9",
             subnet_mask: "255.255.255.0",
         },
     ],
     dns_is_dhcp: false,
-    dns_servers: ["1.1.1.1"],
+    dns_servers: ["192.168.1.1"],
 }
 export const default_presets = [
     default_preset,

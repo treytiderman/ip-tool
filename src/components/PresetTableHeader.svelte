@@ -39,8 +39,8 @@
     />
     <tr>
         <th>
-            <div>
-                <i class="fa-solid fa-floppy-disk orange" />
+            <div class="flex align-center nowrap">
+                <i class="fa-solid fa-floppy-disk oranges" />
                 Preset
             </div>
         </th>
@@ -49,7 +49,7 @@
         <th><div>Gateway</div></th>
         <th><div>DNS Server(s)</div></th>
         <th>
-            <button on:click={(e) => contextMenu.showAtEvent(e)}>
+            <button style="color: currentcolor;" on:click={(e) => contextMenu.showAtEvent(e)}>
                 <i class="fa-solid fa-ellipsis-vertical" />
             </button>
         </th>

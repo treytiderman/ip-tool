@@ -11,7 +11,7 @@
     // $: console.log("$ipv4", $ipv4)
 </script>
 
-<article class="mono tableStyle">
+<article class="mono tableStyle" class:coloredHeaders={$settings.coloredHeaders}>
     <InterfaceTable />
     <!-- <br /> -->
     <PresetTable />
@@ -85,8 +85,26 @@
     :global(table tr th) {
         background-color: var(--color-bg-header);
     }
-    :global(table tr th) {
-        background-color: var(--color-bg-header);
+
+    /* Colored Headers */
+    :global(.coloredHeaders table:nth-child(1) tr th) {
+        background-color: var(--color-bg-purple);
+        color: var(--color-text-purple);
+    }
+    :global(.coloredHeaders table:nth-child(2) tr th) {
+        background-color: var(--color-bg-orange);
+        color: var(--color-text-orange);
+    }
+
+    :global(html.light .coloredHeaders table:nth-child(1) tr th) {
+        background-color: var(--color-bg-purple);
+        border-color: var(--color-text-dim);
+        color: var(--color-text-bright);
+    }
+    :global(html.light .coloredHeaders table:nth-child(2) tr th) {
+        background-color: var(--color-bg-orange);
+        border-color: var(--color-text-dim);
+        color: var(--color-text-bright);
     }
 
     /* All Borders */

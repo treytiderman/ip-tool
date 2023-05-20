@@ -94,7 +94,7 @@
         {/each}
     </td>
     <td>
-        <button on:click={(event) => contextMenu.showAtEvent(event)}>
+        <button style="color: currentcolor;" on:click={(event) => contextMenu.showAtEvent(event)}>
             <i class="fa-solid fa-ellipsis-vertical" />
         </button>
     </td>
@@ -140,6 +140,9 @@
         /* outline-color: var(--color-bg-purple); */
         /* outline-width: 2px; */
         z-index: 2;
+    }
+    html.light tr.selected td {
+        color: var(--color-text-bright);
     }
     td {
         display: flex;

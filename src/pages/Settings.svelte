@@ -3,7 +3,7 @@
     let showReset = false;
 </script>
 
-<article class="mono">
+<article class="mono" class:coloredHeaders={$settings.coloredHeaders}>
     <table style="width: 100%;">
         <thead>
             <tr>
@@ -71,6 +71,18 @@
                 </td>
             </tr>
             <tr>
+                <td><div>startOnBoot</div></td>
+                <td>
+                    <button
+                        on:click={() => {
+                            $settings.startOnBoot = !$settings.startOnBoot;
+                        }}
+                    >
+                        {$settings.startOnBoot}
+                    </button>
+                </td>
+            </tr>
+            <tr>
                 <td><div>theme</div></td>
                 <td>
                     <select
@@ -85,6 +97,18 @@
                             {/if}
                         {/each}
                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td><div>coloredHeaders</div></td>
+                <td>
+                    <button
+                        on:click={() => {
+                            $settings.coloredHeaders = !$settings.coloredHeaders;
+                        }}
+                    >
+                        {$settings.coloredHeaders}
+                    </button>
                 </td>
             </tr>
             <tr>
@@ -117,20 +141,11 @@
                     />
                 </td>
             </tr>
-            <tr>
-                <td><div>startOnBoot</div></td>
-                <td>
-                    <button
-                        on:click={() => {
-                            $settings.startOnBoot = !$settings.startOnBoot;
-                        }}
-                    >
-                        {$settings.startOnBoot}
-                    </button>
-                </td>
-            </tr>
         </tbody>
     </table>
+<!-- </article>
+
+<article class="mono"> -->
     <table style="width: 100%;">
         <thead>
             <tr>
@@ -216,9 +231,9 @@
     td {
         padding: 0;
     }
-    th {
+    /* th {
         color: var(--color-text-bright);
-    }
+    } */
     div,
     button,
     select,

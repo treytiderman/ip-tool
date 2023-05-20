@@ -205,7 +205,7 @@
                 <i class="fa-solid fa-xmark" />
             </button>
         {/if} -->
-        <button on:click={(event) => contextMenu.showAtEvent(event)}>
+        <button style="color: currentcolor;" on:click={(event) => contextMenu.showAtEvent(event)}>
             <i class="fa-solid fa-ellipsis-vertical" />
         </button>
     </td>
