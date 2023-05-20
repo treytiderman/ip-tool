@@ -6,13 +6,14 @@
     // Components
     import Header from "./layout/Header.svelte";
     import Main from "./layout/Main.svelte";
+    import KeyboardShortcuts from "./layout/KeyboardShortcuts.svelte";
 
     // Debug
     // $: console.log("$state", $state)
 </script>
 
 <div
-    id="app"
+    id="window"
     style="
         border: {$settings.hasDecorations ? 'none' : 'var(--border)'};
         border-color: {$state.is_administrator ? ' ' : 'var(--color-bg-red)'};
@@ -25,15 +26,16 @@
     </div>
     <Main />
 </div>
+<KeyboardShortcuts />
 
 <style>
-    #app {
-        width: 100%;
-        height: 100%;
+    #window {
+        width: calc(100% - 1px);
+        height: calc(100% - 1px);
         display: flex;
         flex-direction: column;
     }
-    #app > div {
+    #window > div {
         background-color: var(--color-bg-red);
         color: var(--color-text-red);
         padding: var(--pad);

@@ -15,12 +15,12 @@ html.light {
 
   /* Colors */
   --color-bg: var(--color-grey-950);
-  --color-bg-header: var(--color-grey-900);
+  --color-bg-header: var(--color-grey-800);
   --color-bg-section: var(--color-grey-900);
   --color-bg-dim: var(--color-grey-900);
 
-  --color-text: var(--color-grey-200);
-  --color-text-bright: var(--color-grey-100);
+  --color-text: var(--color-grey-400);
+  --color-text-bright: var(--color-grey-300);
   --color-text-dim: var(--color-grey-500);
   --color-text-link: var(--color-blue-500);
   
@@ -36,13 +36,12 @@ html.light {
   --color-shadow: #00000099;
 
   /* Filters for hover, disable, active */
-  --filter-brightness-hover: brightness(105%);
-  --filter-brightness-disable: brightness(65%);
+  --filter-brightness-hover: brightness(98%);
+  --filter-brightness-disable: brightness(420%);
   --filter-brightness-active: brightness(85%);
   
   /*  Border, Border Radius, Outline */
-  --border-thickness: 0.125rem;
-  --border-thickness: 2px;
+  --border-thickness: 1px;
   --border: var(--border-thickness) solid var(--color-border);
   --radius: 0.4rem;
   --radius-lg: 0.8rem;
@@ -50,24 +49,24 @@ html.light {
   /* Other colors */
   --color-bg-grey:     var(--color-grey-500);
   --color-bg-red:      var(--color-red-500);
-  --color-bg-orange:   var(--color-orange-700);
+  --color-bg-orange:   var(--color-orange-200);
   --color-bg-yellow:   var(--color-yellow-500);
   --color-bg-lime:     var(--color-lime-500);
   --color-bg-green:    var(--color-green-500);
   --color-bg-cyan:     var(--color-cyan-500);
   --color-bg-blue:     var(--color-blue-500);
-  --color-bg-purple:   var(--color-purple-700);
+  --color-bg-purple:   var(--color-purple-200);
   --color-bg-pink:     var(--color-pink-500);
 
-  --color-text-grey:   var(--color-grey-100);
-  --color-text-red:    var(--color-red-100);
-  --color-text-yellow: var(--color-yellow-100);
-  --color-text-orange: var(--color-orange-100);
-  --color-text-lime:   var(--color-lime-100);
-  --color-text-green:  var(--color-green-100);
-  --color-text-cyan:   var(--color-cyan-100);
-  --color-text-blue:   var(--color-blue-100);
-  --color-text-purple: var(--color-purple-100);
-  --color-text-pink:   var(--color-pink-100);
+  --color-text-grey:   var(--color-grey-800);
+  --color-text-red:    var(--color-red-800);
+  --color-text-yellow: var(--color-yellow-800);
+  --color-text-orange: var(--color-orange-800);
+  --color-text-lime:   var(--color-lime-800);
+  --color-text-green:  var(--color-green-800);
+  --color-text-cyan:   var(--color-cyan-800);
+  --color-text-blue:   var(--color-blue-800);
+  --color-text-purple: var(--color-purple-800);
+  --color-text-pink:   var(--color-pink-800);
 
 }

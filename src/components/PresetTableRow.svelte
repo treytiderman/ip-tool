@@ -25,25 +25,25 @@
     let contextMenu;
     const contextMenuItems = [
         {
-            text: "Edit",
-            class: "fa-solid fa-pen-to-square",
+            text: "Edit Preset",
+            class: "fa-solid fa-pen-to-square orange",
             onClick: () => dispatch("edit"),
         },
         {
             text: "hr",
         },
         {
-            text: "Set Selected Inteface",
-            class: "fa-solid fa-check",
-            onClick: () => set_preset($ipv4.interface_active.interface_name, $ipv4.preset_active),
+            text: "Delete Preset",
+            class: "fa-solid fa-trash red",
+            onClick: () => dispatch("delete"),
         },
         {
             text: "hr",
         },
         {
-            text: "Delete Preset",
-            class: "fa-solid fa-trash",
-            onClick: () => dispatch("delete"),
+            text: "Set Selected Inteface",
+            class: "fa-solid fa-ethernet purple",
+            onClick: () => set_preset($ipv4.interface_active.interface_name, $ipv4.preset_active),
         },
     ];
 </script>
@@ -54,6 +54,7 @@
     on:any_click={() => contextMenu.hide()}
     on:any_contextmenu={() => contextMenu.hide()}
 />
+{#if contextMenu?.show}<tr></tr>{/if}
 <tr
     class:selected
     on:click={() => dispatch("select")}
@@ -63,47 +64,49 @@
     }}
 >
     <td>
-        <div>
-            <span>{preset.name} {preset.ip_is_dhcp ? "(DHCP)" : ""}</span>
-        </div>
+        <div>{preset.name} {preset.ip_is_dhcp ? "(DHCP)" : ""}</div>
     </td>
     <td>
-        <div>
-            {#each preset.ip_and_masks as ip_and_mask}
-                <span>{ip_and_mask.ip_address}</span>
-            {/each}
-        </div>
+        {#each preset.ip_and_masks as ip_and_mask}
+            <div>{ip_and_mask.ip_address}</div>
+        {/each}
     </td>
     <td>
-        <div>
-            {#each preset.ip_and_masks as ip_and_mask}
-                <span>{ip_and_mask.subnet_mask}</span>
-            {/each}
-        </div>
+        {#each preset.ip_and_masks as ip_and_mask}
+            <div>{ip_and_mask.subnet_mask}</div>
+        {/each}
     </td>
     <td>
-        <div>
-            <span>{preset.gateway || "-"}</span>
-        </div>
+        <div>{preset.gateway || "-"}</div>
     </td>
     <td>
-        <div>
-            {#each preset.dns_servers as dns_server}
-                <span>{dns_server}</span>
-            {/each}
-        </div>
+        {#each preset.dns_servers as dns_server}
+            <div>{dns_server}</div>
+        {/each}
     </td>
     <td>
-        <div>
-            <button on:click={(event) => contextMenu.showAtEvent(event)}>
-                <i class="fa-solid fa-ellipsis-vertical" />
-            </button>
-        </div>
+        <button on:click={(event) => contextMenu.showAtEvent(event)}>
+            <i class="fa-solid fa-ellipsis-vertical" />
+        </button>
     </td>
 </tr>
 
 <style>
     td {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    td div {
+        padding: calc(var(--pad)/2) var(--pad);
+    }
+    td div:first-child {
+        padding-top: var(--pad);
+    }
+    td div:last-child {
+        padding-bottom: var(--pad);
+    }
+    /* td {
         padding: 0;
         vertical-align: top;
     }
@@ -111,9 +114,7 @@
         min-width: fit-content;
     }
 
-    td:last-child {
-        min-width: 2rem;
-    }
+    
     td > div {
         display: grid;
         gap: 0;
@@ -123,16 +124,23 @@
         gap: 0;
     }
 
-    td > div > span {
+    td > div > div {
         padding: var(--pad);
-    }
-
+    } */
     tr.selected {
         /* background-color: var(--color-text-orange); */
         /* color: var(--color-bg-orange); */
-        box-shadow: inset 0px 0px 0px var(--border-thickness) var(--color-bg-orange);
+        color: var(--color-text-bright);
+        /* outline: var(--border); */
+        /* outline-color: var(--color-bg-orange); */
+        /* outline-width: 2px; */
+        z-index: 2;
     }
-    /* tr.selected > td:first-child > div > span {
+    tr.selected td {
+        background-color: var(--color-text-orange);
+        color: var(--color-bg-orange);
+    }
+    /* tr.selected > td:first-child > div > div {
         padding: calc(var(--pad)/2) calc(3*var(--pad)/4);
         margin: calc(var(--pad)/2) calc(var(--pad)/4);
         width: fit-content;
@@ -142,10 +150,10 @@
         color: var(--color-text-orange);
     } */
 
-    button {
+    /* button {
         padding: var(--pad);
         background-color: transparent;
         color: inherit;
         border-radius: 0;
-    }
+    } */
 </style>

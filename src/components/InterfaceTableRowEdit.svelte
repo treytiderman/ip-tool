@@ -35,36 +35,24 @@
     const edit = clone(nic);
 
     let contextMenu;
-    const contextMenuItems = [
-        // {
-        //     text: "Confirm",
-        //     class: "fa-solid fa-check",
-        //     onClick: () => confirm(),
-        // },
+    $: contextMenuItems = [
+        {
+            text: "Confirm",
+            hide: !isValidInterface(edit),
+            class: "fa-solid fa-check green",
+            onClick: () => confirm(),
+        },
         {
             text: "Cancel",
-            class: "fa-solid fa-xmark",
+            class: "fa-solid fa-xmark red",
             onClick: () => cancel(),
         },
         {
             text: "hr",
         },
         {
-            text: "Add IP",
-            class: "fa-solid fa-plus",
-            onClick: () => addBlankIP(),
-        },
-        {
-            text: "Add DNS server",
-            class: "fa-solid fa-plus",
-            onClick: () => addBlankDNS(),
-        },
-        {
-            text: "hr",
-        },
-        {
             text: "Remove Blanks",
-            class: "fa-solid fa-trash",
+            class: "fa-solid fa-minus purple",
             onClick: () => {
                 removeBlankIPs();
                 removeBlankDNS();
@@ -76,9 +64,11 @@
         if (bool) element.focus();
     }
     function removeBlankIPs() {
-        edit.ip_and_masks = edit.ip_and_masks.filter(
-            (ip_mask) => ip_mask.ip_address !== ""
-        );
+        edit.ip_and_masks = edit.ip_and_masks.filter((ip_mask) => ip_mask.ip_address !== "");
+    }
+    function removeLastIP() {
+        edit.ip_and_masks.pop()
+        edit.ip_and_masks = edit.ip_and_masks
     }
     function addBlankIP() {
         removeBlankIPs();
@@ -90,9 +80,11 @@
         }
     }
     function removeBlankDNS() {
-        edit.dns_servers = edit.dns_servers.filter(
-            (dns_server) => dns_server !== ""
-        );
+        edit.dns_servers = edit.dns_servers.filter((dns_server) => dns_server !== "");
+    }
+    function removeLastDNS() {
+        edit.dns_servers.pop()
+        edit.dns_servers = edit.dns_servers
     }
     function addBlankDNS() {
         removeBlankDNS();
@@ -110,13 +102,11 @@
     }
 
     let validInterface = true;
-    $: {
-        validInterface = true;
+    $: validInterface = isValidInterface(edit);
+    function isValidInterface(edit) {
+        let validInterface = true;
         edit.ip_and_masks.forEach((ip_and_mask) => {
-            if (
-                ip_and_mask.ip_address === "" &&
-                ip_and_mask.subnet_mask === ""
-            ) {
+            if (ip_and_mask.ip_address === "" && ip_and_mask.subnet_mask === "") {
             } else {
                 if (validIPv4(ip_and_mask.ip_address) === false) {
                     validInterface = false;
@@ -140,6 +130,7 @@
                 validInterface = false;
             }
         }
+        return validInterface;
     }
 </script>
 
@@ -149,6 +140,7 @@
     on:any_click={() => contextMenu.hide()}
     on:any_contextmenu={() => contextMenu.hide()}
 />
+{#if contextMenu?.show}<tr />{/if}
 <tr
     class:selected
     on:click={() => dispatch("select")}
@@ -158,86 +150,70 @@
     }}
 >
     <td>
-        <div>
-            <!-- <span>{edit.interface_name} {nic.ip_is_dhcp ? "(DHCP)" : ""}</span> -->
-            <input
-                type="text"
-                maxlength="20"
-                size={edit.interface_name.length || "1"}
-                bind:value={edit.interface_name}
-            />
-        </div>
+        <!-- <span>{edit.interface_name} {nic.ip_is_dhcp ? "(DHCP)" : ""}</span> -->
+        <input type="text" bind:value={edit.interface_name} />
     </td>
     <td>
-        <div>
-            {#each edit.ip_and_masks as ip_and_mask, index}
-                {#if index === 0}
-                    <input
-                        use:focus={index === 0}
-                        type="text"
-                        size={ip_and_mask.ip_address.length || "1"}
-                        maxlength="15"
-                        class:red={!validIPv4(ip_and_mask.ip_address)}
-                        bind:value={ip_and_mask.ip_address}
-                    />
-                {:else}
-                    <input
-                        type="text"
-                        size={ip_and_mask.ip_address.length || "1"}
-                        maxlength="15"
-                        class:red={!validIPv4(ip_and_mask.ip_address)}
-                        bind:value={ip_and_mask.ip_address}
-                    />
-                {/if}
-            {/each}
-            <button on:click={addBlankIP}>
-                <i class="fa-solid fa-plus" />
-            </button>
-        </div>
-    </td>
-    <td>
-        <div>
-            {#each edit.ip_and_masks as ip_and_mask}
+        {#each edit.ip_and_masks as ip_and_mask, index}
+            {#if index === 0}
+                <input
+                    use:focus={index === 0}
+                    type="text"
+                    class:red={!validIPv4(ip_and_mask.ip_address)}
+                    bind:value={ip_and_mask.ip_address}
+                />
+            {:else}
                 <input
                     type="text"
-                    size={ip_and_mask.subnet_mask.length || "1"}
-                    maxlength="15"
-                    class:red={!validIPv4(ip_and_mask.subnet_mask)}
-                    bind:value={ip_and_mask.subnet_mask}
+                    class:red={!validIPv4(ip_and_mask.ip_address)}
+                    bind:value={ip_and_mask.ip_address}
                 />
-            {/each}
-        </div>
-    </td>
-    <td>
-        <div>
-            <input
-                type="text"
-                size={edit.gateway.length || "1"}
-                maxlength="15"
-                class:red={!validIPv4(edit.gateway)}
-                bind:value={edit.gateway}
-            />
-        </div>
-    </td>
-    <td>
-        <div>
-            {#each edit.dns_servers as dns_server}
-                <input
-                    type="text"
-                    size={dns_server.length || "1"}
-                    maxlength="15"
-                    class:red={!validIPv4(dns_server)}
-                    bind:value={dns_server}
-                />
-            {/each}
-            <button on:click={addBlankDNS}>
+            {/if}
+        {/each}
+        <aside class="flex even">
+            <button class="add" on:click={addBlankIP}>
                 <i class="fa-solid fa-plus" />
             </button>
-        </div>
+            <button class="add" on:click={removeLastIP}>
+                <i class="fa-solid fa-minus" />
+            </button>
+        </aside>
     </td>
     <td>
-        <div>
-            {#if validInterface}
+        {#each edit.ip_and_masks as ip_and_mask}
+            <input
+                type="text"
+                class:red={!validIPv4(ip_and_mask.subnet_mask)}
+                bind:value={ip_and_mask.subnet_mask}
+            />
+        {/each}
+    </td>
+    <td>
+        <input
+            type="text"
+            class:red={!validIPv4(edit.gateway)}
+            bind:value={edit.gateway}
+        />
+    </td>
+    <td>
+        {#each edit.dns_servers as dns_server}
+            <input
+                type="text"
+                class:red={!validIPv4(dns_server)}
+                bind:value={dns_server}
+            />
+        {/each}
+        <aside class="flex even">
+            <button class="add" on:click={addBlankDNS}>
+                <i class="fa-solid fa-plus" />
+            </button>
+            <button class="add" on:click={removeLastDNS}>
+                <i class="fa-solid fa-minus" />
+            </button>
+        </aside>
+    </td>
+    <td style="padding: 0;">
+        <!-- {#if validInterface}
                 <button on:click={() => confirm()}>
                     <i class="fa-solid fa-check" />
                 </button>
@@ -245,16 +221,50 @@
                 <button on:click={() => cancel()}>
                     <i class="fa-solid fa-xmark" />
                 </button>
-            {/if}
-            <button on:click={(event) => contextMenu.showAtEvent(event)}>
-                <i class="fa-solid fa-ellipsis-vertical" />
-            </button>
-        </div>
+            {/if} -->
+        <button on:click={(event) => contextMenu.showAtEvent(event)}>
+            <i class="fa-solid fa-ellipsis-vertical" />
+        </button>
     </td>
 </tr>
 
 <style>
+    tr.selected td {
+        /* background-color: var(--color-text-purple); */
+        /* color: var(--color-bg-purple); */
+        color: var(--color-text-bright);
+    }
+    tr.selected {
+        /* background-color: var(--color-text-orange); */
+        /* color: var(--color-bg-orange); */
+        /* outline: var(--border); */
+        /* outline-color: var(--color-bg-purple); */
+        /* outline-width: 2px; */
+        z-index: 2;
+    }
     td {
+        /* padding: 0 calc(var(--pad) / 2) calc(var(--pad) / 2) calc(var(--pad) / 2); */
+        padding: calc(var(--pad) / 2);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: calc(var(--pad) / 2);
+        /* width: 100%; */
+    }
+    aside {
+        width: 100%;
+        gap: calc(var(--pad) / 2);
+    }
+    .add {
+        background-color: var(--color-bg-input);
+        color: var(--color-text-input);
+        padding: calc(var(--pad) / 2);
+        width: 100%;
+
+        /* border: var(--border); */
+        /* border-color: var(--color-text); */
+    }
+    /* td {
         padding: 0;
         vertical-align: top;
     }
@@ -284,8 +294,6 @@
         padding: var(--pad);
     }
     tr {
-        /* background-color: var(--color-bg-section); */
-        /* color: var(--color-bg-red); */
         box-shadow: inset 0px 0px 0px var(--border-thickness)
             var(--color-bg-red);
     }
@@ -297,5 +305,5 @@
     }
     input {
         width: auto;
-    }
+    } */
 </style>

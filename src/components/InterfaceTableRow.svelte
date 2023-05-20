@@ -1,5 +1,5 @@
 <script>
-    import { set_dhcp, set_preset } from "../js/tauri";
+    import { set_dhcp, set_preset, release_dhcp, renew_dhcp, flushdns } from "../js/tauri";
     import { ipv4 } from "../js/store_ipv4";
     import ContextMenu from "../components/ContextMenu.svelte";
 
@@ -35,21 +35,21 @@
     let contextMenu;
     const contextMenuItems = [
         {
-            text: "Edit",
-            class: "fa-solid fa-pen-to-square",
+            text: "Edit Interface",
+            class: "fa-solid fa-pen-to-square purple",
             onClick: () => dispatch("edit"),
+        },
+        {
+            text: "Set DHCP",
+            class: "fa-solid fa-wand-magic-sparkles purple",
+            onClick: () => set_dhcp(nic.interface_name),
         },
         {
             text: "hr",
         },
         {
-            text: "Set DHCP",
-            class: "fa-solid fa-wand-magic-sparkles",
-            onClick: () => set_dhcp(nic.interface_name),
-        },
-        {
-            text: "Set Preset Selected",
-            class: "fa-solid fa-check",
+            text: "Set Selected Preset",
+            class: "fa-solid fa-floppy-disk orange",
             onClick: () => set_preset($ipv4.interface_active.interface_name, $ipv4.preset_active),
         },
     ];
@@ -61,6 +61,7 @@
     on:any_click={() => contextMenu.hide()}
     on:any_contextmenu={() => contextMenu.hide()}
 />
+{#if contextMenu?.show}<tr />{/if}
 <tr
     class:selected
     on:click={() => dispatch("select")}
@@ -75,42 +76,32 @@
         </div>
     </td>
     <td>
-        <div>
-            {#each nic.ip_and_masks as ip_and_mask}
-                <span>{ip_and_mask.ip_address}</span>
-            {/each}
-        </div>
+        {#each nic.ip_and_masks as ip_and_mask}
+            <div>{ip_and_mask.ip_address}</div>
+        {/each}
     </td>
     <td>
-        <div>
-            {#each nic.ip_and_masks as ip_and_mask}
-                <span>{ip_and_mask.subnet_mask}</span>
-            {/each}
-        </div>
+        {#each nic.ip_and_masks as ip_and_mask}
+            <div>{ip_and_mask.subnet_mask}</div>
+        {/each}
     </td>
     <td>
-        <div>
-            <span>{nic.gateway || "-"}</span>
-        </div>
+        <div>{nic.gateway || ""}</div>
     </td>
     <td>
-        <div>
-            {#each nic.dns_servers as dns_server}
-                <span>{dns_server}</span>
-            {/each}
-        </div>
+        {#each nic.dns_servers as dns_server}
+            <div>{dns_server}</div>
+        {/each}
     </td>
     <td>
-        <div>
-            <button on:click={(event) => contextMenu.showAtEvent(event)}>
-                <i class="fa-solid fa-ellipsis-vertical" />
-            </button>
-        </div>
+        <button on:click={(event) => contextMenu.showAtEvent(event)}>
+            <i class="fa-solid fa-ellipsis-vertical" />
+        </button>
     </td>
 </tr>
 
 <style>
-    td {
+    /* td {
         padding: 0;
         vertical-align: top;
     }
@@ -136,12 +127,33 @@
 
     td > div > span {
         padding: var(--pad);
-    }
+    } */
 
+    tr.selected td {
+        background-color: var(--color-text-purple);
+        color: var(--color-bg-purple);
+    }
     tr.selected {
         /* background-color: var(--color-text-orange); */
         /* color: var(--color-bg-orange); */
-        box-shadow: inset 0px 0px 0px var(--border-thickness) var(--color-bg-purple);
+        /* outline: var(--border); */
+        /* outline-color: var(--color-bg-purple); */
+        /* outline-width: 2px; */
+        z-index: 2;
+    }
+    td {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    td div {
+        padding: calc(var(--pad)/2) var(--pad);
+    }
+    td div:first-child {
+        padding-top: var(--pad);
+    }
+    td div:last-child {
+        padding-bottom: var(--pad);
     }
     /* tr.selected > td:first-child > div > span {
         padding: calc(var(--pad)/2) calc(3*var(--pad)/4);
@@ -152,10 +164,10 @@
         background-color: var(--color-bg-purple);
         color: var(--color-text-purple);
     } */
-
+    /* 
     button {
         padding: var(--pad);
         background-color: transparent;
         border-radius: 0;
-    }
+    } */
 </style>

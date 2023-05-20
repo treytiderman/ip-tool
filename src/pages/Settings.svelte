@@ -3,12 +3,7 @@
     let showReset = false;
 </script>
 
-<article
-    class="mono"
-    class:tableGridLines={$settings.tableGridLines}
-    class:colored_headers={$settings.colored_headers}
-    class:alternatingRowBG={$settings.alternatingRowBG}
->
+<article class="mono">
     <table style="width: 100%;">
         <thead>
             <tr>
@@ -18,7 +13,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>defaultSettings</td>
+                <td><div>defaultSettings</div></td>
                 <td>
                     <button
                         hidden={showReset}
@@ -52,7 +47,7 @@
                 </td>
             </tr>
             <tr>
-                <td>isAlwaysOnTop</td>
+                <td><div>isAlwaysOnTop</div></td>
                 <td>
                     <button
                         on:click={() => {
@@ -64,7 +59,7 @@
                 </td>
             </tr>
             <tr>
-                <td>windowDecorations</td>
+                <td><div>windowDecorations</div></td>
                 <td>
                     <button
                         on:click={() => {
@@ -76,7 +71,7 @@
                 </td>
             </tr>
             <tr>
-                <td>theme</td>
+                <td><div>theme</div></td>
                 <td>
                     <select
                         on:input={(event) => {
@@ -93,7 +88,7 @@
                 </td>
             </tr>
             <tr>
-                <td>fontSize (zoom)</td>
+                <td><div>fontSize (zoom)</div></td>
                 <td>
                     <input
                         type="number"
@@ -108,7 +103,7 @@
                 </td>
             </tr>
             <tr>
-                <td>ipPollRate_ms</td>
+                <td><div>ipPollRate_ms</div></td>
                 <td>
                     <input
                         type="number"
@@ -123,7 +118,7 @@
                 </td>
             </tr>
             <tr>
-                <td>startOnBoot</td>
+                <td><div>startOnBoot</div></td>
                 <td>
                     <button
                         on:click={() => {
@@ -134,52 +129,77 @@
                     </button>
                 </td>
             </tr>
+        </tbody>
+    </table>
+    <table style="width: 100%;">
+        <thead>
             <tr>
-                <td>fixedColumns</td>
+                <th>Shortcut</th>
+                <th>Key(s)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
                 <td>
-                    <button
-                        on:click={() => {
-                            $settings.fixedColumns = !$settings.fixedColumns;
-                        }}
-                    >
-                        {$settings.fixedColumns}
-                    </button>
+                    <div>Zoom in</div>
+                </td>
+                <td>
+                    <div>
+                        <code>Control</code>
+                        <code>=</code>
+                    </div>
+                    <div>
+                        <code>Control</code>
+                        <code>Scroll Wheel Forward</code>
+                    </div>
                 </td>
             </tr>
             <tr>
-                <td>tableGridLines</td>
                 <td>
-                    <button
-                        on:click={() => {
-                            $settings.tableGridLines = !$settings.tableGridLines;
-                        }}
-                    >
-                        {$settings.tableGridLines}
-                    </button>
+                    <div>Zoom out</div>
+                </td>
+                <td>
+                    <div>
+                        <code>Control</code>
+                        <code>-</code>
+                    </div>
+                    <div>
+                        <code>Control</code>
+                        <code>Scroll Wheel Back</code>
+                    </div>
                 </td>
             </tr>
             <tr>
-                <td>alternatingRowBG</td>
                 <td>
-                    <button
-                        on:click={() => {
-                            $settings.alternatingRowBG = !$settings.alternatingRowBG;
-                        }}
-                    >
-                        {$settings.alternatingRowBG}
-                    </button>
+                    <div>Default Zoom & Size</div>
+                </td>
+                <td>
+                    <div>
+                        <code>Control</code>
+                        <code>Middle Mouse</code>
+                    </div>
                 </td>
             </tr>
             <tr>
-                <td>colored_headers</td>
                 <td>
-                    <button
-                        on:click={() => {
-                            $settings.colored_headers = !$settings.colored_headers;
-                        }}
-                    >
-                        {$settings.colored_headers}
-                    </button>
+                    <div>Toggle isAlwaysOnTop</div>
+                </td>
+                <td>
+                    <div>
+                        <code>Control</code>
+                        <code>t</code>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>Toggle lightMode</div>
+                </td>
+                <td>
+                    <div>
+                        <code>Control</code>
+                        <code>l</code>
+                    </div>
                 </td>
             </tr>
         </tbody>
@@ -188,21 +208,32 @@
 
 <style>
     article {
+        display: grid;
         padding: var(--pad);
+        gap: var(--gap);
         max-width: fit-content;
     }
     td {
-        padding-top: 0;
-        padding-bottom: 0;
+        padding: 0;
     }
-    th:nth-child(2) {
-        padding: 0 calc(var(--pad) + var(--pad) + 0.2rem);
+    th {
+        color: var(--color-text-bright);
     }
+    div,
     button,
     select,
     input {
         background-color: transparent;
         min-width: 6rem;
         text-align: left;
+        padding: var(--pad);
+        border-radius: 0;
+    }
+    code {
+        font-size: 1rem;
+        background-color: var(--color-bg-dim);
+        color: var(--color-text-input);
+        padding: 0.3rem var(--pad);
+        border: var(--border);
     }
 </style>

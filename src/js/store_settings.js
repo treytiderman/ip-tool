@@ -14,9 +14,6 @@ export const default_settings = {
     "isAlwaysOnTop": false,
     "windowDecorations": false,
     "startOnBoot": false,
-    "fixedColumns": true,
-    "tableGridLines": false,
-    "alternatingRowBG": false,
     "ipPollRate_ms": 1000,
     "colored_headers": true,
 };
@@ -44,13 +41,14 @@ else {
 // Every settings change set the values 
 settings.subscribe(async settings => {
     if (settings !== undefined && settings != default_settings) {
-        console.log("settings: updated", settings);
+        // console.log("settings: updated", settings);
 
         // Update Settings
         appWindow.setAlwaysOnTop(settings.isAlwaysOnTop);
 
         // Hide Title bar, don't hide in the Tauri config so they show unless this page loads correctly
         appWindow.setDecorations(settings.windowDecorations);
+
 
         // Theme
         document.documentElement.classList = settings.theme;

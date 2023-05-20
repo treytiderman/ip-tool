@@ -33,11 +33,13 @@
 <table id="interface_table">
     <InterfaceTableHeader
         on:get_interfaces={async () => {
+            $ipv4.interfaces = []
             await poll_interfaces();
         }}
     />
     <InterfaceTableBody
         on:get_interfaces={async () => {
+            $ipv4.interfaces = []
             await poll_interfaces();
         }}
     />

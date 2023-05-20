@@ -115,10 +115,10 @@ export async function set_interface_name(nic, new_name) {
     });
     return output;
 }
-export async function release() {
+export async function release_dhcp() {
     await invoke("release")
 }
-export async function renew() {
+export async function renew_dhcp() {
     await invoke("renew")
 }
 export async function flushdns() {

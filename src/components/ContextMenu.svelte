@@ -8,6 +8,7 @@
         show: false,
         position: { x: 0, y: 0 },
         size: { h: 0, w: 0 },
+        hide: false,
         showAtEvent: (event) => {
             if (event.pointerId === -1) {
                 console.log("showAtEvent", event);
@@ -76,6 +77,11 @@
             {#each items as item, index}
                 {#if item.text == "hr"}
                     <hr/>
+                {:else if item.hide === true}
+                    <button disabled={item.hide} use:focus={index === 0} class="flex nowrap" on:click={item.onClick}>
+                        <i class={item.class}/>
+                        <span>{item.text}</span>
+                    </button>
                 {:else}
                     <button use:focus={index === 0} class="flex nowrap" on:click={item.onClick}>
                         <i class={item.class}/>
@@ -88,23 +94,23 @@
 {/if}
 
 <style>
+    nav {
+        position: absolute;
+        position: fixed;
+    }
     .navbar {
         display: flex;
-        gap: var(--pad);
         gap: 0;
         min-width: 15rem;
         background-color: var(--color-bg-section);
-        border-radius: var(--radius-lg);
-        border-radius: var(--radius);
-        overflow: hidden;
+        /* border-radius: var(--radius); */
         border: var(--border);
         flex-direction: column;
-        padding: var(--pad);
         padding: calc(var(--pad)/2);
-    }
-    nav {
-        position: fixed;
-        position: absolute;
+        /* padding: var(--pad); */
+        /* border-radius: var(--radius-lg); */
+        /* overflow: hidden; */
+        /* gap: var(--pad); */
     }
     button {
         text-align: left;

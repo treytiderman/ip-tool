@@ -1,6 +1,7 @@
 <script>
+    import { release_dhcp, renew_dhcp, flushdns } from "../js/tauri";
+
     // Components
-    import UpDown from "./UpDown.svelte";
     import ContextMenu from "./ContextMenu.svelte";
 
     // Event Dispatcher
@@ -11,9 +12,27 @@
     let contextMenu;
     const contextMenuItems = [
         {
+            text: "Release & Renew DHCP",
+            class: "fa-solid fa-shuffle purple",
+            onClick: () => {
+                release_dhcp();
+                setTimeout(() => {
+                    renew_dhcp();
+                }, 1000);
+            },
+        },
+        {
+            text: "hr",
+        },
+        {
             text: "Refresh Interfaces",
-            class: "fa-solid fa-arrows-rotate",
+            class: "fa-solid fa-arrows-rotate purple",
             onClick: () => dispatch("get_interfaces"),
+        },
+        {
+            text: "Flush DNS",
+            class: "fa-solid fa-toilet purple",
+            onClick: () => flushdns(),
         },
     ];
 </script>
@@ -26,11 +45,16 @@
         on:any_contextmenu={() => contextMenu.hide()}
     />
     <tr>
-        <th><span>Interface</span></th>
-        <th><span>IP Address(s)</span></th>
-        <th><span>Subnet Mask(s)</span></th>
-        <th><span>Gateway</span></th>
-        <th><span>DNS Server(s)</span></th>
+        <th>
+            <div>
+                <i class="fa-solid fa-ethernet purple" />
+                Interface
+            </div>
+        </th>
+        <th><div>IP Address(s)</div></th>
+        <th><div>Subnet Mask(s)</div></th>
+        <th><div>Gateway</div></th>
+        <th><div>DNS Server(s)</div></th>
         <th>
             <button on:click={(e) => contextMenu.showAtEvent(e)}>
                 <i class="fa-solid fa-ellipsis-vertical" />
@@ -40,7 +64,7 @@
 </thead>
 
 <style>
-    th {
+    /* th {
         min-width: fit-content;
         padding: 0;
     }
@@ -55,5 +79,5 @@
         background-color: transparent;
         color: inherit;
         border-radius: 0;
-    }
+    } */
 </style>
