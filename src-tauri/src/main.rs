@@ -9,6 +9,8 @@ mod netsh;
 use tauri::Manager;
 
 fn main() {
+    // netsh::route_print_v4();
+
     tauri::Builder::default()
         .setup(|app| {
             let main_window = app.get_window("main").unwrap();
@@ -36,6 +38,12 @@ fn main() {
             invoke::release,
             invoke::renew,
             invoke::flushdns,
+            invoke::route_print_v4,
+            invoke::route_add,
+            invoke::route_add_persistent,
+            invoke::route_change,
+            invoke::route_change_persistent,
+            invoke::route_delete,
         ])
         .plugin(tauri_plugin_autostart::init(
             MacosLauncher::LaunchAgent,

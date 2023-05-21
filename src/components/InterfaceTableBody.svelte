@@ -1,5 +1,5 @@
 <script>
-    import { set_preset, set_interface_name } from "../js/tauri"
+    import { set_preset, set_interface_name, set_metric } from "../js/tauri"
     import { ipv4 } from "../js/store_ipv4"
     import InterfaceTableRow from "./InterfaceTableRow.svelte"
     import InterfaceTableRowEdit from "./InterfaceTableRowEdit.svelte"
@@ -17,6 +17,10 @@
                     if (nic.interface_name !== edit.detail.interface_name) {
                         console.log("set_interface_name", nic.interface_name, edit.detail.interface_name)
                         set_interface_name(nic.interface_name, edit.detail.interface_name)
+                    }
+                    if (nic.interface_metric !== edit.detail.interface_metric) {
+                        console.log("set_interface_metric", nic.interface_metric, edit.detail.interface_metric)
+                        set_metric(nic.interface_name, edit.detail.interface_metric)
                     }
                 }}
                 on:cancel={() => {

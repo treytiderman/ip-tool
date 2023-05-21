@@ -22,6 +22,16 @@
             },
         },
         {
+            text: "Release DHCP",
+            class: "fa-solid fa-shuffle purple",
+            onClick: () => release_dhcp(),
+        },
+        {
+            text: "Renew DHCP",
+            class: "fa-solid fa-shuffle purple",
+            onClick: () => renew_dhcp(),
+        },
+        {
             text: "hr",
         },
         {

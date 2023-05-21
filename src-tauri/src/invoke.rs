@@ -121,3 +121,40 @@ pub fn flushdns() {
     println!("flushdns");
     netsh::flushdns();
 }
+
+#[tauri::command]
+pub fn route_print_v4() -> String {
+    // println!("route_print_v4");
+    let output = netsh::route_print_v4();
+    serde_json::to_string(&output).unwrap()
+}
+
+#[tauri::command]
+pub fn route_add(destination: &str, mask: &str, gateway: &str, metric: &str) {
+    println!("route_add {} {} {} {}", destination, mask, gateway, metric);
+    netsh::route_add(destination, mask, gateway, metric);
+}
+
+#[tauri::command]
+pub fn route_add_persistent(destination: &str, mask: &str, gateway: &str, metric: &str) {
+    println!("route_add_persistent {} {} {} {}", destination, mask, gateway, metric);
+    netsh::route_add_persistent(destination, mask, gateway, metric);
+}
+
+#[tauri::command]
+pub fn route_change(destination: &str, mask: &str, gateway: &str, metric: &str) {
+    println!("route_change {} {} {} {}", destination, mask, gateway, metric);
+    netsh::route_change(destination, mask, gateway, metric);
+}
+
+#[tauri::command]
+pub fn route_change_persistent(destination: &str, mask: &str, gateway: &str, metric: &str) {
+    println!("route_change_persistent {} {} {} {}", destination, mask, gateway, metric);
+    netsh::route_change_persistent(destination, mask, gateway, metric);
+}
+
+#[tauri::command]
+pub fn route_delete(destination: &str) {
+    println!("route_delete {}", destination);
+    netsh::route_delete(destination);
+}

@@ -6,9 +6,31 @@
     import { appWindow, LogicalSize } from "@tauri-apps/api/window";
 
     // Functions
+    function onMouseDown(event) {
+        $state.mouse = {
+            which: event.which,
+            isDown: true,
+            ctrlKey: event.ctrlKey,
+            altKey: event.altKey,
+            shiftKey: event.shiftKey,
+            clientX: event.clientX,
+            clientY: event.clientY,
+        };
+        // which: 1 = left mouse button, 2 = middle, 3 = right
+        if (event.ctrlKey && $state.mouse.which === 2) {
+            $settings.fontSize = 16;
+            appWindow.setSize(new LogicalSize(900, 900));
+        }
+        // console.log($state.mouse);
+    }
+    function onMouseUp(event) {
+        $state.mouse.isDown = false;
+        // console.log($state.mouse);
+    }
     function onKeyDown(event) {
         $state.keys = {
             key: event.key,
+            isDown: true,
             ctrlKey: event.ctrlKey,
             altKey: event.altKey,
             shiftKey: event.shiftKey,
@@ -29,12 +51,16 @@
         }
         // console.log($state.keys);
     }
+    function onKeyUp(event) {
+        $state.keys.isDown = false;
+        // console.log($state.keys);
+    }
     function onWheel(event) {
         $state.wheel = {
+            scroll: Math.sign(-1 * event.deltaY),
             ctrlKey: event.ctrlKey,
             altKey: event.altKey,
             shiftKey: event.shiftKey,
-            scroll: Math.sign(-1 * event.deltaY),
             deltaY: event.deltaY,
             clientX: event.clientX,
             clientY: event.clientY,
@@ -46,22 +72,13 @@
         }
         // console.log($state.wheel);
     }
-    function onClick(event) {
-        $state.click = {
-            ctrlKey: event.ctrlKey,
-            altKey: event.altKey,
-            shiftKey: event.shiftKey,
-            which: event.which,
-            clientX: event.clientX,
-            clientY: event.clientY,
-        };
-        // which: 1 = left mouse button, 2 = middle, 3 = right
-        if (event.ctrlKey && $state.click.which === 2) {
-            $settings.fontSize = 16;
-            appWindow.setSize(new LogicalSize(900, 900))
-        }
-        // console.log($state.click);
-    }
 </script>
 
-<svelte:window on:keydown={onKeyDown} on:wheel={onWheel} on:mousewheel={onWheel} on:mouseup={onClick} />
+<svelte:window
+    on:keydown={onKeyDown}
+    on:keyup={onKeyUp}
+    on:pointerup={onMouseUp}
+    on:pointerdown={onMouseDown}
+    on:wheel={onWheel}
+    on:mousewheel={onWheel}
+/>

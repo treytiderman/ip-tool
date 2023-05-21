@@ -1,5 +1,6 @@
 <script>
     import { clone, validIPv4, validMask } from "../js/helper";
+    import { state } from "../js/store_state";
 
     // Components
     import ContextMenu from "../components/ContextMenu.svelte";
@@ -37,13 +38,13 @@
     let contextMenu;
     $: contextMenuItems = [
         {
-            text: "Confirm",
+            text: "Set to Interface",
             hide: !isValidInterface(edit),
             class: "fa-solid fa-check green",
             onClick: () => confirm(),
         },
         {
-            text: "Cancel",
+            text: "Cancel Edit",
             class: "fa-solid fa-xmark red",
             onClick: () => cancel(),
         },
@@ -59,6 +60,9 @@
             },
         },
     ];
+
+    $: $state.keys.isDown && $state.keys.key === "Escape" ? cancel() : ""
+    $: $state.keys.isDown && $state.keys.key === "Enter" && isValidInterface(edit) ? confirm() : ""
 
     function focus(element, bool) {
         if (bool) element.focus();
@@ -152,6 +156,7 @@
     <td>
         <!-- <span>{edit.interface_name} {nic.ip_is_dhcp ? "(DHCP)" : ""}</span> -->
         <input type="text" bind:value={edit.interface_name} />
+        <input type="text" bind:value={edit.interface_metric} placeholder="metric" />
     </td>
     <td>
         {#each edit.ip_and_masks as ip_and_mask, index}

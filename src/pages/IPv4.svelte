@@ -15,6 +15,16 @@
     <InterfaceTable />
     <!-- <br /> -->
     <PresetTable />
+    {#if !$settings.hideLegend}
+        <div class="grid dim">
+            <span class="hover_show">
+                (#) is the Interface Metric
+                <small> (priority of interface when routing network traffic within this PC) </small>
+            </span>
+            <span><i class="fa-solid fa-wand-magic-sparkles" /> is DHCP</span>
+            <!-- <span><i class="fa-solid fa-globe"/> Internet (Interface with Lowest Metric)</span> -->
+        </div>
+    {/if}
 </article>
 
 <style>
@@ -22,6 +32,15 @@
         display: grid;
         gap: var(--gap);
         margin: var(--pad);
+    }
+    .hover_show {
+        cursor: help;
+    }
+    .hover_show small {
+        display: none;
+    }
+    :hover.hover_show small {
+        display: inline;
     }
 
     /* tableStyle */
@@ -72,10 +91,10 @@
         width: 100%;
     }
     :global(.tableStyle table input) {
-        border-radius: calc(var(--radius)/2);
+        border-radius: calc(var(--radius) / 2);
         border-radius: 0;
         width: 100%;
-        padding: calc(var(--pad)/2);
+        padding: calc(var(--pad) / 2);
     }
 
     /* Alt row colors */
@@ -120,5 +139,4 @@
     :global(table td:first-child) {
         border-left: var(--border);
     }
-
 </style>

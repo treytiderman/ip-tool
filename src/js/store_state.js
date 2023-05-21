@@ -10,6 +10,34 @@ const default_state = {
     window_size: { x: 922, y: 800 },
     window_position: { x: 0, y: 0 },
     window_scale_factor: 1,
+    mouse: {
+        which: 1,
+        isDown: false,
+        ctrlKey: false,
+        altKey: false,
+        shiftKey: false,
+        clientX: 0,
+        clientY: 0,
+    },
+    keys: {
+        key: "",
+        isDown: false,
+        ctrlKey: false,
+        altKey: false,
+        shiftKey: false,
+        keyCode: 0,
+        clientX: 0,
+        clientY: 0,
+    },
+    wheel: {
+        scroll: 1,
+        ctrlKey: false,
+        altKey: false,
+        shiftKey: false,
+        deltaY: 150,
+        clientX: 0,
+        clientY: 0,
+    },
 }
 export const state = createStore()
 

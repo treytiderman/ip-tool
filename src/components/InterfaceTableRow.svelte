@@ -1,5 +1,5 @@
 <script>
-    import { set_dhcp, set_preset, release_dhcp, renew_dhcp, flushdns } from "../js/tauri";
+    import { set_dhcp, set_preset, set_metric_auto } from "../js/tauri";
     import { ipv4 } from "../js/store_ipv4";
     import ContextMenu from "../components/ContextMenu.svelte";
 
@@ -45,6 +45,11 @@
             onClick: () => set_dhcp(nic.interface_name),
         },
         {
+            text: "Set Metric Auto",
+            class: "fa-solid fa-route purple",
+            onClick: () => set_metric_auto(nic.interface_name),
+        },
+        {
             text: "hr",
         },
         {
@@ -72,7 +77,12 @@
 >
     <td>
         <div>
-            <span>{nic.interface_name} {nic.ip_is_dhcp ? "(DHCP)" : ""}</span>
+            <span
+                >{nic.interface_name}
+                <small>
+                    {@html nic.ip_is_dhcp ? `<i class="fa-solid fa-wand-magic-sparkles"/>` : ""} ({nic.interface_metric})
+                </small>
+            </span>
         </div>
     </td>
     <td>
@@ -150,7 +160,7 @@
         align-items: flex-start;
     }
     td div {
-        padding: calc(var(--pad)/2) var(--pad);
+        padding: calc(var(--pad) / 2) var(--pad);
     }
     td div:first-child {
         padding-top: var(--pad);

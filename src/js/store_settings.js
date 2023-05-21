@@ -12,6 +12,8 @@ export const default_settings = {
     "theme": "dark",
     "themes": ["dark", "light"],
     "isAlwaysOnTop": false,
+    "hideLegend": false,
+    "hideDefaultRoutes": true,
     "windowDecorations": false,
     "startOnBoot": false,
     "ipPollRate_ms": 1000,

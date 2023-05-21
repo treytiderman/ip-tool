@@ -4,7 +4,7 @@
 </script>
 
 <article class="mono" class:coloredHeaders={$settings.coloredHeaders}>
-    <table style="width: 100%;">
+    <table>
         <thead>
             <tr>
                 <th>Key</th>
@@ -112,6 +112,30 @@
                 </td>
             </tr>
             <tr>
+                <td><div>hideLegend</div></td>
+                <td>
+                    <button
+                        on:click={() => {
+                            $settings.hideLegend = !$settings.hideLegend;
+                        }}
+                    >
+                        {$settings.hideLegend}
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td><div>hideDefaultRoutes</div></td>
+                <td>
+                    <button
+                        on:click={() => {
+                            $settings.hideDefaultRoutes = !$settings.hideDefaultRoutes;
+                        }}
+                    >
+                        {$settings.hideDefaultRoutes}
+                    </button>
+                </td>
+            </tr>
+            <tr>
                 <td><div>fontSize (zoom)</div></td>
                 <td>
                     <input
@@ -143,10 +167,7 @@
             </tr>
         </tbody>
     </table>
-<!-- </article>
-
-<article class="mono"> -->
-    <table style="width: 100%;">
+    <table>
         <thead>
             <tr>
                 <th>Shortcut</th>
@@ -217,16 +238,39 @@
                     </div>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <div>Confirm / Set Edit</div>
+                </td>
+                <td>
+                    <div>
+                        <code>Enter</code>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>Cancel Edit</div>
+                </td>
+                <td>
+                    <div>
+                        <code>Escape</code>
+                    </div>
+                </td>
+            </tr>
         </tbody>
     </table>
 </article>
 
 <style>
     article {
-        display: grid;
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        /* flex-direction: column; */
         padding: var(--pad);
         gap: var(--gap);
-        max-width: fit-content;
+        /* max-width: fit-content; */
     }
     td {
         padding: 0;

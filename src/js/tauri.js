@@ -115,6 +115,20 @@ export async function set_interface_name(nic, new_name) {
     });
     return output;
 }
+export async function set_metric(nic, metric) {
+    const output = await invoke("set_metric", {
+        interface: nic,
+        metric: metric
+    });
+    return output;
+}
+export async function set_metric_auto(nic) {
+    const output = await invoke("set_metric_auto", {
+        interface: nic,
+    });
+    return output;
+}
+
 export async function release_dhcp() {
     await invoke("release")
 }
@@ -123,4 +137,52 @@ export async function renew_dhcp() {
 }
 export async function flushdns() {
     await invoke("flushdns")
+}
+
+export async function route_print_v4() {
+    const output = await invoke("route_print_v4");
+    const routes = JSON.parse(output);
+    return routes;
+}
+export async function route_add(destination, mask, gateway, metric) {
+    const output = await invoke("route_add", {
+        destination: destination,
+        mask: mask,
+        gateway: gateway,
+        metric: metric,
+    });
+    return output;
+}
+export async function route_add_persistent(destination, mask, gateway, metric) {
+    const output = await invoke("route_add_persistent", {
+        destination: destination,
+        mask: mask,
+        gateway: gateway,
+        metric: metric,
+    });
+    return output;
+}
+export async function route_change(destination, mask, gateway, metric) {
+    const output = await invoke("route_change", {
+        destination: destination,
+        mask: mask,
+        gateway: gateway,
+        metric: metric,
+    });
+    return output;
+}
+export async function route_change_persistent(destination, mask, gateway, metric) {
+    const output = await invoke("route_change_persistent", {
+        destination: destination,
+        mask: mask,
+        gateway: gateway,
+        metric: metric,
+    });
+    return output;
+}
+export async function route_delete(destination) {
+    const output = await invoke("route_delete", {
+        destination: destination,
+    });
+    return output;
 }

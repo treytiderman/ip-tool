@@ -1,6 +1,7 @@
 <script>
     import { clone, validIPv4, validMask } from "../js/helper";
     import { ipv4 } from "../js/store_ipv4";
+    import { state } from "../js/store_state";
 
     // Components
     import ContextMenu from "./ContextMenu.svelte";
@@ -35,6 +36,9 @@
 
     let validPreset = true;
     $: validPreset = isValidPreset(edit);
+
+    $: $state.keys.isDown && $state.keys.key === "Escape" ? cancel() : ""
+    $: $state.keys.isDown && $state.keys.key === "Enter" && isValidPreset(edit) ? confirm() : ""
 
     function isValidPreset(edit) {
         let validPreset = true;

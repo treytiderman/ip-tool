@@ -9,7 +9,17 @@ For people that plug into a lot of networks
 /
 [Portable](https://github.com/TreyTiderman/IP-Tool/releases/download/v0.3.0/IP-Tool_0.3.0_Portable.exe)
 
-![Preview UI](./public/preview.png)
+![Preview UI](./public/preview_v0.2.9.png)
+
+# Set to always run as Administrator
+
+Go to the shortcuts properties 
+
+![Preview UI](./public/always_as_admin_1.png)
+
+Then to Shortcut > Advanced... > Run as administrator
+
+![Preview UI](./public/always_as_admin_2.png)
 
 # Source Code
 
@@ -43,14 +53,17 @@ npm run dev
 
 ### TODO
 
-- [ ] alternating colors shift with contextmenu
-- [ ] row moving
-- [ ] table sorting
-- [ ] routes page
+- [x] Alternating colors shift with contextmenu
+- [x] Interface friendly name change
+- [x] Confirm edit with enter
+- [ ] Row moving
+- [ ] Table sorting
+- [x] Routes page View
+- [ ] Routes page Edit
 - [ ] Hide interface
 - [ ] More options to add presets
 - [ ] Network Scan page
-- [x] Interface friendly name change
+- [ ] Default Subnet to 255.255.255.0
 
 ### Network Scan
 

@@ -1,5 +1,5 @@
 <script>
-    import { set_dhcp, set_preset } from "../js/tauri";
+    import { set_dhcp, set_preset, route_add, route_add_persistent, route_delete } from "../js/tauri";
     import { ipv4 } from "../js/store_ipv4";
     import ContextMenu from "./ContextMenu.svelte";
 
@@ -45,7 +45,50 @@
             class: "fa-solid fa-ethernet purple",
             onClick: () => set_preset($ipv4.interface_active.interface_name, $ipv4.preset_active),
         },
+        {
+            text: "hr",
+        },
+        {
+            text: "Add Route",
+            class: "fa-solid fa-route purple",
+            onClick: () => {
+                $ipv4.preset_active.ip_and_masks.forEach(ip_and_mask => {                 
+                    let destination = zeroLastOctet(ip_and_mask.ip_address)
+                    let mask = ip_and_mask.subnet_mask
+                    let gateway = $ipv4.interface_active.gateway
+                    let metric = "1"
+                    route_add(destination, mask, gateway, metric)
+                });
+            },
+        },
+        {
+            text: "Add Persistent Route",
+            class: "fa-solid fa-route purple",
+            onClick: () => {
+                $ipv4.preset_active.ip_and_masks.forEach(ip_and_mask => {                 
+                    let destination = zeroLastOctet(ip_and_mask.ip_address)
+                    let mask = ip_and_mask.subnet_mask
+                    let gateway = $ipv4.interface_active.gateway
+                    let metric = "1"
+                    route_add_persistent(destination, mask, gateway, metric)
+                });
+            },
+        },
+        {
+            text: "Delete Route",
+            class: "fa-solid fa-trash red",
+            onClick: () => {
+                $ipv4.preset_active.ip_and_masks.forEach(ip_and_mask => {                 
+                    let destination = zeroLastOctet(ip_and_mask.ip_address)
+                    route_delete(destination)
+                });
+            },
+        },
     ];
+
+    function zeroLastOctet(ip) {
+        return ip.slice(0, ip.lastIndexOf(".")) + ".0"
+    }
 </script>
 
 <ContextMenu
