@@ -1,9 +1,14 @@
 # README
  
-## Live Development
+## Dev
 
-Run `wails dev` in the project directory
+Run `wails dev`
 
 ## Build
 
-Use `wails build`
+Run `wails build`
+
+## Go Tests
+
+Run `go test`
+

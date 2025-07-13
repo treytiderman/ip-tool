@@ -24,7 +24,7 @@
         </div>
 
         <div class="grid gap-xs">
-            <label for="dns">DNS</label>
+            <label for="dns">DNS Servers</label>
             <input type="text" id="dns" name="dns" placeholder="1.1.1.1" required />
         </div>
 

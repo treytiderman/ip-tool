@@ -7,6 +7,7 @@
 />
 
 <script>
+    import * as app from "../wailsjs/go/main/App.js";
     import { getFontSize, setFontSize, getWindowSize, setWindowSize, toggleWindowAlwaysOnTop } from "./window"
 
     // Helper
@@ -29,7 +30,7 @@
         isMouseDown = true
 
         if (event.ctrlKey && event.which === 2) {
-            console.log("KeyboardShortcut: Reset font size and window size");
+            console.log("KeyboardShortcut: Reset font size and window size")
             setFontSize(defaultFontSize)
             setWindowSize(300, 500)
         }
@@ -44,14 +45,14 @@
         isKeyDown = true
         
         if (event.ctrlKey && event.key === "=") {
-            console.log("KeyboardShortcut: Font size increase");
+            console.log("KeyboardShortcut: Font size increase")
             const size = await getWindowSize()
             const newWidth = Math.round(size.w * (1 + zoomChangeFactor))
             const newHeight = Math.round(size.h * (1 + zoomChangeFactor))
             setWindowSize(newWidth, newHeight)
             setFontSize(getFontSize() + fontChangeFactor)
         } else if (event.ctrlKey && event.key === "-") {
-            console.log("KeyboardShortcut: Font size decrease");
+            console.log("KeyboardShortcut: Font size decrease")
             const size = await getWindowSize()
             const newWidth = Math.round(size.w * (1 - zoomChangeFactor))
             const newHeight = Math.round(size.h * (1 - zoomChangeFactor))
@@ -60,14 +61,20 @@
         }
         
         if (event.ctrlKey && event.key === "0") {
-            console.log("KeyboardShortcut: Reset font size and window size");
+            console.log("KeyboardShortcut: Reset font size and window size")
             setWindowSize(300, 500)
             setFontSize(defaultFontSize)
         }
         
         if (event.ctrlKey && event.key === "t") {
-            console.log("KeyboardShortcut: Toggle Always on Top");
+            console.log("KeyboardShortcut: Toggle Always on Top")
             toggleWindowAlwaysOnTop()
+        }
+        
+        if (event.ctrlKey && event.key === "w") {
+            console.log("KeyboardShortcut: GetInterfaces")
+            const nics = await app.GetInterfaces()
+            console.log(nics)
         }
         
     }
@@ -79,14 +86,14 @@
     async function onWheel(event) {
     
         if (event.ctrlKey && event.deltaY <= 0) {
-            console.log("KeyboardShortcut: Font size increase");
+            console.log("KeyboardShortcut: Font size increase")
             const size = await getWindowSize()
             const newWidth = Math.round(size.w * (1 + zoomChangeFactor))
             const newHeight = Math.round(size.h * (1 + zoomChangeFactor))
             setWindowSize(newWidth, newHeight)
             setFontSize(getFontSize() + fontChangeFactor)
         } else if (event.ctrlKey && event.deltaY >= 0) {
-            console.log("KeyboardShortcut: Font size decrease");
+            console.log("KeyboardShortcut: Font size decrease")
             const size = await getWindowSize()
             const newWidth = Math.round(size.w * (1 - zoomChangeFactor))
             const newHeight = Math.round(size.h * (1 - zoomChangeFactor))

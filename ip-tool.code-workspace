@@ -1,0 +1,17 @@
+{
+	"folders": [
+        {
+            "path": "."
+        },
+        {
+            "path": "../../tracker"
+        },
+        {
+            "path": "../../go-rtsp-to-jsmpeg"
+        },
+        {
+            "path": "../../go-wails"
+        }
+    ],
+    "settings": {}
+}

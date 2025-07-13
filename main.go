@@ -18,16 +18,18 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-
 		Title: "ip-tool",
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
 		BackgroundColour: &options.RGBA{R: 0, G: 0, B: 0, A: 1},
 		OnStartup:        app.startup,
+		OnShutdown:       app.shutdown,
 		Bind: []interface{}{
 			app,
 		},
+
+		EnableDefaultContextMenu: true,
 		Windows: &windows.Options{
 			ZoomFactor:           1.0,
 			IsZoomControlEnabled: false,
