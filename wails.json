@@ -1,13 +1,26 @@
 {
-  "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "ip-tool",
-  "outputfilename": "ip-tool",
-  "frontend:install": "npm install",
-  "frontend:build": "npm run build",
-  "frontend:dev:watcher": "npm run dev",
-  "frontend:dev:serverUrl": "auto",
-  "author": {
-    "name": "Trey Tiderman",
-    "email": "tiderman.trey@gmail.com"
-  }
+    "$schema": "https://wails.io/schemas/config.v2.json",
+    "name": "ip-tool",
+    "outputfilename": "ip-tool",
+    "frontend:install": "npm install",
+    "frontend:build": "npm run build",
+    "frontend:dev:watcher": "npm run dev",
+    "frontend:dev:serverUrl": "auto",
+    "author": {
+        "name": "Trey Tiderman",
+        "email": "tiderman.trey@gmail.com"
+    },
+    "windows": {
+        "rtl": false,
+        "theme": "system",
+        "darkMode": true,
+        "webview2": "browser",
+        "disableWindowIcon": false,
+        "executionLevel": "requireAdministrator",
+        "messages": {
+            "runtimeNotInstalled": "You need to install the WebView2 runtime to run this application. Would you like to download it now?",
+            "webview2DownloadError": "Failed to download the WebView2 runtime. Please check your internet connection.",
+            "webview2InstallationError": "Failed to install the WebView2 runtime. Please try again or install it manually."
+        }
+    }
 }
