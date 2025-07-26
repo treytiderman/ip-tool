@@ -1,13 +1,12 @@
 // @ts-nocheck
-
 import { writable } from "svelte/store"
 
 export {
-    state as store,
+    windowStore as window,
     alwaysOnTopStore,
-    saveState as saveStore,
-    loadState as loadStore,
-    resetState as resetStore,
+    saveWindow,
+    loadWindow,
+    resetWindow,
     getFontSize,
     setFontSize,
     getWindowSize,
@@ -28,50 +27,43 @@ const defaultState = {
     // "ipPollRate_ms": 1000,
 }
 
-let state = JSON.parse(JSON.stringify(defaultState))
+let windowStore = JSON.parse(JSON.stringify(defaultState))
 
 const alwaysOnTopStore = writable(false)
 
-
-// Start Up
-
-loadState()
-
-
-// Functions
-
-function saveState() {
-    localStorage.setItem("store", JSON.stringify(state))
-    return state
+function saveWindow() {
+    localStorage.setItem("window", JSON.stringify(windowStore))
+    return windowStore
 }
 
-function loadState() {
-    const savedStore = localStorage.getItem("store")
+function loadWindow() {
+    const savedStore = localStorage.getItem("window")
     if (savedStore) {
-        state = JSON.parse(savedStore)
+        windowStore = JSON.parse(savedStore)
     }
-    setFontSize(state.fontSize)
-    setWindowSize(state.windowSizeX, state.windowSizeY)
-    setWindowAlwaysOnTop(state.windowAlwaysOnTop)
-    return state
+    console.log("localStorage: window", windowStore);
+    setFontSize(windowStore.fontSize)
+    setWindowSize(windowStore.windowSizeX, windowStore.windowSizeY)
+    setWindowAlwaysOnTop(windowStore.windowAlwaysOnTop)
+    return windowStore
 }
 
-function resetState() {
-    state = JSON.parse(JSON.stringify(defaultState))
-    saveState()
-    return state
+function resetWindow() {
+    windowStore = JSON.parse(JSON.stringify(defaultState))
+    saveWindow()
+    return windowStore
 }
 
 function getFontSize() {
-    return state.fontSize
+    return windowStore.fontSize
 }
 
 function setFontSize(size: number) {
     if (size <= 8 || size >= 36) return
-    state.fontSize = size
-    document.documentElement.style.setProperty('--font-size', `${state.fontSize}px`)
-    document.documentElement.style.setProperty('--font-size-mono', `${state.fontSize - 1}px`)
-    saveState()
+    windowStore.fontSize = size
+    document.documentElement.style.setProperty('--font-size', `${windowStore.fontSize}px`)
+    document.documentElement.style.setProperty('--font-size-mono', `${windowStore.fontSize - 1}px`)
+    saveWindow()
 }
 
 async function getWindowSize() {
@@ -79,10 +71,10 @@ async function getWindowSize() {
 }
 
 function setWindowSize(x: number, y: number) {
-    state.windowSizeX = Math.round(x)
-    state.windowSizeY = Math.round(y)
-    window.runtime.WindowSetSize(state.windowSizeX, state.windowSizeY)
-    saveState()
+    windowStore.windowSizeX = Math.round(x)
+    windowStore.windowSizeY = Math.round(y)
+    window.runtime.WindowSetSize(windowStore.windowSizeX, windowStore.windowSizeY)
+    saveWindow()
 }
 
 function toggleWindowMaximise() {
@@ -94,18 +86,18 @@ function setWindowMinimise() {
 }
 
 function getWindowAlwaysOnTop() {
-    return state.windowAlwaysOnTop
+    return windowStore.windowAlwaysOnTop
 }
 
 function setWindowAlwaysOnTop(alwaysOnTop: boolean) {
-    state.windowAlwaysOnTop = alwaysOnTop
+    windowStore.windowAlwaysOnTop = alwaysOnTop
     alwaysOnTopStore.set(alwaysOnTop)
-    window.runtime.WindowSetAlwaysOnTop(state.windowAlwaysOnTop)
-    saveState()
+    window.runtime.WindowSetAlwaysOnTop(windowStore.windowAlwaysOnTop)
+    saveWindow()
 }
 
 function toggleWindowAlwaysOnTop() {
-    setWindowAlwaysOnTop(!state.windowAlwaysOnTop)
+    setWindowAlwaysOnTop(!windowStore.windowAlwaysOnTop)
 }
 
 function quitApp() {

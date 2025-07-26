@@ -43,7 +43,7 @@
     {/if}
 
     <main class="grow flex column">
-        <div class="h-full" hidden={$pageStore.name !== "Presets"}>
+        <div class="h-full" hidden={$pageStore.name !== "IPv4 Presets"}>
             <Presets />
         </div>
         <div class="h-full" hidden={$pageStore.name !== "Create Preset"}>
@@ -61,8 +61,8 @@
 <style>
     main {
         overflow-y: auto;
-        padding: var(--gap-sm);
-        padding-top: 1px;
+        /* padding: var(--gap-sm);
+        padding-top: 1px; */
     }
     .not-admin {
         padding: var(--gap-sm);

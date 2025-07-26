@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { writable, get } from 'svelte/store'
+import { writable } from 'svelte/store'
 
 export {
     pages,
@@ -9,7 +8,7 @@ export {
 }
 
 let pages = [
-    { name: "Presets" },
+    { name: "IPv4 Presets" },
     { name: "Create Preset" },
     { name: "Edit Preset" },
     { name: "Edit Interface" },
@@ -19,7 +18,7 @@ let pages = [
 let pageStore = writable(pages[0])
 
 function setHomePage() {
-    setPage("Presets")
+    setPage("IPv4 Presets")
 }
 
 function setPage(name: string) {

@@ -88,7 +88,7 @@ func ParseInterfaces(lines []string) ([]Interface, error) {
 	anotherDnsServerIsPossible := false
 
 	reset := func() {
-		curr = Interface{InterfaceMetric: -1, Ips: []Ip{}, Gateways: []Gateway{}}
+		curr = Interface{InterfaceMetric: -1, Ips: []Ip{}, Gateways: []Gateway{}, DnsServers: []string{}}
 		currIP = Ip{}
 	}
 	reset()

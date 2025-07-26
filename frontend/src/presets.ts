@@ -1,0 +1,206 @@
+import { writable, get } from "svelte/store"
+import * as app from "../wailsjs/go/main/App.js";
+
+export type {
+    PresetIp,
+    PresetGateway,
+    Preset,
+}
+export {
+    presets,
+    savePresets,
+    loadPresets,
+    resetPresets,
+    addPreset,
+    removePreset,
+    setPresetToInterface
+}
+
+type PresetIp = {
+    ip_address: string
+    subnet_mask: string
+    cidr: number
+}
+
+type PresetGateway = {
+    gateway_address: string
+}
+
+type Preset = {
+    name: string
+    ip_is_dhcp: boolean
+    ips: PresetIp[]
+    gateways: PresetGateway[]
+    dns_is_dhcp: boolean
+    dns_servers: string[]
+}
+
+const defaultPresets: Preset[] = [
+    {
+        name: "192.168.0.7/24",
+        ip_is_dhcp: false,
+        ips: [
+            {
+                ip_address: "192.168.0.7",
+                subnet_mask: "255.255.255.0",
+                cidr: 24,
+            },
+        ],
+        gateways: [
+            {
+                gateway_address: "192.168.0.1",
+            },
+        ],
+        dns_is_dhcp: false,
+        dns_servers: ["192.168.0.1"],
+    },
+    {
+        name: "192.168.1.7/24",
+        ip_is_dhcp: false,
+        ips: [
+            {
+                ip_address: "192.168.1.7",
+                subnet_mask: "255.255.255.0",
+                cidr: 24,
+            },
+        ],
+        gateways: [
+            {
+                gateway_address: "192.168.1.1",
+            },
+        ],
+        dns_is_dhcp: false,
+        dns_servers: ["192.168.1.1"],
+    },
+    {
+        name: "192.168.2.7/24",
+        ip_is_dhcp: false,
+        ips: [
+            {
+                ip_address: "192.168.2.7",
+                subnet_mask: "255.255.255.0",
+                cidr: 24,
+            },
+        ],
+        gateways: [
+            {
+                gateway_address: "192.168.2.1",
+            },
+        ],
+        dns_is_dhcp: false,
+        dns_servers: ["192.168.2.1"],
+    },
+    {
+        name: "169.254.0.7/24",
+        ip_is_dhcp: false,
+        ips: [
+            {
+                ip_address: "169.254.0.7",
+                subnet_mask: "255.255.255.0",
+                cidr: 24,
+            },
+        ],
+        gateways: [
+            {
+                gateway_address: "169.254.0.1",
+            },
+        ],
+        dns_is_dhcp: false,
+        dns_servers: ["169.254.0.1"],
+    },
+    {
+        name: "172.22.0.7/16",
+        ip_is_dhcp: false,
+        ips: [
+            {
+                ip_address: "172.22.0.7",
+                subnet_mask: "255.255.0.0",
+                cidr: 16,
+            },
+        ],
+        gateways: [
+            {
+                gateway_address: "172.22.0.2",
+            },
+        ],
+        dns_is_dhcp: false,
+        dns_servers: ["172.22.0.2"],
+    },
+    {
+        name: "198.18.0.1/16",
+        ip_is_dhcp: false,
+        ips: [
+            {
+                ip_address: "198.18.0.1",
+                subnet_mask: "255.255.0.0",
+                cidr: 16,
+            },
+        ],
+        gateways: [
+            {
+                gateway_address: "198.18.0.1",
+            },
+        ],
+        dns_is_dhcp: false,
+        dns_servers: ["198.18.0.1"],
+    },
+];
+
+const presets = writable<Preset[]>(JSON.parse(JSON.stringify(defaultPresets)))
+
+function savePresets() {
+    const tempPresets = get(presets)
+    localStorage.setItem("presets", JSON.stringify(tempPresets))
+}
+
+function loadPresets() {
+    const savedPresetsJson = localStorage.getItem("presets")
+    if (savedPresetsJson) {
+        presets.set(JSON.parse(savedPresetsJson))
+    }
+    console.log("localStorage: presets", get(presets));
+}
+
+function resetPresets() {
+    presets.set(JSON.parse(JSON.stringify(defaultPresets)))
+    savePresets()
+}
+
+function addPreset(preset: Preset) {
+    presets.update(ps => {
+        ps.push(preset)
+        return ps
+    })
+}
+
+function removePreset(name: string) {
+    presets.update(ps => {
+        return ps.filter(p => p.name !== name)
+    })
+}
+
+function setPresetToInterface(interface_name: string, preset_name: string) {
+    const ps = get(presets)
+    const p = ps.find(p => p.name === preset_name)
+    console.log("setPresetToInterface", interface_name, p);
+    app.SetStatic(
+        interface_name,
+        p.ips[0].ip_address,
+        p.ips[0].subnet_mask,
+        p.gateways[0].gateway_address,
+        p.dns_servers[0]
+    )
+    if (p.ips.length > 1) {
+        for (let index = 1; index < p.ips.length; index++) {
+            const ip = p.ips[index]
+            app.AddIpStatic(interface_name, ip.ip_address, ip.subnet_mask)
+        }
+    }
+    if (p.dns_servers.length > 1) {
+        for (let index = 1; index < p.dns_servers.length; index++) {
+            const dns = p.dns_servers[index]
+            app.AddDnsStatic(interface_name, dns, index.toString())
+        }
+    }
+}
+
