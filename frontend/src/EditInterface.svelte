@@ -3,13 +3,28 @@
     import { setPage } from "./router";
 
     function setInterfaceName(event: any) {
-        const val = event.target.value
-        $nicTemp.interface_name = val
+        const val = event.target.value;
+        $nicTemp.interface_name = val;
         console.log("Temp Interface", $nicTemp);
     }
     function setIpAddress(index: number, event: any) {
-        const val = event.target.value
-        $nicTemp.ips[index].ip_address = val
+        const val = event.target.value;
+        $nicTemp.ips[index].ip_address = val;
+        console.log("Temp Interface", $nicTemp);
+    }
+    function setSubnetMask(index: number, event: any) {
+        const val = event.target.value;
+        $nicTemp.ips[index].subnet_mask = val;
+        console.log("Temp Interface", $nicTemp);
+    }
+    function setGateway(index: number, event: any) {
+        const val = event.target.value;
+        $nicTemp.gateways[index].gateway_address = val;
+        console.log("Temp Interface", $nicTemp);
+    }
+    function setDnsServer(index: number, event: any) {
+        const val = event.target.value;
+        $nicTemp.dns_servers[index] = val;
         console.log("Temp Interface", $nicTemp);
     }
 </script>
@@ -18,8 +33,8 @@
     class="grid gap pad-sm"
     on:submit|preventDefault={async () => {
         // console.log("submit", $nicTemp);
-        await setNicToInterface($nic.interface_name, $nicTemp)
-        setPage("IPv4 Presets")
+        await setNicToInterface($nic.interface_name, $nicTemp);
+        setPage("IPv4 Presets");
     }}
 >
     <div class="grid gap-xs">
@@ -33,7 +48,6 @@
             value={$nicTemp.interface_name}
             on:input={setInterfaceName}
             required
-            autofocus
         />
     </div>
 
@@ -92,13 +106,14 @@
         </div>
         <input
             type="text"
-            id="ip-address-1"
             class="mono shadow-inset"
+            id="ip-address-1"
             name="ip-address-1"
             placeholder={$nic.ips[0]?.ip_address ?? ""}
             value={$nicTemp.ips[0]?.ip_address ?? ""}
             on:input={(ev) => setIpAddress(0, ev)}
             required
+            autofocus
         />
         {#if $nicTemp.ips.length > 1}
             {#each $nicTemp.ips as ip, index}
@@ -112,6 +127,7 @@
                             name="ip-address-{index}"
                             placeholder={$nic.ips[0]?.ip_address ?? ""}
                             value={$nicTemp.ips[index]?.ip_address ?? ""}
+                            on:input={(ev) => setIpAddress(index, ev)}
                             required
                         />
                     </div>
@@ -129,6 +145,7 @@
             name="subnet-mask-1"
             placeholder={$nic.ips[0]?.subnet_mask ?? ""}
             value={$nicTemp.ips[0]?.subnet_mask ?? ""}
+            on:input={(ev) => setSubnetMask(0, ev)}
             required
         />
         {#if $nicTemp.ips.length > 1}
@@ -143,6 +160,7 @@
                             name="subnet-mask-{index}"
                             placeholder={$nic.ips[0]?.subnet_mask ?? ""}
                             value={$nicTemp.ips[index]?.subnet_mask ?? ""}
+                            on:input={(ev) => setSubnetMask(index, ev)}
                             required
                         />
                     </div>
@@ -160,6 +178,7 @@
             name="gateway"
             placeholder={$nic.gateways[0]?.gateway_address ?? ""}
             value={$nicTemp.gateways[0]?.gateway_address ?? ""}
+            on:input={(ev) => setGateway(0, ev)}
             required
         />
     </div>
@@ -224,6 +243,7 @@
             name="dns"
             placeholder={$nic.dns_servers[0] ?? ""}
             value={$nicTemp.dns_servers[0] ?? ""}
+            on:input={(ev) => setDnsServer(0, ev)}
             required
         />
         {#if $nicTemp.dns_servers.length > 1}
@@ -238,6 +258,7 @@
                             name="dns-{index}"
                             placeholder={$nic.dns_servers[0]}
                             value={$nicTemp.dns_servers[index]}
+                            on:input={(ev) => setDnsServer(index, ev)}
                             required
                         />
                     </div>

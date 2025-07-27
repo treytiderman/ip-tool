@@ -59,7 +59,8 @@ const nic = writable<Nic>({
     dns_servers: ["xxx.xxx.xxx.xxx"],
 })
 
-const nics = writable<Nic[]>([])
+const nics = writable<Nic[]>([]) // TODO: change this to an index of the main nics array
+
 const nicTemp = writable<Nic>(JSON.parse(JSON.stringify(get(nic))))
 
 async function initNics() {
@@ -90,17 +91,17 @@ function setNic(name: string) {
     const found = tempNics.find((nic) => nic.interface_name === name)
     if (found) {
         if (JSON.stringify(found) !== JSON.stringify(get(nic))) {
-            console.log("Current Interface (nic)", found)
+            console.log("Interface Selected (nic)", found)
             nic.set(found)
             nicTemp.set(JSON.parse(JSON.stringify(found)))
         }
     } else {
-        console.error("Current Interface (nic)", name, found)
+        console.error("Interface Selected (nic)", name, found)
     }
 }
 
 async function setNicToInterface(interface_name: string, nic: Nic) {
-    console.log("setNicToInterface", interface_name, nic);
+    console.log("Set Nic To Interface", interface_name, nic);
     await app.SetStatic(
         interface_name,
         nic.ips[0].ip_address,

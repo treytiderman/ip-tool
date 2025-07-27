@@ -8,11 +8,15 @@ export type {
 }
 export {
     presets,
+    presetTemp,
+    presetSelectedIndex,
     savePresets,
     loadPresets,
     resetPresets,
     addPreset,
+    editPreset,
     removePreset,
+    selectPreset,
     setPresetToInterface
 }
 
@@ -148,6 +152,10 @@ const defaultPresets: Preset[] = [
 
 const presets = writable<Preset[]>(JSON.parse(JSON.stringify(defaultPresets)))
 
+const presetTemp = writable<Preset>(JSON.parse(JSON.stringify(defaultPresets[0])))
+
+let presetSelectedIndex = 0
+
 function savePresets() {
     const tempPresets = get(presets)
     localStorage.setItem("presets", JSON.stringify(tempPresets))
@@ -171,19 +179,45 @@ function addPreset(preset: Preset) {
         ps.push(preset)
         return ps
     })
+    savePresets()
+}
+
+function editPreset(preset_name: string, preset: Preset) {
+    presets.update(ps => {
+        const pIndex = ps.findIndex(p => p.name === preset_name)
+        if (pIndex !== -1) {
+            ps[pIndex] = preset
+        }
+        return ps
+    })
+    savePresets()
 }
 
 function removePreset(name: string) {
+    presetSelectedIndex = 0
     presets.update(ps => {
         return ps.filter(p => p.name !== name)
     })
+    savePresets()
 }
 
-function setPresetToInterface(interface_name: string, preset_name: string) {
+function selectPreset(preset_name: string) {
+    const ps = get(presets)
+    presetSelectedIndex = ps.findIndex(p => p.name === preset_name)
+    if (presetSelectedIndex !== -1) {
+        console.log("Preset Selected", preset_name, ps[presetSelectedIndex])
+        presetTemp.set(ps[presetSelectedIndex])
+    } else {
+        console.log("Preset Selected Reset to index 0", preset_name, ps[presetSelectedIndex])
+        presetSelectedIndex = 0
+    }
+}
+
+async function setPresetToInterface(interface_name: string, preset_name: string) {
     const ps = get(presets)
     const p = ps.find(p => p.name === preset_name)
-    console.log("setPresetToInterface", interface_name, p);
-    app.SetStatic(
+    console.log("Set Preset To Interface", interface_name, p);
+    await app.SetStatic(
         interface_name,
         p.ips[0].ip_address,
         p.ips[0].subnet_mask,
@@ -193,13 +227,13 @@ function setPresetToInterface(interface_name: string, preset_name: string) {
     if (p.ips.length > 1) {
         for (let index = 1; index < p.ips.length; index++) {
             const ip = p.ips[index]
-            app.AddIpStatic(interface_name, ip.ip_address, ip.subnet_mask)
+            await app.AddIpStatic(interface_name, ip.ip_address, ip.subnet_mask)
         }
     }
     if (p.dns_servers.length > 1) {
         for (let index = 1; index < p.dns_servers.length; index++) {
             const dns = p.dns_servers[index]
-            app.AddDnsStatic(interface_name, dns, index.toString())
+            await app.AddDnsStatic(interface_name, dns, index.toString())
         }
     }
 }

@@ -16,6 +16,20 @@ Run `wails build -clean -o ip-tool.exe`
 Run `go test`
 
 
+## Ideas
+
+- [ ] Changing interface name does not show correctly on the select without reloading the page
+- [ ] Stop poll interfaces while not focused or minimized
+- [ ] Add DHCP functions renew, release, flushdns
+- [ ] Add css themes
+- [ ] Add settings page
+    - [ ] Be able to change/add filters to interfaces. Currently if contain "Loop" it does not show
+    - [ ] Add poll interfaces time control
+    - [ ] Add setting for when to poll interfaces (focused, minimized)
+    - [ ] Add reset presets button
+    - [ ] Add export presets button
+
+
 ## Always start as Administrator
 
 Add the "trustInfo" section to wails.exe.manifest

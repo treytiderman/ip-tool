@@ -10,6 +10,7 @@
         addPreset,
         removePreset,
         setPresetToInterface,
+        selectPreset,
     } from "./presets";
     import * as app from "../wailsjs/go/main/App.js";
 
@@ -38,12 +39,13 @@
                 <selectedcontent></selectedcontent>
             </button>
 
-            <option value="" hidden>
-                <span>Select an Interface</span>
-            </option>
-
-            {#each $nics as nic}
-                <option value={nic.interface_name} title={`${nic.interface_name} (${nic.interface_metric})`}>
+            {#each $nics as nic, index}
+                <option
+                    selected
+                    value={nic.interface_name}
+                    title={`${nic.interface_name} (${nic.interface_metric})`}
+                    hidden={nic.interface_name.includes("Loop")}
+                >
                     <div>
                         <div class="flex center-y gap-sm">
                             <div>{nic.interface_name}</div>
@@ -61,21 +63,35 @@
                     {#if $nic.ip_is_dhcp}
                         <span class="color-dim grid right" style="font-size: 0.875rem;" title="DHCP">
                             <div class="flex center-y gap-xs">
-                                <svg style="height: 0.75rem;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-heading)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path fill="var(--color-text-heading)" d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"/>
-                                    <path d="m14 7 3 3"/>
-                                    <path d="M5 6v4"/>
-                                    <path d="M19 14v4"/>
-                                    <path d="M10 2v2"/>
-                                    <path d="M7 8H3"/>
-                                    <path d="M21 16h-4"/>
-                                    <path d="M11 3H9"/>
+                                <svg
+                                    style="height: 0.75rem;"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="var(--color-text-heading)"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path
+                                        fill="var(--color-text-heading)"
+                                        d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"
+                                    />
+                                    <path d="m14 7 3 3" />
+                                    <path d="M5 6v4" />
+                                    <path d="M19 14v4" />
+                                    <path d="M10 2v2" />
+                                    <path d="M7 8H3" />
+                                    <path d="M21 16h-4" />
+                                    <path d="M11 3H9" />
                                 </svg>
                                 <span>IP:</span>
                             </div>
                         </span>
                     {:else}
-                      <span class="color-dim grid right" style="font-size: 0.875rem;" title="Static">IP:</span>
+                        <span class="color-dim grid right" style="font-size: 0.875rem;" title="Static">IP:</span>
                     {/if}
                     <span class="mono" style="color: var(--color-text-heading); font-weight: bold;"
                         >{ipMask.ip_address}</span
@@ -157,14 +173,13 @@
         </div>
 
         {#each $presets as preset}
-            <div
-                class="flex center-y gap-sm pad-sm"
-                style="border-top: var(--border);"
-            >
+            <div class="flex center-y gap-sm pad-sm" style="border-top: var(--border);">
                 <button
                     class="ip-icon-button shadow"
                     style="background-color: var(--color-bg-3);"
-                    on:click={() => {}}
+                    on:click={() => {
+                        setPresetToInterface($nic.interface_name, preset.name);
+                    }}
                     title="Set Interface
 Preset: {preset.name}
 IP: {preset.ips[0].ip_address}
@@ -192,7 +207,7 @@ DNS: {preset.dns_servers[0]}
                     class="ip-icon-button"
                     on:click={async () => {
                         setPage("Edit Preset");
-                        setPresetToInterface($nic.interface_name, preset.name);
+                        selectPreset(preset.name);
                     }}
                     title="Edit Preset"
                 >
