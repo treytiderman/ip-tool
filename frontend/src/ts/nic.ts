@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store"
-import * as app from "../wailsjs/go/main/App.js";
+import * as app from "../../wailsjs/go/main/App.js";
 
 export type {
     NicIp,

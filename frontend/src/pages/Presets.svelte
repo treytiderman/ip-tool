@@ -1,29 +1,13 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    import { setPage } from "./router";
-    import { nic, nics, setNic, initNics, pollNics } from "./nic";
-    import {
-        presets,
-        savePresets,
-        loadPresets,
-        resetPresets,
-        addPreset,
-        removePreset,
-        setPresetToInterface,
-        selectPreset,
-    } from "./presets";
-    import * as app from "../wailsjs/go/main/App.js";
+    import { setPage } from "../ts/router";
+    import { nic, nics, setNic } from "../ts/nic";
+    import { presets, setPresetToInterface, selectPreset } from "../ts/presets";
+    import * as app from "../../wailsjs/go/main/App.js";
 
     function setNicFromEvent(event: any) {
         const val = event.target.value;
         setNic(val);
     }
-
-    onMount(async () => {
-        loadPresets();
-        await initNics();
-        const interval = pollNics();
-    });
 </script>
 
 <div class="flex column gap-sm pad-sm h-full" style="padding-top: 1px;">

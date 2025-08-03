@@ -1,52 +1,79 @@
 <script lang="ts">
-    import { nic, nics, nicTemp, initNics, pollNics, setNic, setNicToInterface } from "./nic";
-    import { setPage } from "./router";
+    import { presets, presetTemp, presetSelectedIndex, editPreset, removePreset, selectPreset } from "../ts/presets";
+    import { setPage } from "../ts/router";
 
-    function setInterfaceName(event: any) {
+    function setPresetName(event: any) {
         const val = event.target.value;
-        $nicTemp.interface_name = val;
-        console.log("Temp Interface", $nicTemp);
+        $presetTemp.name = val;
+        console.log("Temp Preset", $presetTemp);
     }
     function setIpAddress(index: number, event: any) {
         const val = event.target.value;
-        $nicTemp.ips[index].ip_address = val;
-        console.log("Temp Interface", $nicTemp);
+        $presetTemp.ips[index].ip_address = val;
+        console.log("Temp Preset", $presetTemp);
     }
     function setSubnetMask(index: number, event: any) {
         const val = event.target.value;
-        $nicTemp.ips[index].subnet_mask = val;
-        console.log("Temp Interface", $nicTemp);
+        $presetTemp.ips[index].subnet_mask = val;
+        console.log("Temp Preset", $presetTemp);
     }
     function setGateway(index: number, event: any) {
         const val = event.target.value;
-        $nicTemp.gateways[index].gateway_address = val;
-        console.log("Temp Interface", $nicTemp);
+        $presetTemp.gateways[index].gateway_address = val;
+        console.log("Temp Preset", $presetTemp);
     }
     function setDnsServer(index: number, event: any) {
         const val = event.target.value;
-        $nicTemp.dns_servers[index] = val;
-        console.log("Temp Interface", $nicTemp);
+        $presetTemp.dns_servers[index] = val;
+        console.log("Temp Preset", $presetTemp);
     }
 </script>
 
 <form
     class="grid gap pad-sm"
     on:submit|preventDefault={async () => {
-        // console.log("submit", $nicTemp);
-        await setNicToInterface($nic.interface_name, $nicTemp);
+        console.log("submit", $presetTemp);
+        editPreset($presets[presetSelectedIndex].name, $presetTemp);
         setPage("IPv4 Presets");
     }}
 >
     <div class="grid gap-xs">
-        <label for="interface-name">Interface Name</label>
+        <div class="flex center-y gap-xs">
+            <label for="preset-name" class="grow">Preset Name</label>
+            <button
+                class="ip-icon-button red-hover"
+                type="button"
+                title="Delete Preset"
+                on:click={() => {
+                    removePreset($presets[presetSelectedIndex].name);
+                    setPage("IPv4 Presets");
+                }}
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                    <path d="M3 6h18" />
+                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+            </button>
+        </div>
         <input
             type="text"
-            id="interface-name"
             class="mono shadow-inset"
-            name="interface-name"
-            placeholder={$nic.interface_name}
-            value={$nicTemp.interface_name}
-            on:input={setInterfaceName}
+            id="preset-name"
+            name="preset-name"
+            placeholder={$presets[presetSelectedIndex].name}
+            value={$presetTemp.name}
+            on:input={setPresetName}
             required
         />
     </div>
@@ -54,14 +81,14 @@
     <div class="grid gap-xs">
         <div class="flex center-y gap-xs">
             <label for="ip-address-1" class="grow">IP Address</label>
-            {#if $nicTemp.ips.length > 1}
+            {#if $presetTemp.ips.length > 1}
                 <button
                     class="ip-icon-button"
                     type="button"
                     title="Remove IP Address"
                     on:click={() => {
-                        $nicTemp.ips.pop();
-                        $nicTemp = $nicTemp;
+                        $presetTemp.ips.pop();
+                        $presetTemp = $presetTemp;
                     }}
                 >
                     <svg
@@ -84,8 +111,8 @@
                 type="button"
                 title="Add IP Address"
                 on:click={() => {
-                    $nicTemp.ips.push({ ip_address: "", subnet_mask: "", cidr: 24 });
-                    $nicTemp = $nicTemp;
+                    $presetTemp.ips.push({ ip_address: "", subnet_mask: "", cidr: 24 });
+                    $presetTemp = $presetTemp;
                 }}
             >
                 <svg
@@ -109,14 +136,14 @@
             class="mono shadow-inset"
             id="ip-address-1"
             name="ip-address-1"
-            placeholder={$nic.ips[0]?.ip_address ?? ""}
-            value={$nicTemp.ips[0]?.ip_address ?? ""}
+            placeholder={$presets[presetSelectedIndex].ips[0]?.ip_address ?? ""}
+            value={$presetTemp.ips[0]?.ip_address ?? ""}
             on:input={(ev) => setIpAddress(0, ev)}
             required
             autofocus
         />
-        {#if $nicTemp.ips.length > 1}
-            {#each $nicTemp.ips as ip, index}
+        {#if $presetTemp.ips.length > 1}
+            {#each $presetTemp.ips as ip, index}
                 {#if index > 0}
                     <div class="grid gap-xs">
                         <label for="ip-address-{index}" hidden>IP Address</label>
@@ -125,8 +152,8 @@
                             id="ip-address-{index}"
                             class="mono shadow-inset"
                             name="ip-address-{index}"
-                            placeholder={$nic.ips[0]?.ip_address ?? ""}
-                            value={$nicTemp.ips[index]?.ip_address ?? ""}
+                            placeholder={$presets[presetSelectedIndex].ips[0]?.ip_address ?? ""}
+                            value={$presetTemp.ips[index]?.ip_address ?? ""}
                             on:input={(ev) => setIpAddress(index, ev)}
                             required
                         />
@@ -143,13 +170,13 @@
             id="subnet-mask-1"
             class="mono shadow-inset"
             name="subnet-mask-1"
-            placeholder={$nic.ips[0]?.subnet_mask ?? ""}
-            value={$nicTemp.ips[0]?.subnet_mask ?? ""}
+            placeholder={$presets[presetSelectedIndex].ips[0]?.subnet_mask ?? ""}
+            value={$presetTemp.ips[0]?.subnet_mask ?? ""}
             on:input={(ev) => setSubnetMask(0, ev)}
             required
         />
-        {#if $nicTemp.ips.length > 1}
-            {#each $nicTemp.ips as ip, index}
+        {#if $presetTemp.ips.length > 1}
+            {#each $presetTemp.ips as ip, index}
                 {#if index > 0}
                     <div class="grid gap-xs">
                         <label for="subnet-mask-{index}" hidden>Subnet Mask</label>
@@ -158,8 +185,8 @@
                             id="subnet-mask-{index}"
                             class="mono shadow-inset"
                             name="subnet-mask-{index}"
-                            placeholder={$nic.ips[0]?.subnet_mask ?? ""}
-                            value={$nicTemp.ips[index]?.subnet_mask ?? ""}
+                            placeholder={$presets[presetSelectedIndex].ips[0]?.subnet_mask ?? ""}
+                            value={$presetTemp.ips[index]?.subnet_mask ?? ""}
                             on:input={(ev) => setSubnetMask(index, ev)}
                             required
                         />
@@ -176,8 +203,8 @@
             id="gateway"
             class="mono shadow-inset"
             name="gateway"
-            placeholder={$nic.gateways[0]?.gateway_address ?? ""}
-            value={$nicTemp.gateways[0]?.gateway_address ?? ""}
+            placeholder={$presets[presetSelectedIndex].gateways[0]?.gateway_address ?? ""}
+            value={$presetTemp.gateways[0]?.gateway_address ?? ""}
             on:input={(ev) => setGateway(0, ev)}
         />
     </div>
@@ -185,14 +212,14 @@
     <div class="grid gap-xs">
         <div class="flex center-y gap-xs">
             <label for="dns" class="grow">DNS Servers</label>
-            {#if $nicTemp.dns_servers.length > 1}
+            {#if $presetTemp.dns_servers.length > 1}
                 <button
                     class="ip-icon-button"
                     type="button"
                     title="Remove DNS Server"
                     on:click={() => {
-                        $nicTemp.dns_servers.pop();
-                        $nicTemp = $nicTemp;
+                        $presetTemp.dns_servers.pop();
+                        $presetTemp = $presetTemp;
                     }}
                 >
                     <svg
@@ -215,8 +242,8 @@
                 type="button"
                 title="Add DNS Server"
                 on:click={() => {
-                    $nicTemp.dns_servers.push("");
-                    $nicTemp = $nicTemp;
+                    $presetTemp.dns_servers.push("");
+                    $presetTemp = $presetTemp;
                 }}
             >
                 <svg
@@ -240,12 +267,12 @@
             id="dns"
             class="mono shadow-inset"
             name="dns"
-            placeholder={$nic.dns_servers[0] ?? ""}
-            value={$nicTemp.dns_servers[0] ?? ""}
+            placeholder={$presets[presetSelectedIndex].dns_servers[0] ?? ""}
+            value={$presetTemp.dns_servers[0] ?? ""}
             on:input={(ev) => setDnsServer(0, ev)}
         />
-        {#if $nicTemp.dns_servers.length > 1}
-            {#each $nicTemp.dns_servers as dns, index}
+        {#if $presetTemp.dns_servers.length > 1}
+            {#each $presetTemp.dns_servers as dns, index}
                 {#if index > 0}
                     <div class="grid gap-xs">
                         <label for="dns-{index}" hidden>IP Address</label>
@@ -254,8 +281,8 @@
                             id="dns-{index}"
                             class="mono shadow-inset"
                             name="dns-{index}"
-                            placeholder={$nic.dns_servers[0]}
-                            value={$nicTemp.dns_servers[index]}
+                            placeholder={$presets[presetSelectedIndex].dns_servers[0]}
+                            value={$presetTemp.dns_servers[index]}
                             on:input={(ev) => setDnsServer(index, ev)}
                         />
                     </div>
@@ -265,7 +292,7 @@
     </div>
 
     <button type="submit" class="shadow">
-        <div>Set to Interface "<span class="mono small">{$nic.interface_name}</span>"</div>
+        <div>Update Preset "<span class="mono small">{$presets[presetSelectedIndex].name}</span>"</div>
     </button>
 </form>
 

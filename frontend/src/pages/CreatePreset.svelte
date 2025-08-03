@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { nic } from "./nic";
-    import { presets, presetTemp, presetSelectedIndex, editPreset, addPreset } from "./presets";
-    import { setPage } from "./router";
+    import { presets, presetTemp, presetSelectedIndex, editPreset, addPreset } from "../ts/presets";
+    import { setPage } from "../ts/router";
 
     function setPresetName(event: any) {
         const val = event.target.value;
