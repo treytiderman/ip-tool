@@ -180,7 +180,6 @@
             placeholder={$presets[presetSelectedIndex].gateways[0]?.gateway_address ?? ""}
             value={$presetTemp.gateways[0]?.gateway_address ?? ""}
             on:input={(ev) => setGateway(0, ev)}
-            required
         />
     </div>
 
@@ -245,7 +244,6 @@
             placeholder={$presets[presetSelectedIndex].dns_servers[0] ?? ""}
             value={$presetTemp.dns_servers[0] ?? ""}
             on:input={(ev) => setDnsServer(0, ev)}
-            required
         />
         {#if $presetTemp.dns_servers.length > 1}
             {#each $presetTemp.dns_servers as dns, index}
@@ -260,7 +258,6 @@
                             placeholder={$presets[presetSelectedIndex].dns_servers[0]}
                             value={$presetTemp.dns_servers[index]}
                             on:input={(ev) => setDnsServer(index, ev)}
-                            required
                         />
                     </div>
                 {/if}

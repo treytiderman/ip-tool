@@ -179,7 +179,6 @@
             placeholder={$nic.gateways[0]?.gateway_address ?? ""}
             value={$nicTemp.gateways[0]?.gateway_address ?? ""}
             on:input={(ev) => setGateway(0, ev)}
-            required
         />
     </div>
 
@@ -244,7 +243,6 @@
             placeholder={$nic.dns_servers[0] ?? ""}
             value={$nicTemp.dns_servers[0] ?? ""}
             on:input={(ev) => setDnsServer(0, ev)}
-            required
         />
         {#if $nicTemp.dns_servers.length > 1}
             {#each $nicTemp.dns_servers as dns, index}
@@ -259,7 +257,6 @@
                             placeholder={$nic.dns_servers[0]}
                             value={$nicTemp.dns_servers[index]}
                             on:input={(ev) => setDnsServer(index, ev)}
-                            required
                         />
                     </div>
                 {/if}

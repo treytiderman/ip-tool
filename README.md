@@ -20,6 +20,7 @@ Run `go test`
 
 - [ ] Changing interface name does not show correctly on the select without reloading the page
 - [ ] Stop poll interfaces while not focused or minimized
+- [ ] Add CIDR input of Subnet Mask if starts with "/"
 - [ ] Add DHCP functions renew, release, flushdns
 - [ ] Add css themes
 - [ ] Add settings page
