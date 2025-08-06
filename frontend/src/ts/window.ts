@@ -41,7 +41,7 @@ function loadWindow() {
     if (savedStore) {
         windowStore = JSON.parse(savedStore)
     }
-    console.log("localStorage: window", windowStore);
+    console.log("localStorage: window", windowStore || undefined);
     setFontSize(windowStore.fontSize)
     setWindowSize(windowStore.windowSizeX, windowStore.windowSizeY)
     setWindowAlwaysOnTop(windowStore.windowAlwaysOnTop)

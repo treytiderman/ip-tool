@@ -7,9 +7,11 @@ export type {
     Nic,
 }
 export {
-    nic,
     nics,
     nicTemp,
+    nicStatus,
+    currentNicIndex,
+    lastSelectedNicName,
     initNics,
     updateNics,
     pollNics,
@@ -38,7 +40,7 @@ type Nic = {
     dns_servers: string[];
 };
 
-const nic = writable<Nic>({
+const blankNic: Nic = {
     interface_name: "xxxxxx",
     interface_metric: 999,
     ip_is_dhcp: false,
@@ -57,47 +59,105 @@ const nic = writable<Nic>({
     ],
     dns_is_dhcp: false,
     dns_servers: ["xxx.xxx.xxx.xxx"],
-})
+}
 
-const nics = writable<Nic[]>([]) // TODO: change this to an index of the main nics array
+const nics = writable<Nic[]>([blankNic])
 
-const nicTemp = writable<Nic>(JSON.parse(JSON.stringify(get(nic))))
+const nicTemp = writable<Nic>(JSON.parse(JSON.stringify(blankNic)))
+
+const nicStatus = writable("")
+
+const currentNicIndex = writable(0)
+const lastSelectedNicName = writable("")
+let lastSelectedWaitCounter = 0
+
+function saveLastSelectedNicName() {
+    const temp = get(lastSelectedNicName)
+    localStorage.setItem("lastSelectedNicName", temp)
+}
+
+function loadLastSelectedNicName() {
+    const temp = localStorage.getItem("lastSelectedNicName")
+    console.log("localStorage: lastSelectedNicName", temp);
+    if (temp) {
+        setNic(temp)
+    }
+}
 
 async function initNics() {
     const tempNics = await app.GetInterfaces()
-    console.log("Interfaces (nics)", tempNics)
+    console.log("api: Network Interfaces (nics)", tempNics)
     nics.set(tempNics)
-    setNic(tempNics[0].interface_name)
-}
-
-async function updateNics() {
-    const tempNics = await app.GetInterfaces()
-    nics.set(tempNics)
-    if (JSON.stringify(tempNics) !== JSON.stringify(get(nics))) {
-        console.log("Interfaces (nics)", tempNics)
-    }
-    if (!tempNics.find(n => n.interface_name === get(nic).interface_name)) {
-        setNic(get(nics)[0].interface_name)
-    }
-    setNic(get(nic).interface_name)
-}
-
-function pollNics(ms = 2000) {
-    return setInterval(updateNics, ms)
+    loadLastSelectedNicName()
 }
 
 function setNic(name: string) {
     const tempNics = get(nics)
-    const found = tempNics.find((nic) => nic.interface_name === name)
-    if (found) {
-        if (JSON.stringify(found) !== JSON.stringify(get(nic))) {
-            console.log("Interface Selected (nic)", found)
-            nic.set(found)
-            nicTemp.set(JSON.parse(JSON.stringify(found)))
-        }
-    } else {
-        console.error("Interface Selected (nic)", name, found)
+    const foundIndex = tempNics.findIndex((nic) => nic.interface_name === name)
+
+    if (foundIndex === -1) {
+        console.log("ui: Network Interface (nic) Selected does not exist", name)
+        return
     }
+
+    console.log("ui: Network Interface (nic) Selected", tempNics, tempNics[foundIndex])
+    currentNicIndex.set(foundIndex)
+    nicTemp.set(JSON.parse(JSON.stringify(tempNics[foundIndex])))
+    lastSelectedNicName.set(tempNics[foundIndex].interface_name)
+    saveLastSelectedNicName()
+}
+
+function resetNic() {
+    const tempNics = get(nics)
+    if (tempNics.length > 0) {
+        console.log("ui: Network Interface Resetting:", lastSelectedWaitCounter, tempNics[0].interface_name)
+
+        if (lastSelectedWaitCounter < 10) {
+            lastSelectedWaitCounter++
+        } else {
+            lastSelectedWaitCounter = 0
+            lastSelectedNicName.set(tempNics[0].interface_name)
+            // saveLastSelectedNicName()
+        }
+        
+        currentNicIndex.set(0)
+        nicTemp.set(JSON.parse(JSON.stringify(tempNics[0])))
+        nics.set(tempNics)
+    } else {
+        console.log("ui: No Network Interfaces found")
+        currentNicIndex.set(0)
+        nicTemp.set(JSON.parse(JSON.stringify(tempNics[0])))
+        nics.set(tempNics)
+    }
+}
+
+async function updateNics() {
+    const tempNics = await app.GetInterfaces()
+    if (JSON.stringify(tempNics) !== JSON.stringify(get(nics))) {
+        console.log("api: Network Interfaces (nics)", tempNics, get(nics))
+        nics.set(tempNics)
+        nicTemp.set(JSON.parse(JSON.stringify(tempNics[get(currentNicIndex)])))
+    }
+
+    const tempLastSelectedNicName = get(lastSelectedNicName)
+    const foundIndex = tempNics.findIndex((nic) => nic.interface_name === tempLastSelectedNicName)
+    if (foundIndex === -1) {
+        console.log("api: Network Interfaces (nics) no longer found", tempLastSelectedNicName || undefined)
+        resetNic()
+        return
+    }
+    
+    if (foundIndex !== get(currentNicIndex)) {
+        console.log("api: Network Interface Selected at new index", foundIndex)
+        currentNicIndex.set(foundIndex)
+        nicTemp.set(JSON.parse(JSON.stringify(tempNics[foundIndex])))
+        setNic(tempNics[foundIndex].interface_name)
+        lastSelectedWaitCounter = 0
+    }
+}
+
+function pollNics(ms = 2000) {
+    return setInterval(updateNics, ms)
 }
 
 async function setNicToInterface(interface_name: string, nic: Nic) {

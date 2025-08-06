@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { nic, nics, nicTemp, initNics, pollNics, setNic, setNicToInterface } from "../ts/nic";
+    import { nics, nicTemp, currentNicIndex, setNicToInterface } from "../ts/nic";
     import { setPage } from "../ts/router";
 
     function setInterfaceName(event: any) {
@@ -33,8 +33,8 @@
     class="grid gap pad-sm"
     on:submit|preventDefault={async () => {
         // console.log("submit", $nicTemp);
-        await setNicToInterface($nic.interface_name, $nicTemp);
         setPage("IPv4 Presets");
+        await setNicToInterface($nics[$currentNicIndex].interface_name, $nicTemp);
     }}
 >
     <div class="grid gap-xs">
@@ -44,7 +44,7 @@
             id="interface-name"
             class="mono shadow-inset"
             name="interface-name"
-            placeholder={$nic.interface_name}
+            placeholder={$nics[$currentNicIndex].interface_name}
             value={$nicTemp.interface_name}
             on:input={setInterfaceName}
             required
@@ -109,7 +109,7 @@
             class="mono shadow-inset"
             id="ip-address-1"
             name="ip-address-1"
-            placeholder={$nic.ips[0]?.ip_address ?? ""}
+            placeholder={$nics[$currentNicIndex].ips[0]?.ip_address ?? ""}
             value={$nicTemp.ips[0]?.ip_address ?? ""}
             on:input={(ev) => setIpAddress(0, ev)}
             required
@@ -125,7 +125,7 @@
                             id="ip-address-{index}"
                             class="mono shadow-inset"
                             name="ip-address-{index}"
-                            placeholder={$nic.ips[0]?.ip_address ?? ""}
+                            placeholder={$nics[$currentNicIndex].ips[0]?.ip_address ?? ""}
                             value={$nicTemp.ips[index]?.ip_address ?? ""}
                             on:input={(ev) => setIpAddress(index, ev)}
                             required
@@ -143,7 +143,7 @@
             id="subnet-mask-1"
             class="mono shadow-inset"
             name="subnet-mask-1"
-            placeholder={$nic.ips[0]?.subnet_mask ?? ""}
+            placeholder={$nics[$currentNicIndex].ips[0]?.subnet_mask ?? ""}
             value={$nicTemp.ips[0]?.subnet_mask ?? ""}
             on:input={(ev) => setSubnetMask(0, ev)}
             required
@@ -158,7 +158,7 @@
                             id="subnet-mask-{index}"
                             class="mono shadow-inset"
                             name="subnet-mask-{index}"
-                            placeholder={$nic.ips[0]?.subnet_mask ?? ""}
+                            placeholder={$nics[$currentNicIndex].ips[0]?.subnet_mask ?? ""}
                             value={$nicTemp.ips[index]?.subnet_mask ?? ""}
                             on:input={(ev) => setSubnetMask(index, ev)}
                             required
@@ -176,7 +176,7 @@
             id="gateway"
             class="mono shadow-inset"
             name="gateway"
-            placeholder={$nic.gateways[0]?.gateway_address ?? ""}
+            placeholder={$nics[$currentNicIndex].gateways[0]?.gateway_address ?? ""}
             value={$nicTemp.gateways[0]?.gateway_address ?? ""}
             on:input={(ev) => setGateway(0, ev)}
         />
@@ -240,7 +240,7 @@
             id="dns"
             class="mono shadow-inset"
             name="dns"
-            placeholder={$nic.dns_servers[0] ?? ""}
+            placeholder={$nics[$currentNicIndex].dns_servers[0] ?? ""}
             value={$nicTemp.dns_servers[0] ?? ""}
             on:input={(ev) => setDnsServer(0, ev)}
         />
@@ -254,7 +254,7 @@
                             id="dns-{index}"
                             class="mono shadow-inset"
                             name="dns-{index}"
-                            placeholder={$nic.dns_servers[0]}
+                            placeholder={$nics[$currentNicIndex].dns_servers[0]}
                             value={$nicTemp.dns_servers[index]}
                             on:input={(ev) => setDnsServer(index, ev)}
                         />
@@ -265,7 +265,7 @@
     </div>
 
     <button type="submit" class="shadow">
-        <div>Set to Interface "<span class="mono small">{$nic.interface_name}</span>"</div>
+        <div>Set to Interface "<span class="mono small">{$nics[$currentNicIndex].interface_name}</span>"</div>
     </button>
 </form>
 

@@ -131,11 +131,11 @@ const defaultPresets: Preset[] = [
         dns_servers: ["172.22.0.2"],
     },
     {
-        name: "198.18.0.1/16",
+        name: "198.18.0.99/16",
         ip_is_dhcp: false,
         ips: [
             {
-                ip_address: "198.18.0.1",
+                ip_address: "198.18.0.99",
                 subnet_mask: "255.255.0.0",
                 cidr: 16,
             },
@@ -166,7 +166,7 @@ function loadPresets() {
     if (savedPresetsJson) {
         presets.set(JSON.parse(savedPresetsJson))
     }
-    console.log("localStorage: presets", get(presets));
+    console.log("localStorage: presets", get(presets) || undefined);
 }
 
 function resetPresets() {

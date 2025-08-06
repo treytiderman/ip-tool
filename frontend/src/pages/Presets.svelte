@@ -1,6 +1,6 @@
 <script lang="ts">
     import { setPage } from "../ts/router";
-    import { nic, nics, setNic } from "../ts/nic";
+    import { nics, setNic, currentNicIndex } from "../ts/nic";
     import { presets, setPresetToInterface, selectPreset } from "../ts/presets";
     import * as app from "../../wailsjs/go/main/App.js";
 
@@ -8,12 +8,21 @@
         const val = event.target.value;
         setNic(val);
     }
+
+    let selectedNic = "Select Interface";
+
+    nics.subscribe((ncs) => {
+        selectedNic = JSON.parse(JSON.stringify(ncs[$currentNicIndex].interface_name));
+    });
+    currentNicIndex.subscribe((i) => {
+        selectedNic = JSON.parse(JSON.stringify($nics[i].interface_name));
+    });
 </script>
 
 <div class="flex column gap-sm pad-sm h-full" style="padding-top: 1px;">
     <div class="ip-nic flex column shadow">
         <select
-            value={$nic.interface_name}
+            bind:value={selectedNic}
             id="networkInterface"
             name="networkInterface"
             title="Select Network Interface"
@@ -35,16 +44,16 @@
                             <div>{nic.interface_name}</div>
                             <div class="color-dim" style="font-size: 0.6rem;">({nic.interface_metric})</div>
                         </div>
-                        <div class="mono">{nic.ips[0]?.ip_address}</div>
+                        <div class="mono">{nic.ips[0] ? nic.ips[0].ip_address : "No IP Address"}</div>
                     </div>
                 </option>
             {/each}
         </select>
 
         <div class="grid pad-sm">
-            {#each $nic.ips as ipMask, index}
+            {#each $nics[$currentNicIndex].ips as ipMask, index}
                 <div class="grid center-y gap-sm" style="grid-template-columns: 2.75rem 1fr 2rem;">
-                    {#if $nic.ip_is_dhcp}
+                    {#if $nics[$currentNicIndex].ip_is_dhcp}
                         <span class="color-dim grid right" style="font-size: 0.875rem;" title="DHCP">
                             <div class="flex center-y gap-xs">
                                 <svg
@@ -113,14 +122,14 @@
                 </div>
             {/each}
 
-            {#each $nic.gateways as gateway}
+            {#each $nics[$currentNicIndex].gateways as gateway}
                 <div class="grid center-y gap-sm" style="grid-template-columns: 2.75rem 1fr;">
                     <span class="color-dim grid right" style="font-size: 0.875rem;">Gate:</span>
                     <span class="mono">{gateway.gateway_address}</span>
                 </div>
             {/each}
 
-            {#each $nic.dns_servers as dns_server}
+            {#each $nics[$currentNicIndex].dns_servers as dns_server}
                 <div class="grid center-y gap-sm" style="grid-template-columns: 2.75rem 1fr;">
                     <span class="color-dim grid right" style="font-size: 0.875rem;">DNS:</span>
                     <span class="mono">{dns_server}</span>
@@ -129,12 +138,16 @@
         </div>
     </div>
 
-    <div class="presets grid overflow grow radius shadow" style="background-color: var(--color-bg-1);">
+    <div
+        class="presets grid overflow grow radius shadow"
+        style="background-color: var(--color-bg-1);"
+        hidden={$nics[$currentNicIndex].ips[0]?.ip_address === ""}
+    >
         <div class="flex center-y gap-sm pad-sm">
             <button
                 class="ip-icon-button shadow"
                 style="background-color: var(--color-bg-3);"
-                on:click={async () => await app.SetDhcp($nic.interface_name)}
+                on:click={async () => await app.SetDhcp($nics[$currentNicIndex].interface_name)}
                 title="Set Interface to DHCP"
             >
                 <svg
@@ -162,7 +175,7 @@
                     class="ip-icon-button shadow"
                     style="background-color: var(--color-bg-3);"
                     on:click={() => {
-                        setPresetToInterface($nic.interface_name, preset.name);
+                        setPresetToInterface($nics[$currentNicIndex].interface_name, preset.name);
                     }}
                     title="Set Interface
 Preset: {preset.name}

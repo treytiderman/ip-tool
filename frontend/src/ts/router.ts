@@ -22,10 +22,11 @@ function setHomePage() {
 }
 
 function setPage(name: string) {
+    console.log(`ui: Set Page "${name}"`)
     const page = pages.find(p => p.name === name)
     if (page) {
         pageStore.set(page)
     } else {
-        console.warn(`Page with name "${name}" not found.`)
+        console.warn(`ui: Set Page failed, name "${name}" not found.`)
     }
 }
