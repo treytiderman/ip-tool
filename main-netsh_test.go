@@ -354,6 +354,15 @@ func Test_CidrToMask(t *testing.T) {
 	}
 }
 
+// func TestNotReal()  {
+// 	example1 := `
+// Admin State    State          Type             Interface Name
+// -------------------------------------------------------------------------
+// Enabled        Connected      Dedicated        Ethernet
+// Enabled        Disconnected   Dedicated        Ethernet 3
+// `
+// }
+
 func Test_Manual(t *testing.T) {
 	adminStatus := IsAdmin()
 	if adminStatus == false {
