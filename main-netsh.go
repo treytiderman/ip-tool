@@ -27,11 +27,31 @@ type Gateway struct {
 type Interface struct {
 	InterfaceName   string    `json:"interface_name"`
 	InterfaceMetric int       `json:"interface_metric"`
+	InterfaceType   string    `json:"interface_type"` // "Dedicated", "Other"
+	Connected       bool      `json:"connected"`
+	Disabled        bool      `json:"disabled"`
 	IpIsDhcp        bool      `json:"ip_is_dhcp"`
 	Ips             []Ip      `json:"ips"`
 	Gateways        []Gateway `json:"gateways"`
 	DnsIsDhcp       bool      `json:"dns_is_dhcp"`
 	DnsServers      []string  `json:"dns_servers"`
+}
+
+type InterfaceConfig struct {
+	InterfaceName   string    `json:"interface_name"`
+	InterfaceMetric int       `json:"interface_metric"`
+	IpIsDhcp        bool      `json:"ip_is_dhcp"`
+	Ips             []Ip      `json:"ips"`
+	Gateways        []Gateway `json:"gateways"`
+	DnsIsDhcp       bool      `json:"dns_is_dhcp"`
+	DnsServers      []string  `json:"dns_servers"`
+}
+
+type InterfaceState struct {
+	InterfaceName string `json:"interface_name"`
+	InterfaceType string `json:"interface_type"`
+	Connected     bool   `json:"connected"`
+	Disabled      bool   `json:"disabled"`
 }
 
 type Route struct {
@@ -79,16 +99,16 @@ func CidrToMask(cidrString string) (string, error) {
 	return net.IP(mask).String(), nil
 }
 
-func ParseInterfaces(lines []string) ([]Interface, error) {
-	nics := []Interface{}
-	curr := Interface{}
+func ParseInterfaces(lines []string) ([]InterfaceConfig, error) {
+	nics := []InterfaceConfig{}
+	curr := InterfaceConfig{}
 	currIP := Ip{}
 	currGateway := Gateway{}
 	newNic := false
 	anotherDnsServerIsPossible := false
 
 	reset := func() {
-		curr = Interface{InterfaceMetric: -1, Ips: []Ip{}, Gateways: []Gateway{}, DnsServers: []string{}}
+		curr = InterfaceConfig{InterfaceMetric: -1, Ips: []Ip{}, Gateways: []Gateway{}, DnsServers: []string{}}
 		currIP = Ip{}
 	}
 	reset()
@@ -174,13 +194,131 @@ func ParseInterfaces(lines []string) ([]Interface, error) {
 	return nics, nil
 }
 
+func ParseInterfaceStates(lines []string) ([]InterfaceState, error) {
+	states := []InterfaceState{}
+
+	for _, raw := range lines {
+		line := strings.TrimSpace(raw)
+
+		if !strings.HasPrefix(line, "Disabled") && !strings.HasPrefix(line, "Enabled") {
+			continue
+		}
+
+		split := strings.Fields(line)
+		if len(split) < 4 {
+			continue
+		}
+
+		var disabled bool
+		if split[0] == "Enabled" {
+			disabled = false
+		} else {
+			disabled = true
+		}
+
+		var connected bool
+		if split[1] == "Connected" {
+			connected = true
+		} else {
+			connected = false
+		}
+
+		var interfaceType = split[2]
+
+		// need to preserve spaces in interfaceName
+		idx := strings.Index(line, interfaceType)
+		if idx == -1 {
+			continue
+		}
+		var interfaceName = strings.TrimSpace(line[idx+len(interfaceType):])
+		if interfaceName == "" {
+			continue
+		}
+
+		state := InterfaceState{
+			Disabled:      disabled,
+			Connected:     connected,
+			InterfaceType: interfaceType,
+			InterfaceName: interfaceName,
+		}
+		states = append(states, state)
+	}
+
+	return states, nil
+}
+
 // run and parse command: netsh interface ipv4 show config
-func GetInterfaces() ([]Interface, error) {
+func GetInterfaceConfigs() ([]InterfaceConfig, error) {
 	lines, err := Cmd("netsh", "interface", "ipv4", "show", "config")
 	if err != nil {
 		return nil, err
 	}
 	return ParseInterfaces(lines)
+}
+
+// run and parse command: netsh interface show interface
+func GetInterfaceStates() ([]InterfaceState, error) {
+	lines, err := Cmd("netsh", "interface", "show", "interface")
+	if err != nil {
+		return nil, err
+	}
+	return ParseInterfaceStates(lines)
+}
+
+
+// get full interface object. only ones returned in GetInterfaceStates()
+func GetInterfaces() ([]Interface, error) {
+	interfaceConfigs, err := GetInterfaceConfigs()
+	if err != nil {
+		return nil, err
+	}
+	
+	interfaceStates, err := GetInterfaceStates()
+	if err != nil {
+		return nil, err
+	}
+
+	interfaces := []Interface{}
+	for _, state := range interfaceStates {
+		configIdx := -1
+		for i := range interfaceConfigs {
+			if interfaceConfigs[i].InterfaceName == state.InterfaceName {
+				configIdx = i
+				break
+			}
+		}
+		if configIdx == -1 {
+			iface := Interface{
+				InterfaceName:   state.InterfaceName,
+				InterfaceType:   state.InterfaceType,
+				Connected:       state.Connected,
+				Disabled:        state.Disabled,
+				InterfaceMetric: 999,
+				IpIsDhcp:        false,
+				Ips:             []Ip{},
+				Gateways:        []Gateway{},
+				DnsIsDhcp:       false,
+				DnsServers:      []string{},
+			}
+			interfaces = append(interfaces, iface)
+		} else {
+			iface := Interface{
+				InterfaceName:   state.InterfaceName,
+				InterfaceType:   state.InterfaceType,
+				Connected:       state.Connected,
+				Disabled:        state.Disabled,
+				InterfaceMetric: interfaceConfigs[configIdx].InterfaceMetric,
+				IpIsDhcp:        interfaceConfigs[configIdx].IpIsDhcp,
+				Ips:             interfaceConfigs[configIdx].Ips,
+				Gateways:        interfaceConfigs[configIdx].Gateways,
+				DnsIsDhcp:       interfaceConfigs[configIdx].DnsIsDhcp,
+				DnsServers:      interfaceConfigs[configIdx].DnsServers,
+			}
+			interfaces = append(interfaces, iface)
+		}
+	}
+
+	return interfaces, nil
 }
 
 // returns true if first line is blank
@@ -252,6 +390,16 @@ func SetInterfaceMetricAuto(iface string) bool {
 // run command: netsh interface set interface name="Ethernet" newname="New Ethernet"
 func SetInterfaceName(oldName, newName string) bool {
 	return NetshCmdBool("interface", "set", "interface", "name="+oldName, "newname="+newName)
+}
+
+// netsh interface set interface "Ethernet" enabled
+func EnableInterface(iface string) bool {
+	return NetshCmdBool("interface", "set", "interface", iface, "enabled")
+}
+
+// netsh interface set interface "Ethernet" disable
+func DisableInterface(iface string) bool {
+	return NetshCmdBool("interface", "set", "interface", iface, "disable")
 }
 
 // run command: ipconfig /release

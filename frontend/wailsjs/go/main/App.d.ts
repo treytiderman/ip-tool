@@ -8,6 +8,10 @@ export function AddIpStatic(arg1:string,arg2:string,arg3:string):Promise<boolean
 
 export function FlushDns():Promise<boolean>;
 
+export function GetInterfaceConfigs():Promise<Array<main.InterfaceConfig>>;
+
+export function GetInterfaceStates():Promise<Array<main.InterfaceState>>;
+
 export function GetInterfaces():Promise<Array<main.Interface>>;
 
 export function IsAdmin():Promise<boolean>;

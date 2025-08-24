@@ -1,11 +1,9 @@
 import { writable, get } from "svelte/store"
 import * as app from "../../wailsjs/go/main/App.js";
+import { main } from "../../wailsjs/go/models";
 
-export type {
-    NicIp,
-    NicGateway,
-    Nic,
-}
+// main.Interface
+
 export {
     nics,
     nicTemp,
@@ -19,30 +17,12 @@ export {
     setNicToInterface,
 }
 
-type NicIp = {
-    ip_address: string;
-    subnet_mask: string;
-    cidr: number;
-};
-
-type NicGateway = {
-    gateway_address: string;
-    gateway_metric: number;
-};
-
-type Nic = {
-    interface_name: string;
-    interface_metric: number;
-    ip_is_dhcp: boolean;
-    ips: NicIp[];
-    gateways: NicGateway[];
-    dns_is_dhcp: boolean;
-    dns_servers: string[];
-};
-
-const blankNic: Nic = {
+const blankNic: any = {
     interface_name: "xxxxxx",
     interface_metric: 999,
+    interface_type: "Dedicated",
+    connected: true,
+    disabled: false,
     ip_is_dhcp: false,
     ips: [
         {
@@ -61,9 +41,9 @@ const blankNic: Nic = {
     dns_servers: ["xxx.xxx.xxx.xxx"],
 }
 
-const nics = writable<Nic[]>([blankNic])
+const nics = writable<main.Interface[]>([blankNic])
 
-const nicTemp = writable<Nic>(JSON.parse(JSON.stringify(blankNic)))
+const nicTemp = writable<main.Interface>(JSON.parse(JSON.stringify(blankNic)))
 
 const nicStatus = writable("")
 
@@ -119,7 +99,7 @@ function resetNic() {
             lastSelectedNicName.set(tempNics[0].interface_name)
             // saveLastSelectedNicName()
         }
-        
+
         currentNicIndex.set(0)
         nicTemp.set(JSON.parse(JSON.stringify(tempNics[0])))
         nics.set(tempNics)
@@ -146,7 +126,7 @@ async function updateNics() {
         resetNic()
         return
     }
-    
+
     if (foundIndex !== get(currentNicIndex)) {
         console.log("api: Network Interface Selected at new index", foundIndex)
         currentNicIndex.set(foundIndex)
@@ -160,7 +140,7 @@ function pollNics(ms = 2000) {
     return setInterval(updateNics, ms)
 }
 
-async function setNicToInterface(interface_name: string, nic: Nic) {
+async function setNicToInterface(interface_name: string, nic: main.Interface) {
     console.log("Set Nic To Interface", interface_name, nic);
     await app.SetStatic(
         interface_name,

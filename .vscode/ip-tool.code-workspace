@@ -1,0 +1,17 @@
+{
+	"folders": [
+        {
+            "name": "backend-go",
+            "path": "../"
+        },
+        {
+            "name": "frontend-svelte",
+            "path": "../frontend/src"
+        },
+        // {
+        //     "name": "ip-tool-v1",
+        //     "path": "../../ip-tool"
+        // },
+    ],
+    "settings": {}
+}

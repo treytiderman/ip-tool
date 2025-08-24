@@ -14,6 +14,14 @@ export function FlushDns() {
   return window['go']['main']['App']['FlushDns']();
 }
 
+export function GetInterfaceConfigs() {
+  return window['go']['main']['App']['GetInterfaceConfigs']();
+}
+
+export function GetInterfaceStates() {
+  return window['go']['main']['App']['GetInterfaceStates']();
+}
+
 export function GetInterfaces() {
   return window['go']['main']['App']['GetInterfaces']();
 }

@@ -25,48 +25,72 @@ func (a *App) IsAdmin() bool {
 	return IsAdmin()
 }
 
-func (a *App) GetInterfaces() []Interface {
-	nics, err := GetInterfaces()
+func (a *App) GetInterfaceConfigs() []InterfaceConfig {
+	nics, err := GetInterfaceConfigs()
 	if err != nil {
-		return []Interface{}
+		return []InterfaceConfig{}
 	}
 	return nics
 }
 
+func (a *App) GetInterfaceStates() []InterfaceState {
+	states, err := GetInterfaceStates()
+	if err != nil {
+		return []InterfaceState{}
+	}
+	return states
+}
+
+func (a *App) GetInterfaces() []Interface {
+	ifaces, err := GetInterfaces()
+	if err != nil {
+		return []Interface{}
+	}
+	return ifaces
+}
+
 func (a *App) SetIpDhcp(iface string) bool {
-    return SetIpDhcp(iface)
+	return SetIpDhcp(iface)
 }
 
 func (a *App) SetIpStatic(iface, ip, mask, gateway string) bool {
-    return SetIpStatic(iface, ip, mask, gateway)
+	return SetIpStatic(iface, ip, mask, gateway)
 }
 
 func (a *App) AddIpStatic(iface, ip, mask string) bool {
-    return AddIpStatic(iface, ip, mask)
+	return AddIpStatic(iface, ip, mask)
 }
 
 func (a *App) SetDnsDhcp(iface string) bool {
-    return SetDnsDhcp(iface)
+	return SetDnsDhcp(iface)
 }
 
 func (a *App) SetDnsStatic(iface, dns string) bool {
-    return SetDnsStatic(iface, dns)
+	return SetDnsStatic(iface, dns)
 }
 
 func (a *App) AddDnsStatic(iface, dns, index string) bool {
-    return AddDnsStatic(iface, dns, index)
+	return AddDnsStatic(iface, dns, index)
 }
 
 func (a *App) SetInterfaceMetric(iface, metric string) bool {
-    return SetInterfaceMetric(iface, metric)
+	return SetInterfaceMetric(iface, metric)
 }
 
 func (a *App) SetInterfaceMetricAuto(iface string) bool {
-    return SetInterfaceMetricAuto(iface)
+	return SetInterfaceMetricAuto(iface)
 }
 
 func (a *App) SetInterfaceName(oldName, newName string) bool {
-    return SetInterfaceName(oldName, newName)
+	return SetInterfaceName(oldName, newName)
+}
+
+func (a *App) EnableInterface(iface string) bool {
+	return EnableInterface(iface)
+}
+
+func (a *App) DisableInterface(iface string) bool {
+	return DisableInterface(iface)
 }
 
 func (a *App) ReleaseDhcp() bool {
@@ -82,9 +106,9 @@ func (a *App) FlushDns() bool {
 }
 
 func (a *App) SetDhcp(iface string) bool {
-    return SetDhcp(iface)
+	return SetDhcp(iface)
 }
 
 func (a *App) SetStatic(iface, ip, mask, gateway, dns string) bool {
-    return SetStatic(iface, ip, mask, gateway, dns)
+	return SetStatic(iface, ip, mask, gateway, dns)
 }

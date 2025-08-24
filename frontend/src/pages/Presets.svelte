@@ -37,14 +37,14 @@
                     selected
                     value={nic.interface_name}
                     title={`${nic.interface_name} (${nic.interface_metric})`}
-                    hidden={nic.interface_name.includes("Loop")}
+                    disabled={nic.disabled}
                 >
                     <div>
                         <div class="flex center-y gap-sm">
                             <div>{nic.interface_name}</div>
                             <div class="color-dim" style="font-size: 0.6rem;">({nic.interface_metric})</div>
                         </div>
-                        <div class="mono">{nic.ips[0] ? nic.ips[0].ip_address : "No IP Address"}</div>
+                        <div class="mono">{nic.ips[0] ? nic.ips[0].ip_address : nic.disabled ? "Interface Disabled" : "No IP Address"}</div>
                     </div>
                 </option>
             {/each}
@@ -316,6 +316,11 @@ DNS: {preset.dns_servers[0]}
 
     .ip-nic option:checked {
         font-weight: bold;
+    }
+
+    .ip-nic option:disabled {
+        cursor: not-allowed;
+        color: var(--color-text-placeholder)
     }
 
     .ip-nic option:not(option:first-of-type) {
