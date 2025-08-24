@@ -546,4 +546,8 @@ func Test_Manual(t *testing.T) {
 	// SetInterfaceName("Ethernet", "Ethernet 2")
 	// SetInterfaceName("Ethernet 2", "Ethernet")
 
+	// Enable/Disable Interface
+	// EnableInterface("Ethernet Anker")
+	// DisableInterface("Ethernet Anker")
+
 }

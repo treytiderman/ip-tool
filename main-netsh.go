@@ -394,7 +394,7 @@ func SetInterfaceName(oldName, newName string) bool {
 
 // netsh interface set interface "Ethernet" enabled
 func EnableInterface(iface string) bool {
-	return NetshCmdBool("interface", "set", "interface", iface, "enabled")
+	return NetshCmdBool("interface", "set", "interface", iface, "enable")
 }
 
 // netsh interface set interface "Ethernet" disable
