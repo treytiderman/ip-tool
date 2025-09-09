@@ -1,0 +1,122 @@
+<script lang="ts">
+    import { setPage } from "../ts/router";
+    import { nics, setNic, currentNicIndex } from "../ts/nic";
+    import { presets, setPresetToInterface, selectPreset } from "../ts/presets";
+    import * as app from "../../wailsjs/go/main/App.js";
+</script>
+
+<!-- <div class="grid gap-xs h-full" style="padding-top: 1px;"> -->
+    <div class="flex bottom pad-inline-sm">
+        <label>Presets</label>
+        <button
+            title="Add New Preset"
+            class="ip-icon-button color-dim"
+            style="margin-left: auto;"
+            on:click={() => setPage("Create Preset")}
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+            </svg>
+        </button>
+    </div>
+    <div
+        class="grow overflow grid gap-xs overflow grow pad-inline-xs" style="padding-bottom: var(--gap-sm); margin-inline: var(--gap-xs);"
+        hidden={$nics[$currentNicIndex].ips[0]?.ip_address === ""}
+    >
+        <div class="flex center-y gap-xs pad-xs radius shadow" style="background-color: var(--color-bg-1);">
+            <button
+                class="ip-icon-button"
+                on:click={async () => await app.SetDhcp($nics[$currentNicIndex].interface_name)}
+                title="Set Interface to DHCP"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    style="color: var(--color-text-orange);"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <polygon points="6 3 20 12 6 21 6 3" />
+                </svg>
+            </button>
+            <div class="grow">
+                <span>DHCP</span>
+            </div>
+        </div>
+
+        {#each $presets as preset}
+            <div class="flex center-y gap-xs pad-xs radius shadow" style="background-color: var(--color-bg-1);">
+                <button
+                    class="ip-icon-button"
+                    on:click={() => {
+                        setPresetToInterface($nics[$currentNicIndex].interface_name, preset.name);
+                    }}
+                    title="Set Interface
+Preset: {preset.name}
+IP: {preset.ips[0].ip_address}
+Mask: {preset.ips[0].subnet_mask}
+Gate: {preset.gateways[0].gateway_address}
+DNS: {preset.dns_servers[0]}
+"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        style="color: var(--color-text-orange);"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <polygon points="6 3 20 12 6 21 6 3" />
+                    </svg>
+                </button>
+                <div class="grow">{preset.name}</div>
+                <button
+                    class="ip-icon-button color-dim"
+                    on:click={async () => {
+                        setPage("Edit Preset");
+                        selectPreset(preset.name);
+                    }}
+                    title="Edit Preset"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path
+                            d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+                        />
+                        <path d="m15 5 4 4" />
+                    </svg>
+                </button>
+            </div>
+        {/each}
+    </div>
+<!-- </div> -->

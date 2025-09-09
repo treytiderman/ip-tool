@@ -12,6 +12,7 @@
 
     // Pages
     import Presets from "./pages/Presets.svelte";
+    import Interfaces from "./pages/Interfaces.svelte";
     import EditPreset from "./pages/EditPreset.svelte";
     import CreatePreset from "./pages/CreatePreset.svelte";
     import EditInterface from "./pages/EditInterface.svelte";
@@ -41,6 +42,10 @@
 <div class="flex column" style="height: 100svh; --default-contextmenu: show;">
     <Header title={$pageStore.name} />
 
+    <div style="padding-inline: var(--gap-sm)">
+        <hr>
+    </div>
+
     {#if isAdmin === false}
         <div class="not-admin">
             <div class="flex center-y gap-sm">
@@ -66,19 +71,18 @@
         </div>
     {/if}
 
-    <main class="grow flex column overflow">
-        <div class="h-full" hidden={$pageStore.name !== "IPv4 Presets"}>
+    <main class="grow flex column overflow h-full">
+        {#if $pageStore.name === "IPv4 Presets"}
             <Presets />
-        </div>
-        <div class="h-full" hidden={$pageStore.name !== "Edit Preset"}>
+        {:else if $pageStore.name === "Interfaces"}
+            <Interfaces />
+        {:else if $pageStore.name === "Edit Preset"}
             <EditPreset />
-        </div>
-        <div class="h-full" hidden={$pageStore.name !== "Create Preset"}>
+        {:else if $pageStore.name === "Create Preset"}
             <CreatePreset />
-        </div>
-        <div class="h-full" hidden={$pageStore.name !== "Edit Interface"}>
+        {:else if $pageStore.name === "Edit Interface"}
             <EditInterface />
-        </div>
+        {/if}
     </main>
 </div>
 

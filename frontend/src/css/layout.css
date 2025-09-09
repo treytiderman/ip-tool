@@ -176,6 +176,18 @@ button.flex {
     padding: var(--gap-xs);
 }
 
+.pad-inline {
+    padding-inline: var(--gap);
+}
+
+.pad-inline-sm {
+    padding-inline: var(--gap-sm);
+}
+
+.pad-inline-xs {
+    padding-inline: var(--gap-xs);
+}
+
 .shadow {
     box-shadow: 0.075rem 0.125rem 0.1rem 0 #00000033;
 }

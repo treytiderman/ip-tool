@@ -10,6 +10,14 @@ export function AddIpStatic(arg1, arg2, arg3) {
   return window['go']['main']['App']['AddIpStatic'](arg1, arg2, arg3);
 }
 
+export function DisableInterface(arg1) {
+  return window['go']['main']['App']['DisableInterface'](arg1);
+}
+
+export function EnableInterface(arg1) {
+  return window['go']['main']['App']['EnableInterface'](arg1);
+}
+
 export function FlushDns() {
   return window['go']['main']['App']['FlushDns']();
 }

@@ -18,7 +18,7 @@ Run `go test`
 
 ## Ideas
 
-- [ ] Changing interface name does not show correctly on the select without reloading the page
+- [x] Changing interface name does not show correctly on the select without reloading the page. Changed to a new interface select page
 - [ ] Stop poll interfaces while not focused or minimized
 - [ ] Add CIDR input of Subnet Mask if starts with "/"
 - [ ] Add DHCP functions renew, release, flushdns

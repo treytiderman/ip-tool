@@ -9,6 +9,7 @@ export {
 
 let pages = [
     { name: "IPv4 Presets" },
+    { name: "Interfaces" },
     { name: "Create Preset" },
     { name: "Edit Preset" },
     { name: "Edit Interface" },

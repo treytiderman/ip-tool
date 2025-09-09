@@ -52,7 +52,7 @@
     </div>
 
     <div class="grid gap-xs">
-        <div class="flex center-y gap-xs">
+        <div class="flex bottom gap-xs">
             <label for="ip-address-1" class="grow">IP Address</label>
             {#if $nicTemp.ips.length > 1}
                 <button
@@ -183,7 +183,7 @@
     </div>
 
     <div class="grid gap-xs">
-        <div class="flex center-y gap-xs">
+        <div class="flex bottom gap-xs">
             <label for="dns" class="grow">DNS Servers</label>
             {#if $nicTemp.dns_servers.length > 1}
                 <button

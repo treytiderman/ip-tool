@@ -4,7 +4,7 @@
     import { quitApp, setWindowMinimise, alwaysOnTopStore, toggleWindowAlwaysOnTop } from "./ts/window";
 </script>
 
-<header class="flex center-y">
+<header class="flex center-y gap-xs">
     {#if title !== "IPv4 Presets"}
         <button class="ip-icon-button" on:click={setHomePage} title="Back to IPv4 Presets">
             <svg
@@ -26,9 +26,9 @@
 
     <div class="grow" style="--wails-draggable:drag">{title}</div>
     {#if $alwaysOnTopStore}
-        <button class="ip-icon-button" on:click={toggleWindowAlwaysOnTop} title="Disable Always on Top">
+        <button class="ip-icon-button" style="height: 1.5rem;" on:click={toggleWindowAlwaysOnTop} title="Disable Always on Top">
             <svg
-                style="height: 0.875rem;"
+                style="height: 0.8rem;"
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -49,7 +49,7 @@
     {:else}
         <button class="ip-icon-button color-dim" on:click={toggleWindowAlwaysOnTop} title="Enable Always on Top">
             <svg
-                style="height: 0.875rem;"
+                style="height: 0.8rem;"
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -102,11 +102,11 @@
 
 <style>
     header {
-        padding: var(--gap-xs, 0.25rem);
+        padding: var(--gap-xs);
     }
     header div {
         cursor: pointer;
         user-select: none;
-        padding-inline: var(--gap-xs, 0.25rem);
+        padding-inline: var(--gap-xs);
     }
 </style>

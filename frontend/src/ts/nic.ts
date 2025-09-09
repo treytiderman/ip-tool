@@ -2,8 +2,6 @@ import { writable, get } from "svelte/store"
 import * as app from "../../wailsjs/go/main/App.js";
 import { main } from "../../wailsjs/go/models";
 
-// main.Interface
-
 export {
     nics,
     nicTemp,
@@ -21,7 +19,7 @@ const blankNic: any = {
     interface_name: "xxxxxx",
     interface_metric: 999,
     interface_type: "Dedicated",
-    connected: true,
+    connected: false,
     disabled: false,
     ip_is_dhcp: false,
     ips: [
