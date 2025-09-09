@@ -90,6 +90,11 @@
             setWindowSize(newWidth, newHeight);
         }
     }
+
+    async function onResize(event) {
+        const size = await getWindowSize();
+        setWindowSize(size.w, size.h);
+    }
 </script>
 
 <svelte:window
@@ -98,4 +103,5 @@
     on:pointerup={onMouseUp}
     on:pointerdown={onMouseDown}
     on:wheel={onWheel}
+    on:resize={onResize}
 />
