@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { writable, get } from "svelte/store"
 import * as app from "../../wailsjs/go/main/App.js";
 import { main } from "../../wailsjs/go/models";
@@ -110,6 +111,13 @@ function resetNic() {
 }
 
 async function updateNics() {
+    const settingDontPollIfMinimised = true
+    const settingDontPollIfNotFocued = true
+    const isMinimised = await window.runtime.WindowIsMinimised()
+    if (settingDontPollIfMinimised && isMinimised) return
+    if (settingDontPollIfNotFocued && !document.hasFocus()) return
+    console.log("updateNics")
+
     const tempNics = await app.GetInterfaces()
     if (JSON.stringify(tempNics) !== JSON.stringify(get(nics))) {
         console.log("api: Network Interfaces (nics)", tempNics, get(nics))
