@@ -75,6 +75,7 @@
                     }}
                     class="grow"
                     title="Select Interface"
+                    disabled={nic.disabled}
                     >
                     {nic.interface_name}</button
                 >

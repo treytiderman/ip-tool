@@ -141,7 +141,7 @@
             {/each}
         </div>
         <div class="pad-xs">
-            <button class="ip-icon-button color-dim" title="Edit Interface" on:click={() => setPage("Edit Interface")}>
+            <button class="ip-icon-button color-dim" hidden={!$nics[$currentNicIndex].connected} title="Edit Interface" on:click={() => setPage("Edit Interface")}>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"

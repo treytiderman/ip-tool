@@ -232,6 +232,11 @@ button:active:not(:disabled)>* {
     transform: translate(1px, 1px);
 }
 
+button:disabled {
+    cursor: not-allowed;
+    color: var(--color-text-placeholder);
+}
+
 .color-dim {
     color: var(--color-text-placeholder, #555);
 }

@@ -18,8 +18,9 @@ Run `go test`
 
 ## Ideas
 
+- [x] Add DHCP functions renew, release
 - [ ] Add CIDR input of Subnet Mask if starts with "/"
-- [ ] Add DHCP functions renew, release, flushdns
+- [ ] Add disable/enable interfaces
 - [ ] Add css themes
 - [ ] Add logging for each netsh command
 - [ ] Add settings page
