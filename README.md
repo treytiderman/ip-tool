@@ -1,11 +1,46 @@
 # README
- 
+
+Quickly change and save network IPv4 settings
+
+
+## Download
+
+Windows (portable): [ip-tool-v0.2.1.exe](https://github.com/treytiderman/ip-tool/releases/download/v0.2.1/ip-tool-v0.2.1.exe)
+
+
+## Screenshots
+
+![Preview UI](./screenshots/presets.png)
+
+![Preview UI](./screenshots/interfaces.png)
+
+![Preview UI](./screenshots/preset-edit.png)
+
+
+## Ideas
+
+- [x] Add DHCP functions renew, release
+- [ ] Add CIDR input of Subnet Mask if starts with "/"
+- [ ] Add disable/enable interfaces
+- [ ] Add css themes
+- [ ] Add logging for each netsh command
+- [ ] Add settings page
+    - [ ] Be able to change/add filters to interfaces
+    - [ ] Add poll interfaces time control
+    - [ ] Add setting for when to poll interfaces (focused, minimized)
+    - [ ] Add reset presets button
+    - [ ] Add export presets button
+    - [ ] Add export logs button
+
+
 ## Dev
 
 Run `wails dev`
 
 
 ## Build
+
+Run `wails build -clean -devtools -o ip-tool-v0.2.1.exe`
 
 Run `wails build`
 Run `wails build -clean` deletes build/bin
@@ -20,21 +55,6 @@ Run `wails build -devtools -o ip-tool-v0.x.exe`
 ## Go Tests
 
 Run `go test`
-
-
-## Ideas
-
-- [x] Add DHCP functions renew, release
-- [ ] Add CIDR input of Subnet Mask if starts with "/"
-- [ ] Add disable/enable interfaces
-- [ ] Add css themes
-- [ ] Add logging for each netsh command
-- [ ] Add settings page
-    - [ ] Be able to change/add filters to interfaces. Currently if contain "Loop" it does not show
-    - [ ] Add poll interfaces time control
-    - [ ] Add setting for when to poll interfaces (focused, minimized)
-    - [ ] Add reset presets button
-    - [ ] Add export presets button
 
 
 ## Always start as Administrator
