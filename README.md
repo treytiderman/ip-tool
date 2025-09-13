@@ -5,7 +5,7 @@ Quickly change and save network IPv4 settings
 
 ## Download
 
-Windows (portable): [ip-tool-v0.2.1.exe](https://github.com/treytiderman/ip-tool/releases/download/v0.2.1/ip-tool-v0.2.1.exe)
+Windows (portable): [ip-tool-v0.2.exe](https://github.com/treytiderman/ip-tool/releases/download/v0.2/ip-tool-v0.2.exe)
 
 
 ## Screenshots
@@ -40,7 +40,7 @@ Run `wails dev`
 
 ## Build
 
-Run `wails build -clean -devtools -o ip-tool-v0.2.1.exe`
+Run `wails build -clean -devtools -o ip-tool-v0.2.exe`
 
 Run `wails build`
 Run `wails build -clean` deletes build/bin
