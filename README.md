@@ -18,13 +18,10 @@ Run `go test`
 
 ## Ideas
 
-- [x] Changing interface name does not show correctly on the select without reloading the page. Changed to a new interface select page
-- [ ] Stop poll interfaces while not focused or minimized
 - [ ] Add CIDR input of Subnet Mask if starts with "/"
 - [ ] Add DHCP functions renew, release, flushdns
-- [x] Add "netsh interface show interface" function to tell if an interface is connected or not
-- [x] Add "netsh interface set interface "Ethernet" enable" or "disable" function to enable/disable an interface
 - [ ] Add css themes
+- [ ] Add logging for each netsh command
 - [ ] Add settings page
     - [ ] Be able to change/add filters to interfaces. Currently if contain "Loop" it does not show
     - [ ] Add poll interfaces time control
