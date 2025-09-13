@@ -14,7 +14,7 @@
         "rtl": false,
         "theme": "system",
         "darkMode": true,
-        "webview2": "browser",
+        "webview2": "download",
         "disableWindowIcon": false,
         "executionLevel": "requireAdministrator",
         "messages": {

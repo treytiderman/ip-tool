@@ -8,7 +8,13 @@ Run `wails dev`
 ## Build
 
 Run `wails build`
-Run `wails build -clean -o ip-tool.exe`
+Run `wails build -clean` deletes build/bin
+Run `wails build -devtools`
+Run `wails build -webview2 download` default option. asks to install webview
+Run `wails build -webview2 browser` if no webview then it opens the browser to the download page
+Run `wails build -webview2 embed` doesnt work?
+Run `wails build -o ip-tool-v0.x.exe`
+Run `wails build -devtools -o ip-tool-v0.x.exe`
 
 
 ## Go Tests
@@ -33,9 +39,9 @@ Run `go test`
 
 ## Always start as Administrator
 
-Add the "trustInfo" section to wails.exe.manifest
+Add the "<trustInfo>" section to wails.exe.manifest
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3">
     <assemblyIdentity type="win32" name="com.wails.{{.Name}}" version="{{.Info.ProductVersion}}.0" processorArchitecture="*"/>
@@ -62,7 +68,7 @@ Add the "trustInfo" section to wails.exe.manifest
 
 Adding the "windows" key to wails.json did not work
 
-```
+```json
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
   "name": "ip-tool",
