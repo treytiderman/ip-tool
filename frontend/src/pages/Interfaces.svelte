@@ -73,7 +73,7 @@
                         setNic(nic.interface_name);
                         setPage("IPv4 Presets");
                     }}
-                    class="grow"
+                    class="grow shadow"
                     title="Select Interface"
                     disabled={nic.disabled}
                     >

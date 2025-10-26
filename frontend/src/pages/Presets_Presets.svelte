@@ -64,7 +64,7 @@
                     await app.ReleaseDhcp();
                 }}
                 title="Release DHCP
-WARNING: affects all interfaces"
+WARNING: effects all interfaces"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +87,7 @@ WARNING: affects all interfaces"
                     await app.RenewDhcp();
                 }}
                 title="Renew DHCP
-WARNING: affects all interfaces"
+WARNING: effects all interfaces"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"

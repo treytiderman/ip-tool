@@ -93,6 +93,7 @@ html {
 
     /*  Border, Border Radius, Outline */
     --border-width: 1px;
+    --border-width: 1.5px;
     --border-radius: 0.25rem;
     --border-radius-lg: 1.0rem;
     --border: var(--border-width) solid var(--color-border);
@@ -124,6 +125,10 @@ html {
 body {
     color: var(--color-text, #fff);
     background-color: var(--color-bg, #000);
+}
+
+p {
+    line-height: var(--line-height);
 }
 
 input,

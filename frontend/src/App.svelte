@@ -16,6 +16,7 @@
     import EditPreset from "./pages/EditPreset.svelte";
     import CreatePreset from "./pages/CreatePreset.svelte";
     import EditInterface from "./pages/EditInterface.svelte";
+    import Settings from "./pages/Settings.svelte";
 
     // App start up
     let isAdmin = true;
@@ -82,6 +83,8 @@
             <CreatePreset />
         {:else if $pageStore.name === "Edit Interface"}
             <EditInterface />
+        {:else if $pageStore.name === "Settings"}
+            <Settings />
         {/if}
     </main>
 </div>
