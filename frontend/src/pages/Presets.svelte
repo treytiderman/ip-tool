@@ -3,7 +3,7 @@
     import Presets_Interface from "./Presets_Interface.svelte";
 </script>
 
-<div class="flex column gap-xs h-full" style="padding-top: var(--gap-xs);">
+<div class="grow height-100 flex column gap-1 pad-1">
     <Presets_Interface/>
     <div></div>
     <Presets_Presets/>

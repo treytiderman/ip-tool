@@ -4,13 +4,13 @@
     import { quitApp, setWindowMinimise, alwaysOnTopStore, toggleWindowAlwaysOnTop } from "./ts/window";
 </script>
 
-<header class="flex center-y gap-xs">
+<header class="flex center-y gap-1">
     {#if title !== "IPv4 Presets"}
-        <button class="ip-icon-button" on:click={() => setPage("IPv4 Presets")} title="Back to IPv4 Presets">
+        <button class="transparent" on:click={() => setPage("IPv4 Presets")} title="Back to IPv4 Presets">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -25,7 +25,7 @@
     {/if}
 
     {#if title == "IPv4 Presets"}
-        <button class="ip-icon-button" on:click={() => setPage("Settings")} title="Back to IPv4 Presets">
+        <button class="transparent" on:click={() => setPage("Settings")} title="Back to IPv4 Presets">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -45,10 +45,11 @@
         </button>
     {/if}
 
-    <div class="grow" style="--wails-draggable:drag">{title}</div>
+    <div class="grow" style="--wails-draggable:drag; cursor: pointer; user-select: none;">{title}</div>
+
     {#if $alwaysOnTopStore}
         <button
-            class="ip-icon-button"
+            class="transparent"
             style="height: 1.5rem;"
             on:click={toggleWindowAlwaysOnTop}
             title="Disable Always on Top"
@@ -56,8 +57,8 @@
             <svg
                 style="height: 0.8rem;"
                 xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -73,12 +74,12 @@
             </svg>
         </button>
     {:else}
-        <button class="ip-icon-button color-dim" on:click={toggleWindowAlwaysOnTop} title="Enable Always on Top">
+        <button class="transparent color-dim" on:click={toggleWindowAlwaysOnTop} title="Enable Always on Top">
             <svg
                 style="height: 0.8rem;"
                 xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -93,11 +94,11 @@
             </svg>
         </button>
     {/if}
-    <button class="ip-icon-button" on:click={setWindowMinimise} title="Minimise App">
+    <button class="transparent" on:click={setWindowMinimise} title="Minimise App">
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
+            width="24"
+            height="24"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -108,11 +109,11 @@
             <path d="M5 12h14" />
         </svg>
     </button>
-    <button class="ip-icon-button red-hover" on:click={quitApp} title="Quit App">
+    <button class="transparent error-bg-hover" on:click={quitApp} title="Quit App">
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
+            width="24"
+            height="24"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -125,14 +126,3 @@
         </svg>
     </button>
 </header>
-
-<style>
-    header {
-        padding: var(--gap-xs);
-    }
-    header div {
-        cursor: pointer;
-        user-select: none;
-        padding-inline: var(--gap-xs);
-    }
-</style>

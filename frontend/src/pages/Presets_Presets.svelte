@@ -5,15 +5,9 @@
     import * as app from "../../wailsjs/go/main/App.js";
 </script>
 
-<!-- <div class="grid gap-xs h-full" style="padding-top: 1px;"> -->
-<div class="flex bottom pad-inline-sm">
-    <label>Presets</label>
-    <button
-        title="Add New Preset"
-        class="ip-icon-button color-dim"
-        style="margin-left: auto;"
-        on:click={() => setPage("Create Preset")}
-    >
+<div class="flex bottom">
+    <div class="grow text-dark thin">Presets</div>
+    <button class="transparent text-dark" title="Add New Preset" on:click={() => setPage("Create Preset")}>
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -31,13 +25,12 @@
     </button>
 </div>
 <div
-    class="grow overflow grid gap-xs overflow grow pad-inline-xs"
-    style="padding-bottom: var(--gap-sm); margin-inline: var(--gap-xs);"
+    class="bg border radius shadow pad-1 flex column gap-1 grow overflow"
     hidden={$nics[$currentNicIndex].ips[0]?.ip_address === ""}
 >
-    <div class="flex center-y gap-xs pad-xs radius shadow" style="background-color: var(--color-bg-1);">
+    <div class="flex center-y gap-1">
         <button
-            class="ip-icon-button"
+            class="transparent"
             on:click={async () => await app.SetDhcp($nics[$currentNicIndex].interface_name)}
             title="Set Interface to DHCP"
         >
@@ -45,10 +38,9 @@
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
-                style="color: var(--color-text-orange);"
                 viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
+                fill="var(--warning-border)"
+                stroke="var(--warning)"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -59,7 +51,7 @@
         <div class="grow">DHCP</div>
         {#if $nics[$currentNicIndex].ip_is_dhcp}
             <button
-                class="ip-icon-button color-dim"
+                class="transparent text-dark"
                 on:click={async () => {
                     await app.ReleaseDhcp();
                 }}
@@ -82,7 +74,7 @@ WARNING: effects all interfaces"
                 </svg>
             </button>
             <button
-                class="ip-icon-button color-dim"
+                class="transparent text-dark"
                 on:click={async () => {
                     await app.RenewDhcp();
                 }}
@@ -110,9 +102,10 @@ WARNING: effects all interfaces"
     </div>
 
     {#each $presets as preset}
-        <div class="flex center-y gap-xs pad-xs radius shadow" style="background-color: var(--color-bg-1);">
+        <hr>
+        <div class="flex center-y gap-1">
             <button
-                class="ip-icon-button"
+                class="transparent"
                 on:click={() => {
                     setPresetToInterface($nics[$currentNicIndex].interface_name, preset.name);
                 }}
@@ -128,10 +121,9 @@ DNS: {preset.dns_servers[0]}
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
-                    style="color: var(--color-text-orange);"
                     viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
+                    fill="var(--warning-border)"
+                    stroke="var(--warning)"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -141,7 +133,7 @@ DNS: {preset.dns_servers[0]}
             </button>
             <div class="grow">{preset.name}</div>
             <button
-                class="ip-icon-button color-dim"
+                class="transparent text-dark"
                 on:click={async () => {
                     setPage("Edit Preset");
                     selectPreset(preset.name);
@@ -168,4 +160,3 @@ DNS: {preset.dns_servers[0]}
         </div>
     {/each}
 </div>
-<!-- </div> -->

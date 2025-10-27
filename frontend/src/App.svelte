@@ -40,16 +40,14 @@
 
 <KeyboardShortcuts />
 
-<div class="flex column" style="height: 100svh; --default-contextmenu: show;">
+<div class="flex column pad-1 gap-1" style="height: 100svh; --default-contextmenu: show; overflow: hidden;">
     <Header title={$pageStore.name} />
 
-    <div style="padding-inline: var(--gap-sm)">
-        <hr>
-    </div>
+    <hr>
 
     {#if isAdmin === false}
-        <div class="not-admin">
-            <div class="flex center-y gap-sm">
+        <div class="pad-2 radius error error-bg error-border shadow">
+            <div class="flex center-y gap-2">
                 <div>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +70,7 @@
         </div>
     {/if}
 
-    <main class="grow flex column overflow h-full">
+    <main class="grow flex column overflow height-100">
         {#if $pageStore.name === "IPv4 Presets"}
             <Presets />
         {:else if $pageStore.name === "Interfaces"}
@@ -88,16 +86,3 @@
         {/if}
     </main>
 </div>
-
-<style>
-    .not-admin {
-        padding: var(--gap-sm);
-        padding-top: 1px;
-    }
-    .not-admin > div {
-        padding: var(--gap-sm);
-        color: var(--color-bg-red);
-        background-color: var(--color-text-red);
-        border-radius: var(--border-radius);
-    }
-</style>

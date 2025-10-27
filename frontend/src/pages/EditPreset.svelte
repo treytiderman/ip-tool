@@ -30,18 +30,18 @@
 </script>
 
 <form
-    class="grid gap pad-sm"
+    class="grid gap-4 pad-1"
     on:submit|preventDefault={async () => {
         console.log("submit", $presetTemp);
         editPreset($presets[presetSelectedIndex].name, $presetTemp);
         setPage("IPv4 Presets");
     }}
 >
-    <div class="grid gap-xs">
-        <div class="flex bottom gap-xs">
-            <label for="preset-name" class="grow">Preset Name</label>
+    <div class="grid gap-1">
+        <div class="flex bottom gap-1">
+            <label class="text-dark thin grow" for="preset-name">Preset Name</label>
             <button
-                class="ip-icon-button red-hover"
+                class="transparent text-dark error-bg-hover"
                 type="button"
                 title="Delete Preset"
                 on:click={() => {
@@ -68,7 +68,7 @@
         </div>
         <input
             type="text"
-            class="mono shadow-inset"
+            class="mono border shadow-inset"
             id="preset-name"
             name="preset-name"
             placeholder={$presets[presetSelectedIndex].name}
@@ -78,12 +78,12 @@
         />
     </div>
 
-    <div class="grid gap-xs">
-        <div class="flex bottom gap-xs">
-            <label for="ip-address-1" class="grow">IP Address</label>
+    <div class="grid gap-1">
+        <div class="flex bottom gap-1">
+            <label class="text-dark thin grow" for="ip-address-1">IP Address</label>
             {#if $presetTemp.ips.length > 1}
                 <button
-                    class="ip-icon-button"
+                    class="transparent text-dark"
                     type="button"
                     title="Remove IP Address"
                     on:click={() => {
@@ -107,7 +107,7 @@
                 </button>
             {/if}
             <button
-                class="ip-icon-button"
+                class="transparent text-dark"
                 type="button"
                 title="Add IP Address"
                 on:click={() => {
@@ -133,7 +133,7 @@
         </div>
         <input
             type="text"
-            class="mono shadow-inset"
+            class="mono border shadow-inset"
             id="ip-address-1"
             name="ip-address-1"
             placeholder={$presets[presetSelectedIndex].ips[0]?.ip_address ?? ""}
@@ -145,12 +145,12 @@
         {#if $presetTemp.ips.length > 1}
             {#each $presetTemp.ips as ip, index}
                 {#if index > 0}
-                    <div class="grid gap-xs">
-                        <label for="ip-address-{index}" hidden>IP Address</label>
+                    <div class="grid gap-1">
+                        <label class="text-dark thin" for="ip-address-{index}" hidden>IP Address</label>
                         <input
                             type="text"
                             id="ip-address-{index}"
-                            class="mono shadow-inset"
+                            class="mono border shadow-inset"
                             name="ip-address-{index}"
                             placeholder={$presets[presetSelectedIndex].ips[0]?.ip_address ?? ""}
                             value={$presetTemp.ips[index]?.ip_address ?? ""}
@@ -163,12 +163,12 @@
         {/if}
     </div>
 
-    <div class="grid gap-xs">
-        <label for="subnet-mask-1">Subnet Mask</label>
+    <div class="grid gap-1">
+        <label class="text-dark thin" for="subnet-mask-1">Subnet Mask</label>
         <input
             type="text"
             id="subnet-mask-1"
-            class="mono shadow-inset"
+            class="mono border shadow-inset"
             name="subnet-mask-1"
             placeholder={$presets[presetSelectedIndex].ips[0]?.subnet_mask ?? ""}
             value={$presetTemp.ips[0]?.subnet_mask ?? ""}
@@ -178,12 +178,12 @@
         {#if $presetTemp.ips.length > 1}
             {#each $presetTemp.ips as ip, index}
                 {#if index > 0}
-                    <div class="grid gap-xs">
-                        <label for="subnet-mask-{index}" hidden>Subnet Mask</label>
+                    <div class="grid gap-1">
+                        <label class="text-dark thin" for="subnet-mask-{index}" hidden>Subnet Mask</label>
                         <input
                             type="text"
                             id="subnet-mask-{index}"
-                            class="mono shadow-inset"
+                            class="mono border shadow-inset"
                             name="subnet-mask-{index}"
                             placeholder={$presets[presetSelectedIndex].ips[0]?.subnet_mask ?? ""}
                             value={$presetTemp.ips[index]?.subnet_mask ?? ""}
@@ -196,12 +196,12 @@
         {/if}
     </div>
 
-    <div class="grid gap-xs">
-        <label for="gateway">Gateway</label>
+    <div class="grid gap-1">
+        <label class="text-dark thin" for="gateway">Gateway</label>
         <input
             type="text"
             id="gateway"
-            class="mono shadow-inset"
+            class="mono border shadow-inset"
             name="gateway"
             placeholder={$presets[presetSelectedIndex].gateways[0]?.gateway_address ?? ""}
             value={$presetTemp.gateways[0]?.gateway_address ?? ""}
@@ -209,12 +209,12 @@
         />
     </div>
 
-    <div class="grid gap-xs">
-        <div class="flex bottom gap-xs">
-            <label for="dns" class="grow">DNS Servers</label>
+    <div class="grid gap-1">
+        <div class="flex bottom gap-1">
+            <label class="text-dark thin grow" for="dns">DNS Servers</label>
             {#if $presetTemp.dns_servers.length > 1}
                 <button
-                    class="ip-icon-button"
+                    class="transparent text-dark"
                     type="button"
                     title="Remove DNS Server"
                     on:click={() => {
@@ -238,7 +238,7 @@
                 </button>
             {/if}
             <button
-                class="ip-icon-button"
+                class="transparent text-dark"
                 type="button"
                 title="Add DNS Server"
                 on:click={() => {
@@ -265,7 +265,7 @@
         <input
             type="text"
             id="dns"
-            class="mono shadow-inset"
+            class="mono border shadow-inset"
             name="dns"
             placeholder={$presets[presetSelectedIndex].dns_servers[0] ?? ""}
             value={$presetTemp.dns_servers[0] ?? ""}
@@ -274,12 +274,12 @@
         {#if $presetTemp.dns_servers.length > 1}
             {#each $presetTemp.dns_servers as dns, index}
                 {#if index > 0}
-                    <div class="grid gap-xs">
-                        <label for="dns-{index}" hidden>IP Address</label>
+                    <div class="grid gap-1">
+                        <label class="text-dark thin" for="dns-{index}" hidden>IP Address</label>
                         <input
                             type="text"
                             id="dns-{index}"
-                            class="mono shadow-inset"
+                            class="mono border shadow-inset"
                             name="dns-{index}"
                             placeholder={$presets[presetSelectedIndex].dns_servers[0]}
                             value={$presetTemp.dns_servers[index]}
@@ -291,9 +291,17 @@
         {/if}
     </div>
 
-    <button type="submit" class="shadow">
-        <div>Update Preset "<span class="mono small">{$presets[presetSelectedIndex].name}</span>"</div>
-    </button>
+    <div class="flex even gap-2">
+        <button type="submit" class="warning warning-bg warning-border shadow">Update</button>
+        <button
+            type="button"
+            class="transparent text-dark"
+            on:click={() => setPage("IPv4 Presets")}
+            title="Back to IPv4 Presets"
+        >
+            Cancel
+        </button>
+    </div>
 </form>
 
 <style>

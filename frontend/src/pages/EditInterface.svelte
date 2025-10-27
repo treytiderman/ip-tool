@@ -30,19 +30,36 @@
 </script>
 
 <form
-    class="grid gap pad-sm"
+    class="grid gap-4 pad-1"
     on:submit|preventDefault={async () => {
-        // console.log("submit", $nicTemp);
+        console.log("submit", $nicTemp);
         setPage("IPv4 Presets");
         await setNicToInterface($nics[$currentNicIndex].interface_name, $nicTemp);
     }}
 >
-    <div class="grid gap-xs">
-        <label for="interface-name">Interface Name</label>
+    <div class="grid gap-1">
+        <div class="flex bottom gap-1">
+            <label class="text-dark thin grow" for="preset-name">Interface Name</label>
+            <button class="transparent text-dark invisible" type="button">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M5 12h14" />
+                </svg>
+            </button>
+        </div>
         <input
             type="text"
             id="interface-name"
-            class="mono shadow-inset"
+            class="mono border shadow-inset"
             name="interface-name"
             placeholder={$nics[$currentNicIndex].interface_name}
             value={$nicTemp.interface_name}
@@ -51,12 +68,12 @@
         />
     </div>
 
-    <div class="grid gap-xs">
-        <div class="flex bottom gap-xs">
-            <label for="ip-address-1" class="grow">IP Address</label>
+    <div class="grid gap-1">
+        <div class="flex bottom gap-1">
+            <label class="text-dark thin grow" for="ip-address-1">IP Address</label>
             {#if $nicTemp.ips.length > 1}
                 <button
-                    class="ip-icon-button"
+                    class="transparent text-dark"
                     type="button"
                     title="Remove IP Address"
                     on:click={() => {
@@ -80,7 +97,7 @@
                 </button>
             {/if}
             <button
-                class="ip-icon-button"
+                class="transparent text-dark"
                 type="button"
                 title="Add IP Address"
                 on:click={() => {
@@ -106,7 +123,7 @@
         </div>
         <input
             type="text"
-            class="mono shadow-inset"
+            class="mono border shadow-inset"
             id="ip-address-1"
             name="ip-address-1"
             placeholder={$nics[$currentNicIndex].ips[0]?.ip_address ?? ""}
@@ -118,12 +135,12 @@
         {#if $nicTemp.ips.length > 1}
             {#each $nicTemp.ips as ip, index}
                 {#if index > 0}
-                    <div class="grid gap-xs">
-                        <label for="ip-address-{index}" hidden>IP Address</label>
+                    <div class="grid gap-1">
+                        <label class="text-dark thin" for="ip-address-{index}" hidden>IP Address</label>
                         <input
                             type="text"
                             id="ip-address-{index}"
-                            class="mono shadow-inset"
+                            class="mono border shadow-inset"
                             name="ip-address-{index}"
                             placeholder={$nics[$currentNicIndex].ips[0]?.ip_address ?? ""}
                             value={$nicTemp.ips[index]?.ip_address ?? ""}
@@ -136,12 +153,12 @@
         {/if}
     </div>
 
-    <div class="grid gap-xs">
-        <label for="subnet-mask-1">Subnet Mask</label>
+    <div class="grid gap-1">
+        <label class="text-dark thin" for="subnet-mask-1">Subnet Mask</label>
         <input
             type="text"
             id="subnet-mask-1"
-            class="mono shadow-inset"
+            class="mono border shadow-inset"
             name="subnet-mask-1"
             placeholder={$nics[$currentNicIndex].ips[0]?.subnet_mask ?? ""}
             value={$nicTemp.ips[0]?.subnet_mask ?? ""}
@@ -151,12 +168,12 @@
         {#if $nicTemp.ips.length > 1}
             {#each $nicTemp.ips as ip, index}
                 {#if index > 0}
-                    <div class="grid gap-xs">
-                        <label for="subnet-mask-{index}" hidden>Subnet Mask</label>
+                    <div class="grid gap-1">
+                        <label class="text-dark thin" for="subnet-mask-{index}" hidden>Subnet Mask</label>
                         <input
                             type="text"
                             id="subnet-mask-{index}"
-                            class="mono shadow-inset"
+                            class="mono border shadow-inset"
                             name="subnet-mask-{index}"
                             placeholder={$nics[$currentNicIndex].ips[0]?.subnet_mask ?? ""}
                             value={$nicTemp.ips[index]?.subnet_mask ?? ""}
@@ -169,12 +186,12 @@
         {/if}
     </div>
 
-    <div class="grid gap-xs">
-        <label for="gateway">Gateway</label>
+    <div class="grid gap-1">
+        <label class="text-dark thin" for="gateway">Gateway</label>
         <input
             type="text"
             id="gateway"
-            class="mono shadow-inset"
+            class="mono border shadow-inset"
             name="gateway"
             placeholder={$nics[$currentNicIndex].gateways[0]?.gateway_address ?? ""}
             value={$nicTemp.gateways[0]?.gateway_address ?? ""}
@@ -182,12 +199,12 @@
         />
     </div>
 
-    <div class="grid gap-xs">
-        <div class="flex bottom gap-xs">
-            <label for="dns" class="grow">DNS Servers</label>
+    <div class="grid gap-1">
+        <div class="flex bottom gap-1">
+            <label class="text-dark thin grow" for="dns">DNS Servers</label>
             {#if $nicTemp.dns_servers.length > 1}
                 <button
-                    class="ip-icon-button"
+                    class="transparent text-dark"
                     type="button"
                     title="Remove DNS Server"
                     on:click={() => {
@@ -211,7 +228,7 @@
                 </button>
             {/if}
             <button
-                class="ip-icon-button"
+                class="transparent text-dark"
                 type="button"
                 title="Add DNS Server"
                 on:click={() => {
@@ -238,7 +255,7 @@
         <input
             type="text"
             id="dns"
-            class="mono shadow-inset"
+            class="mono border shadow-inset"
             name="dns"
             placeholder={$nics[$currentNicIndex].dns_servers[0] ?? ""}
             value={$nicTemp.dns_servers[0] ?? ""}
@@ -247,12 +264,12 @@
         {#if $nicTemp.dns_servers.length > 1}
             {#each $nicTemp.dns_servers as dns, index}
                 {#if index > 0}
-                    <div class="grid gap-xs">
-                        <label for="dns-{index}" hidden>IP Address</label>
+                    <div class="grid gap-1">
+                        <label class="text-dark thin" for="dns-{index}" hidden>IP Address</label>
                         <input
                             type="text"
                             id="dns-{index}"
-                            class="mono shadow-inset"
+                            class="mono border shadow-inset"
                             name="dns-{index}"
                             placeholder={$nics[$currentNicIndex].dns_servers[0]}
                             value={$nicTemp.dns_servers[index]}
@@ -264,9 +281,17 @@
         {/if}
     </div>
 
-    <button type="submit" class="shadow">
-        <div>Set to Interface "<span class="mono small">{$nics[$currentNicIndex].interface_name}</span>"</div>
-    </button>
+    <div class="flex even gap-2">
+        <button type="submit" class="info info-bg info-border shadow">Set</button>
+        <button
+            type="button"
+            class="transparent text-dark"
+            on:click={() => setPage("IPv4 Presets")}
+            title="Back to IPv4 Presets"
+        >
+            Cancel
+        </button>
+    </div>
 </form>
 
 <style>
