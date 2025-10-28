@@ -41,6 +41,24 @@ type Preset = {
 
 const defaultPresets: Preset[] = [
     {
+        name: "169.254.0.7/24",
+        ip_is_dhcp: false,
+        ips: [
+            {
+                ip_address: "169.254.0.7",
+                subnet_mask: "255.255.255.0",
+                cidr: 24,
+            },
+        ],
+        gateways: [
+            {
+                gateway_address: "169.254.0.1",
+            },
+        ],
+        dns_is_dhcp: false,
+        dns_servers: ["169.254.0.1"],
+    },
+    {
         name: "192.168.0.7/24",
         ip_is_dhcp: false,
         ips: [
@@ -95,22 +113,22 @@ const defaultPresets: Preset[] = [
         dns_servers: ["192.168.2.1"],
     },
     {
-        name: "169.254.0.7/24",
+        name: "192.168.100.7/24",
         ip_is_dhcp: false,
         ips: [
             {
-                ip_address: "169.254.0.7",
+                ip_address: "192.168.100.7",
                 subnet_mask: "255.255.255.0",
                 cidr: 24,
             },
         ],
         gateways: [
             {
-                gateway_address: "169.254.0.1",
+                gateway_address: "192.168.100.1",
             },
         ],
         dns_is_dhcp: false,
-        dns_servers: ["169.254.0.1"],
+        dns_servers: ["192.168.100.1"],
     },
     {
         name: "172.22.0.7/16",
@@ -129,6 +147,60 @@ const defaultPresets: Preset[] = [
         ],
         dns_is_dhcp: false,
         dns_servers: ["172.22.0.2"],
+    },
+    {
+        name: "10.0.0.7/24",
+        ip_is_dhcp: false,
+        ips: [
+            {
+                ip_address: "10.0.0.7",
+                subnet_mask: "255.255.255.0",
+                cidr: 24,
+            },
+        ],
+        gateways: [
+            {
+                gateway_address: "10.0.0.1",
+            },
+        ],
+        dns_is_dhcp: false,
+        dns_servers: ["10.0.0.1"],
+    },
+    {
+        name: "10.0.1.7/24",
+        ip_is_dhcp: false,
+        ips: [
+            {
+                ip_address: "10.0.1.7",
+                subnet_mask: "255.255.255.0",
+                cidr: 24,
+            },
+        ],
+        gateways: [
+            {
+                gateway_address: "10.0.1.1",
+            },
+        ],
+        dns_is_dhcp: false,
+        dns_servers: ["10.0.1.1"],
+    },
+    {
+        name: "10.0.2.7/24",
+        ip_is_dhcp: false,
+        ips: [
+            {
+                ip_address: "10.0.2.7",
+                subnet_mask: "255.255.255.0",
+                cidr: 24,
+            },
+        ],
+        gateways: [
+            {
+                gateway_address: "10.0.2.1",
+            },
+        ],
+        dns_is_dhcp: false,
+        dns_servers: ["10.0.2.1"],
     },
     {
         name: "198.18.0.99/16",
@@ -176,7 +248,7 @@ function resetPresets() {
 
 function addPreset(preset: Preset) {
     presets.update(ps => {
-        ps.push(preset)
+        ps.push(JSON.parse(JSON.stringify(preset)))
         return ps
     })
     savePresets()
@@ -186,7 +258,7 @@ function editPreset(preset_name: string, preset: Preset) {
     presets.update(ps => {
         const pIndex = ps.findIndex(p => p.name === preset_name)
         if (pIndex !== -1) {
-            ps[pIndex] = preset
+            ps[pIndex] = JSON.parse(JSON.stringify(preset))
         }
         return ps
     })

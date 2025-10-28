@@ -15,7 +15,7 @@
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
+            stroke-width="var(--border-width)"
             stroke-linecap="round"
             stroke-linejoin="round"
         >
@@ -41,7 +41,7 @@
                 viewBox="0 0 24 24"
                 fill="var(--warning-border)"
                 stroke="var(--warning)"
-                stroke-width="2"
+                stroke-width="var(--border-width)"
                 stroke-linecap="round"
                 stroke-linejoin="round"
             >
@@ -65,7 +65,7 @@ WARNING: effects all interfaces"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    stroke-width="var(--border-width)"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                 >
@@ -88,7 +88,7 @@ WARNING: effects all interfaces"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    stroke-width="var(--border-width)"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                 >
@@ -124,7 +124,7 @@ DNS: {preset.dns_servers[0]}
                     viewBox="0 0 24 24"
                     fill="var(--warning-border)"
                     stroke="var(--warning)"
-                    stroke-width="2"
+                    stroke-width="var(--border-width)"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                 >
@@ -147,7 +147,7 @@ DNS: {preset.dns_servers[0]}
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    stroke-width="var(--border-width)"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                 >

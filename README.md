@@ -5,25 +5,30 @@ Quickly change and save network IPv4 settings
 
 ## Download
 
-Windows (portable): [ip-tool-v0.2.exe](https://github.com/treytiderman/ip-tool/releases/download/v0.2/ip-tool-v0.2.exe)
+Windows (portable): [ip-tool-v0.3.exe](https://github.com/treytiderman/ip-tool/releases/download/v0.3/ip-tool-v0.3.exe)
 
 
 ## Screenshots
 
-![Preview UI](./screenshots/presets.png)
+![preview presets page](./screenshots/presets.png)
 
-![Preview UI](./screenshots/interfaces.png)
+![preview interfaces page](./screenshots/interfaces.png)
 
-![Preview UI](./screenshots/preset-edit.png)
+![preview preset edit page](./screenshots/preset-edit.png)
+
+![preview preset page in the black theme](./screenshots/theme-black-presets.png)
+
+![preview preset page in the white theme](./screenshots/theme-white-presets.png)
 
 
 ## Ideas
 
 - [x] Add DHCP functions renew, release
+- [x] Add css themes
 - [ ] Add CIDR input of Subnet Mask if starts with "/"
 - [ ] Add disable/enable interfaces
-- [ ] Add css themes
 - [ ] Add logging for each netsh command
+- [ ] [Auto Update](https://github.com/wailsapp/wails/issues/1178#issuecomment-3448430708)
 - [ ] Add settings page
     - [ ] Be able to change/add filters to interfaces
     - [ ] Add poll interfaces time control
@@ -40,21 +45,36 @@ Run `wails dev`
 
 ## Build
 
-Run `wails build -clean -devtools -o ip-tool-v0.2.exe`
+```sh
+# Run 
+wails build
 
-Run `wails build`
-Run `wails build -clean` deletes build/bin
-Run `wails build -devtools`
-Run `wails build -webview2 download` default option. asks to install webview
-Run `wails build -webview2 browser` if no webview then it opens the browser to the download page
-Run `wails build -webview2 embed` doesnt work?
-Run `wails build -o ip-tool-v0.x.exe`
-Run `wails build -devtools -o ip-tool-v0.x.exe`
+wails build -clean -devtools -o ip-tool-v0.3.exe
+
+# deletes build/bin
+wails build -clean
+ 
+wails build -devtools
+
+# default option. asks to install webview
+wails build -webview2 download
+
+# if no webview then it opens the browser to the download page
+wails build -webview2 browser
+
+# doesnt work?
+wails build -webview2 embed
+
+wails build -o ip-tool-v0.x.exe
+```
 
 
 ## Go Tests
 
-Run `go test`
+```sh
+# Run
+go test
+```
 
 
 ## Always start as Administrator

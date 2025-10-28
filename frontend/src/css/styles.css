@@ -69,19 +69,19 @@ html {
     --bg-dark: hsl(220, 9%, 12%);
 
     /* other colors */
-    --accent:         hsl(265, 99%, 84%);
+    --accent:         hsl(218, 99%, 84%);
     --error:          hsl(5,   99%, 80%);
     --warning:        hsl(35,  99%, 80%);
     --success:        hsl(130, 99%, 78%);
     --info:           hsl(220, 99%, 82%);
 
-    --accent-bg:      hsl(265, 60%, 18%);
+    --accent-bg:      hsl(218, 60%, 18%);
     --error-bg:       hsl(5,   60%, 18%);
     --warning-bg:     hsl(35,  60%, 18%);
     --success-bg:     hsl(130, 60%, 18%);
     --info-bg:        hsl(220, 60%, 18%);
 
-    --accent-border:  hsl(265, 99%, 32%);
+    --accent-border:  hsl(218, 99%, 32%);
     --error-border:   hsl(5,   99%, 25%);
     --warning-border: hsl(35,  99%, 25%);
     --success-border: hsl(130, 99%, 25%);
@@ -90,7 +90,7 @@ html {
     /* hover / active */
     --hover-mix-color: white;
     --active-mix-color: black;
-    --hover-percent: 6%;
+    --hover-percent: 8%;
     --active-percent: 12%;
 
 }
@@ -113,19 +113,19 @@ html {
         --bg-dark: hsl(220, 0%, 100%);
 
         /* other colors */
-        --accent:         hsl(210, 99%, 35%);
+        --accent:         hsl(218, 99%, 35%);
         --error:          hsl(5,   99%, 35%);
         --warning:        hsl(35,  99%, 35%);
         --success:        hsl(130, 99%, 35%);
         --info:           hsl(220, 99%, 35%);
 
-        --accent-bg:      hsl(210, 90%, 92%);
+        --accent-bg:      hsl(218, 90%, 92%);
         --error-bg:       hsl(5,   90%, 92%);
         --warning-bg:     hsl(35,  90%, 92%);
         --success-bg:     hsl(130, 90%, 92%);
         --info-bg:        hsl(220, 90%, 92%);
 
-        --accent-border:  hsl(210, 99%, 75%);
+        --accent-border:  hsl(218, 99%, 75%);
         --error-border:   hsl(5,   99%, 75%);
         --warning-border: hsl(35,  99%, 75%);
         --success-border: hsl(130, 99%, 75%);
@@ -831,15 +831,20 @@ details[open] summary {
 
 /* scrollbar for Chrome and Safari */
 ::-webkit-scrollbar {
-    width: 0.75rem;
-    height: 1rem;
+    width: 7.5px;
+    width: calc( calc(var(--border-width)*2) + calc(4px*2) );
 }
 
 ::-webkit-scrollbar-thumb {
-    box-shadow: inset 0 0 1rem 1rem var(--text-dark);
-    border: solid 0.25rem transparent;
+    box-shadow: inset 0 0 1rem 1rem var(--border-color);
+    border: solid 4px transparent;
     border-radius: 99px;
     cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    box-shadow: inset 0 0 1rem 1rem var(--text-dark);
+    box-shadow: inset 0 0 1rem 1rem color-mix(in oklab, var(--border-color), var(--hover-mix-color) var(--hover-percent));
 }
 
 ::-webkit-resizer {
