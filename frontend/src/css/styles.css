@@ -68,15 +68,6 @@ html {
     --bg: hsl(220, 12%, 16%);
     --bg-dark: hsl(220, 9%, 12%);
 
-    /* Black Theme */
-    /* --text-light: hsl(220, 8%, 75%);
-    --text: hsl(220, 8%, 65%);
-    --text-dark: hsl(220, 8%, 50%);
-    --bg-light: hsl(220, 13%, 14%);
-    --bg: hsl(220, 8%, 8%);
-    --bg-dark: hsl(220, 0%, 0%);
-    --border-color: hsl(220, 12%, 20%); */
-
     /* other colors */
     --accent:         hsl(265, 99%, 84%);
     --error:          hsl(5,   99%, 80%);
@@ -84,17 +75,17 @@ html {
     --success:        hsl(130, 99%, 78%);
     --info:           hsl(220, 99%, 82%);
 
-    --accent-bg:      hsl(265, 40%, 18%);
-    --error-bg:       hsl(5,   40%, 18%);
-    --warning-bg:     hsl(35,  40%, 18%);
-    --success-bg:     hsl(130, 40%, 18%);
-    --info-bg:        hsl(220, 40%, 18%);
+    --accent-bg:      hsl(265, 60%, 18%);
+    --error-bg:       hsl(5,   60%, 18%);
+    --warning-bg:     hsl(35,  60%, 18%);
+    --success-bg:     hsl(130, 60%, 18%);
+    --info-bg:        hsl(220, 60%, 18%);
 
-    --accent-border:  hsl(265, 75%, 32%);
-    --error-border:   hsl(5,   75%, 25%);
-    --warning-border: hsl(35,  75%, 25%);
-    --success-border: hsl(130, 75%, 25%);
-    --info-border:    hsl(220, 75%, 30%);
+    --accent-border:  hsl(265, 99%, 32%);
+    --error-border:   hsl(5,   99%, 25%);
+    --warning-border: hsl(35,  99%, 25%);
+    --success-border: hsl(130, 99%, 25%);
+    --info-border:    hsl(220, 99%, 30%);
 
     /* hover / active */
     --hover-mix-color: white;
@@ -114,7 +105,7 @@ html {
         /* text color */
         --text-light: hsl(220, 10%, 10%);
         --text: hsl(220, 10%, 36%);
-        --text-dark: hsl(220, 10%, 68%);
+        --text-dark: hsl(220, 10%, 55%);
 
         /* bg color */
         --bg-light: hsl(220, 12%, 93%);
@@ -141,7 +132,7 @@ html {
         --info-border:    hsl(220, 99%, 75%);
 
         /* border */
-        --border-color: hsl(220, 12%, 75%);
+        --border-color: hsl(220, 12%, 84%);
 
         /* shadows */
         --shadow: 0 1px 2px 0px hsla(220, 10%, 10%, 10%), 0 1px 2px 1px hsla(220, 10%, 10%, 2%);

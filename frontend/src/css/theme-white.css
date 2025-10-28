@@ -1,0 +1,48 @@
+html.white {
+
+    /* built-in theme */
+    --color-scheme: light;
+
+    /* text color */
+    --text-light: hsl(220, 10%, 10%);
+    --text: hsl(220, 10%, 36%);
+    --text-dark: hsl(220, 10%, 55%);
+
+    /* bg color */
+    --bg-light: hsl(220, 12%, 93%);
+    --bg: hsl(220, 8%, 98%);
+    --bg-dark: hsl(220, 0%, 100%);
+
+    /* other colors */
+    --accent:         hsl(210, 99%, 35%);
+    --error:          hsl(5,   99%, 35%);
+    --warning:        hsl(35,  99%, 35%);
+    --success:        hsl(130, 99%, 35%);
+    --info:           hsl(220, 99%, 35%);
+
+    --accent-bg:      hsl(210, 90%, 92%);
+    --error-bg:       hsl(5,   90%, 92%);
+    --warning-bg:     hsl(35,  90%, 92%);
+    --success-bg:     hsl(130, 90%, 92%);
+    --info-bg:        hsl(220, 90%, 92%);
+
+    --accent-border:  hsl(210, 99%, 75%);
+    --error-border:   hsl(5,   99%, 75%);
+    --warning-border: hsl(35,  99%, 75%);
+    --success-border: hsl(130, 99%, 75%);
+    --info-border:    hsl(220, 99%, 75%);
+
+    /* border */
+    --border-color: hsl(220, 12%, 84%);
+
+    /* shadows */
+    --shadow: 0 1px 2px 0px hsla(220, 10%, 10%, 10%), 0 1px 2px 1px hsla(220, 10%, 10%, 2%);
+    --shadow-inset: inset 0 1px 2px 0 hsla(220, 10%, 10%, 5%), inset 0 1px 2px -1px hsla(220, 10%, 10%, 2%);
+
+    /* hover / active */
+    --hover-mix-color: white;
+    --hover-percent: 40%;
+    --active-mix-color: black;
+    --active-percent: 4%;
+
+}

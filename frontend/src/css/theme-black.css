@@ -1,0 +1,91 @@
+html.black {
+
+    /* built-in theme */
+    --color-scheme: dark;
+
+    /* text */
+    --font-family: 'Rubik', helvetica, arial, sans-serif;
+    --font-family-mono: 'Fira Code', Menlo, Consolas, monospace;
+    --line-height: 1.6;
+
+    /* text sizes */
+    --font-size: 16px;
+    --font-size-mono: calc(var(--font-size) - 3px);
+    --p: 1rem;
+    --h1: 1.8rem;
+    --h2: 1.4rem;
+    --h3: 1.2rem;
+    --h4: 1rem;
+    --small: 0.875rem;
+
+    /* gap */
+    --gap: 0.25rem;
+
+    /* padding */
+    --padding-x: calc(var(--gap) * 2);
+    --padding-y: calc(var(--gap) * 1.1);
+    --padding: var(--padding-y) var(--padding-x);
+
+    /* break points */
+    --break-xs: 200px;
+    --break-sm: 500px;
+    --break-md: 800px;
+    --break-lg: 1200px;
+    --break-xl: 1900px;
+
+    /* border */
+    --border-width: 1.5px;
+    --border-radius: 0.25rem;
+    --border-color: hsl(220, 12%, 25%);
+    --border: var(--border-width) solid var(--border-color);
+    --outline: var(--border-width) solid var(--text-light);
+
+    /* shadows */
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px 1px rgb(0 0 0 / 0.1);
+    --shadow-inset: inset 0 1px 3px 0 rgb(0 0 0 / 0.3), inset 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+    /* text color */
+    --text-light: hsl(220, 8%, 84%);
+    --text: hsl(220, 8%, 72%);
+    --text-dark: hsl(220, 8%, 50%);
+    
+    /* bg color */
+    --bg-light: hsl(220, 13%, 18%);
+    --bg: hsl(220, 12%, 16%);
+    --bg-dark: hsl(220, 9%, 12%);
+
+    /* other colors */
+    --accent:         hsl(265, 99%, 84%);
+    --error:          hsl(5,   99%, 80%);
+    --warning:        hsl(35,  99%, 80%);
+    --success:        hsl(130, 99%, 78%);
+    --info:           hsl(220, 99%, 82%);
+
+    --accent-bg:      hsl(265, 60%, 18%);
+    --error-bg:       hsl(5,   60%, 18%);
+    --warning-bg:     hsl(35,  60%, 18%);
+    --success-bg:     hsl(130, 60%, 18%);
+    --info-bg:        hsl(220, 60%, 18%);
+
+    --accent-border:  hsl(265, 99%, 32%);
+    --error-border:   hsl(5,   99%, 25%);
+    --warning-border: hsl(35,  99%, 25%);
+    --success-border: hsl(130, 99%, 25%);
+    --info-border:    hsl(220, 99%, 30%);
+
+    /* hover / active */
+    --hover-mix-color: white;
+    --active-mix-color: black;
+    --hover-percent: 6%;
+    --active-percent: 12%;
+
+    /* black theme */
+    --text-light: hsl(220, 8%, 75%);
+    --text: hsl(220, 8%, 65%);
+    --text-dark: hsl(220, 8%, 50%);
+    --bg-light: hsl(220, 13%, 14%);
+    --bg: hsl(220, 8%, 8%);
+    --bg-dark: hsl(220, 0%, 0%);
+    --border-color: hsl(220, 12%, 20%);
+
+}

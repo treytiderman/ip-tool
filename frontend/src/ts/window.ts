@@ -4,6 +4,7 @@ import { writable } from "svelte/store"
 export {
     windowStore as window,
     alwaysOnTopStore,
+    themeStore,
     saveWindow,
     loadWindow,
     resetWindow,
@@ -16,7 +17,8 @@ export {
     getWindowAlwaysOnTop,
     setWindowAlwaysOnTop,
     toggleWindowAlwaysOnTop,
-    quitApp
+    quitApp,
+    setTheme,
 }
 
 const defaultState = {
@@ -24,12 +26,14 @@ const defaultState = {
     windowSizeX: 300,
     windowSizeY: 500,
     windowAlwaysOnTop: false,
+    theme: "auto",
     // "ipPollRate_ms": 1000,
 }
 
 let windowStore = JSON.parse(JSON.stringify(defaultState))
 
 const alwaysOnTopStore = writable(false)
+const themeStore = writable("auto")
 
 function saveWindow() {
     localStorage.setItem("window", JSON.stringify(windowStore))
@@ -43,6 +47,7 @@ function loadWindow() {
     }
     console.log("localStorage: window", windowStore || undefined);
     setFontSize(windowStore.fontSize)
+    setTheme(windowStore.theme)
     setWindowSize(windowStore.windowSizeX, windowStore.windowSizeY)
     setWindowAlwaysOnTop(windowStore.windowAlwaysOnTop)
     return windowStore
@@ -102,4 +107,11 @@ function toggleWindowAlwaysOnTop() {
 
 function quitApp() {
     window.runtime.Quit()
+}
+
+function setTheme(theme: string) {
+    windowStore.theme = theme
+    themeStore.set(theme)
+    document.getElementsByTagName('html')[0].classList = theme
+    saveWindow()
 }
