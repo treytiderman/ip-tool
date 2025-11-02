@@ -5,7 +5,7 @@ Quickly change and save network IPv4 settings
 
 ## Download
 
-Windows (portable): [ip-tool-v0.3.exe](https://github.com/treytiderman/ip-tool/releases/download/v0.3/ip-tool-v0.3.exe)
+Windows (portable): [ip-tool-v0.4.exe](https://github.com/treytiderman/ip-tool/releases/download/v0.4/ip-tool-v0.4.exe)
 
 
 ## Screenshots
@@ -16,6 +16,8 @@ Windows (portable): [ip-tool-v0.3.exe](https://github.com/treytiderman/ip-tool/r
 
 ![preview preset edit page](./screenshots/preset-edit.png)
 
+![preview settings page](./screenshots/settings.png)
+
 ![preview preset page in the black theme](./screenshots/theme-black-presets.png)
 
 ![preview preset page in the white theme](./screenshots/theme-white-presets.png)
@@ -23,18 +25,23 @@ Windows (portable): [ip-tool-v0.3.exe](https://github.com/treytiderman/ip-tool/r
 
 ## Ideas
 
-- [x] Add DHCP functions renew, release
 - [x] Add css themes
+- [x] Add DHCP functions renew, release
 - [ ] Add CIDR input of Subnet Mask if starts with "/"
 - [ ] Add disable/enable interfaces
 - [ ] Add logging for each netsh command
+- [ ] Add set interface metric
+- [ ] Add set routes like netrouteview
+- [ ] Add confirm dialog to replace built-in window.confirm()
+- [ ] Add network scanner
+- [ ] Add mDNS discovery
 - [ ] [Auto Update](https://github.com/wailsapp/wails/issues/1178#issuecomment-3448430708)
-- [ ] Add settings page
+- [x] Add settings page
     - [ ] Be able to change/add filters to interfaces
-    - [ ] Add poll interfaces time control
-    - [ ] Add setting for when to poll interfaces (focused, minimized)
-    - [ ] Add reset presets button
-    - [ ] Add export presets button
+    - [x] Add poll interfaces time control
+    - [x] Add setting for when to poll interfaces (focused, minimized)
+    - [x] Add reset presets button
+    - [x] Add export/import presets button
     - [ ] Add export logs button
 
 
@@ -49,7 +56,7 @@ Run `wails dev`
 # Run 
 wails build
 
-wails build -clean -devtools -o ip-tool-v0.3.exe
+wails build -clean -devtools -o ip-tool-v0.4.exe
 
 # deletes build/bin
 wails build -clean
