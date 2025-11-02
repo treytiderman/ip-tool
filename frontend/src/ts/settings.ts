@@ -94,7 +94,7 @@ function onSettingsChange() {
     const FONT_SIZE_MAX = 36
     settings.fontSize = Math.min(Math.max(settings.fontSize, FONT_SIZE_MIN), FONT_SIZE_MAX)
     document.documentElement.style.setProperty('--font-size', `${settings.fontSize}px`)
-    document.documentElement.style.setProperty('--font-size-mono', `${settings.fontSize - 3}px`)
+    document.documentElement.style.setProperty('--font-size-mono', `${settings.fontSize - 1}px`)
     
     // Theme
     document.getElementsByTagName('html')[0].classList = settings.theme
