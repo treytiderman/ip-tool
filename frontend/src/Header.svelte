@@ -1,7 +1,7 @@
 <script lang="ts">
     export let title: string = "Title";
     import { setPage } from "./ts/router";
-    import { settingsStore, quitApp, windowSetMinimise, windowToggleMaximise } from "./ts/settings";
+    import { settingsStore, quitApp, windowSetMinimise } from "./ts/settings";
 </script>
 
 <header class="flex center-y gap-1">

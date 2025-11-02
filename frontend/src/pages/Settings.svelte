@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { settingsStore, windowSetSize } from "../ts/settings";
+    import { settingsStore, windowSetSize, windowSetMaximise, windowSetUnmaximise } from "../ts/settings";
     import { presets, resetPresets } from "../ts/presets";
 
     async function fileUploaded(event: any) {
@@ -11,6 +11,7 @@
         if (!JSON.parse(text)) return;
         const obj = JSON.parse(text);
 
+        windowSetMaximise()
         if (
             window.confirm(
                 `Are you sure you want to overwrite all presets with the contents of "${name}"? This cannot be undone.`,
@@ -19,6 +20,7 @@
             console.log("Re-write Presets", obj);
             resetPresets(obj);
         }
+        windowSetUnmaximise()
     }
 </script>
 
@@ -30,9 +32,11 @@
                 class="transparent text-dark error-bg-hover"
                 title="Reset ALL Presets to Default"
                 on:click={() => {
+                    windowSetMaximise()
                     if (window.confirm("Are you sure you want to reset presets? This cannot be undone.")) {
                         resetPresets();
                     }
+                    windowSetUnmaximise()
                 }}
             >
                 <svg
@@ -56,6 +60,7 @@
             <a
                 class="border border-radius padding bg-light bg-light-hover text-decoration-none shadow flex center-y gap-2"
                 download="presets.json"
+                title="Export a JSON file of the current presets"
                 href={URL.createObjectURL(new Blob([JSON.stringify($presets, null, 4)], { type: "text/json" }))}
             >
                 <svg
@@ -76,10 +81,11 @@
                     <path d="M12 18v-6" />
                     <path d="m9 15 3 3 3-3" />
                 </svg>
-                <div>Download</div>
+                <div>Export</div>
             </a>
             <label
                 for="file"
+                title="Import a JSON file of presets to overwrite the current presets"
                 class="padding border border-radius text-light bg-light bg-light-hover shadow width-100 pointer flex center-y gap-2"
             >
                 <svg
@@ -100,7 +106,7 @@
                     <path d="M12 12v6" />
                     <path d="m15 15-3-3-3 3" />
                 </svg>
-                Upload
+                Import
             </label>
         </div>
 

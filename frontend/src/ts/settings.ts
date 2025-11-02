@@ -8,7 +8,8 @@ export {
     loadSettings,
     resetSettings,
     quitApp,
-    windowToggleMaximise,
+    windowSetMaximise,
+    windowSetUnmaximise,
     windowSetMinimise,
     windowGetSize,
     windowUpdateSize,
@@ -54,8 +55,12 @@ function quitApp() {
     window.runtime.Quit()
 }
 
-function windowToggleMaximise() {
-    window.runtime.WindowToggleMaximise()
+function windowSetMaximise() {
+    window.runtime.WindowMaximise()
+}
+
+function windowSetUnmaximise() {
+    window.runtime.WindowUnmaximise()
 }
 
 function windowSetMinimise() {
