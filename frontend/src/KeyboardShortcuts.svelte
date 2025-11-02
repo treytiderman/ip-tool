@@ -62,6 +62,17 @@
             })
         }
 
+        if (event.ctrlKey && event.key === "9") {
+            console.log("KeyboardShortcut: Large font size and window size");
+            settingsStore.update(store => {
+                store.fontSize = 36
+                store.windowSizeWidth = 700
+                store.windowSizeHeight = 1100
+                windowSetSize()
+                return store
+            })
+        }
+
         if (event.ctrlKey && event.key === "t") {
             console.log("KeyboardShortcut: Toggle Always on Top");
             settingsStore.update(store => {
