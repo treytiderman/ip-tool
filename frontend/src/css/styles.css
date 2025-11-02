@@ -224,10 +224,19 @@ html {
     .error-bg-hover:hover:not(:disabled) {
         color: var(--error);
         background-color: var(--error-bg) !important;
+        border-color: var(--error-border);
     }
     .error-bg-hover:active:not(:disabled) {
         color: var(--error);
         background-color: color-mix(in oklab, var(--error-bg), var(--active-mix-color) var(--active-percent)) !important;
+    }
+    .bg-light-hover:hover:not(:disabled) {
+        color: var(--text-light);
+        background-color: color-mix(in oklab, var(--bg-light), var(--hover-mix-color) var(--hover-percent)) !important;
+    }
+    .bg-light-hover:active:not(:disabled) {
+        color: var(--text-light);
+        background-color: color-mix(in oklab, var(--bg-light), var(--active-mix-color) var(--active-percent)) !important;
     }
 }
 
@@ -290,8 +299,10 @@ html {
 .height-100, .height-full { height: 100%; }
 .height-1 { height: calc(var(--gap)*1); }
 .height-2 { height: calc(var(--gap)*2); }
+.height-3 { height: calc(var(--gap)*3); }
 .height-4 { height: calc(var(--gap)*4); }
 .height-6 { height: calc(var(--gap)*6); }
+.height-7 { height: calc(var(--gap)*7); }
 .height-8 { height: calc(var(--gap)*8); }
 .height-10 { height: calc(var(--gap)*10); }
 .height-12 { height: calc(var(--gap)*12); }
@@ -342,6 +353,8 @@ html {
 .grow-3 { flex: 3 0 0%; }
 
 /* wrap to one element per line at break point */
+@media (max-width: 200px) { .flex.break-xs>* { flex: 0 1 100% !important; } }
+@media (max-width: 500px) { .flex.break-sm>* { flex: 0 1 100% !important; } }
 @media (max-width: 800px) { .flex.break-md>* { flex: 0 1 100% !important; } }
 @media (max-width: 1200px) { .flex.break-lg>* { flex: 0 1 100% !important; } }
 @media (max-width: 1900px) { .flex.break-xl>* { flex: 0 1 100% !important; } }
@@ -488,6 +501,7 @@ textarea {
     height: 4rem;
 }
 
+.pointer,
 button,
 select,
 input[type=file],
@@ -720,6 +734,7 @@ video {
 }
 
 svg {
+    width: 1rem;
     height: 1rem;
     min-width: 1rem;
 }
