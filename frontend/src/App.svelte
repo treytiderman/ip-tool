@@ -1,9 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { pageStore } from "./ts/router";
-    import { loadWindow } from "./ts/window";
+    import { loadSettings } from "./ts/settings";
     import { loadPresets } from "./ts/presets";
-    import { initNics, pollNics } from "./ts/nic";
     import * as app from "../wailsjs/go/main/App.js";
 
     // Components
@@ -21,20 +20,16 @@
     // App start up
     let isAdmin = true;
     onMount(async () => {
+
         // Check if the app is running as Administrator on Windows
         isAdmin = await app.IsAdmin();
         if (isAdmin) console.log("App is running as Administrator on Windows");
         else console.log("App is NOT running as Administrator");
 
-        // Load presets
-        loadWindow();
-
-        // Load presets
+        // Load localStorage
+        loadSettings();
         loadPresets();
 
-        // Poll for changes in network interfaces
-        await initNics();
-        const interval = pollNics();
     });
 </script>
 

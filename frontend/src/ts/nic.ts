@@ -2,6 +2,7 @@
 import { writable, get } from "svelte/store"
 import * as app from "../../wailsjs/go/main/App.js";
 import { main } from "../../wailsjs/go/models";
+import { settingsStore } from "./settings.js";
 
 export {
     nics,
@@ -9,6 +10,7 @@ export {
     nicStatus,
     currentNicIndex,
     lastSelectedNicName,
+    nicsUpdateTrigger,
     initNics,
     updateNics,
     pollNics,
@@ -41,13 +43,12 @@ const blankNic: any = {
 }
 
 const nics = writable<main.Interface[]>([blankNic])
-
 const nicTemp = writable<main.Interface>(JSON.parse(JSON.stringify(blankNic)))
-
 const nicStatus = writable("")
-
 const currentNicIndex = writable(0)
 const lastSelectedNicName = writable("")
+const nicsUpdateTrigger = writable<boolean>(false)
+
 let lastSelectedWaitCounter = 0
 
 function saveLastSelectedNicName() {
@@ -111,11 +112,13 @@ function resetNic() {
 }
 
 async function updateNics() {
-    const settingDontPollIfMinimised = true
-    const settingDontPollIfNotFocued = true
+    const setting = get(settingsStore)
     const isMinimised = await window.runtime.WindowIsMinimised()
-    if (settingDontPollIfMinimised && isMinimised) return
-    if (settingDontPollIfNotFocued && !document.hasFocus()) return
+    if (!setting.pollIfMinimised && isMinimised) return
+    if (!setting.pollIfNotFocued && !document.hasFocus()) return
+
+    nicsUpdateTrigger.set(false)
+    setTimeout(() => nicsUpdateTrigger.set(true), 1);
     console.log("updateNics")
 
     const tempNics = await app.GetInterfaces()

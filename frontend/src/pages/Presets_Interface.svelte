@@ -1,6 +1,7 @@
 <script lang="ts">
     import { setPage } from "../ts/router";
-    import { nics, currentNicIndex } from "../ts/nic";
+    import { nics, currentNicIndex, nicsUpdateTrigger } from "../ts/nic";
+    import { settingsStore } from "../ts/settings";
 </script>
 
 <div class="flex bottom">
@@ -29,7 +30,12 @@
 <section class="bg border radius shadow">
     <div class="flex center-y gap-2 pad-2">
         {#if $nics[$currentNicIndex].connected}
-            <div title="Interface is connected to a network" style="height: 1rem;">
+            <div
+                class:pulse-out={$nicsUpdateTrigger && $settingsStore.showPollAnimation}
+                title="Interface is connected to a network
+Every pulse indicates the interfaces were polled"
+                style="height: 1rem;"
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -45,7 +51,13 @@
                 </svg>
             </div>
         {:else}
-            <div title="Interface is NOT connected to a network" style="height: 1rem;">
+            <div
+                class:pulse-out={$nicsUpdateTrigger && $settingsStore.showPollAnimation}
+                class="pulse-out-error"
+                title="Interface is NOT connected to a network
+Every pulse indicates the interfaces were polled"
+                style="height: 1rem;"
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     style="color: var(--error);"
@@ -161,3 +173,36 @@
         </div>
     </div>
 </section>
+
+<style>
+    .pulse-out {
+        z-index: 0;
+        position: relative;
+    }
+    .pulse-out::before {
+        content: "";
+        z-index: -1;
+        position: absolute;
+        background-color: var(--success);
+        border-radius: 50%;
+        width: 1rem;
+        height: 1rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        animation: pulse 450ms ease-out forwards;
+    }
+    .pulse-out-error::before {
+        background-color: var(--error);
+    }
+    @keyframes pulse {
+        0% {
+            opacity: 0.8;
+            transform: translate(-50%, -50%) scale(0.4);
+        }
+        100% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(1.4);
+        }
+    }
+</style>

@@ -241,8 +241,8 @@ function loadPresets() {
     console.log("localStorage: presets", get(presets) || undefined);
 }
 
-function resetPresets() {
-    presets.set(JSON.parse(JSON.stringify(defaultPresets)))
+function resetPresets(ps = defaultPresets) {
+    presets.set(JSON.parse(JSON.stringify(ps)))
     savePresets()
 }
 
@@ -278,7 +278,7 @@ function selectPreset(preset_name: string) {
     presetSelectedIndex = ps.findIndex(p => p.name === preset_name)
     if (presetSelectedIndex !== -1) {
         console.log("Preset Selected", preset_name, ps[presetSelectedIndex])
-        presetTemp.set(ps[presetSelectedIndex])
+        presetTemp.set(JSON.parse(JSON.stringify(ps[presetSelectedIndex])))
     } else {
         console.log("Preset Selected Reset to index 0", preset_name, ps[presetSelectedIndex])
         presetSelectedIndex = 0

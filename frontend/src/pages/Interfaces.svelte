@@ -1,18 +1,26 @@
 <script lang="ts">
+    import { onMount, onDestroy } from "svelte";
     import { setPage } from "../ts/router";
-    import { nics, setNic, currentNicIndex } from "../ts/nic";
-    import { presets, setPresetToInterface, selectPreset } from "../ts/presets";
-    import * as app from "../../wailsjs/go/main/App.js";
+    import { nics, setNic, nicsUpdateTrigger, initNics, pollNics } from "../ts/nic";
+    import { settingsStore } from "../ts/settings";
+
+    // Page start
+    let interval: number;
+    onMount(async () => {
+        await initNics();
+        interval = pollNics($settingsStore.interfacePollRateMs);
+    });
+    
+    // Page close
+    onDestroy(async () => {
+        clearInterval(interval);
+    });
 </script>
 
 <div class="grid gap-1 pad-1">
     <div class="flex bottom gap-1">
         <div class="grow text-dark thin">Select Interface</div>
-        <button
-            class="transparent text-dark"
-            style="margin-left: auto; visibility: hidden;"
-            title="Change Interface"
-        >
+        <button class="transparent text-dark" style="margin-left: auto; visibility: hidden;" title="Change Interface">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -30,10 +38,15 @@
     </div>
 
     {#each $nics as nic}
-        <section class="bg border radius shadow" >
+        <section class="bg border radius shadow">
             <div class="flex center-y gap-2 pad-2">
                 {#if nic.connected}
-                    <div title="Interface is connected to a network" style="height: 1rem;">
+                    <div
+                        class:pulse-out={$nicsUpdateTrigger && $settingsStore.showPollAnimation}
+                        title="Interface is connected to a network
+Every pulse indicates the interfaces were polled"
+                        style="height: 1rem;"
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -49,7 +62,13 @@
                         </svg>
                     </div>
                 {:else}
-                    <div title="Interface is NOT connected to a network" style="height: 1rem;">
+                    <div
+                        class:pulse-out={$nicsUpdateTrigger && $settingsStore.showPollAnimation}
+                        class="pulse-out-error"
+                        title="Interface is NOT connected to a network
+Every pulse indicates the interfaces were polled"
+                        style="height: 1rem;"
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             style="color: var(--error);"
@@ -74,7 +93,7 @@
                     class="border grow shadow"
                     title="Select Interface"
                     disabled={nic.disabled}
-                    >
+                >
                     {nic.interface_name}</button
                 >
                 <small class="text-dark thin pad-inline-1">[{nic.interface_metric}]</small>
@@ -82,7 +101,7 @@
             <div class="pad-inline-2">
                 <hr />
             </div>
-            <div class="flex wrap top pad-2">
+            <div class="grid pad-2">
                 {#each nic.ips as ipMask, index}
                     <div class="grid center-y gap-2" style="grid-template-columns: 2.6rem 1fr 2rem;">
                         {#if nic.ip_is_dhcp}
@@ -149,3 +168,36 @@
         <div></div>
     {/each}
 </div>
+
+<style>
+    .pulse-out {
+        z-index: 0;
+        position: relative;
+    }
+    .pulse-out::before {
+        content: "";
+        z-index: -1;
+        position: absolute;
+        background-color: var(--success);
+        border-radius: 50%;
+        width: 1rem;
+        height: 1rem;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        animation: pulse 450ms ease-out forwards;
+    }
+    .pulse-out-error::before {
+        background-color: var(--error);
+    }
+    @keyframes pulse {
+        0% {
+            opacity: 0.8;
+            transform: translate(-50%, -50%) scale(0.4);
+        }
+        100% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(1.4);
+        }
+    }
+</style>
