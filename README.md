@@ -2,6 +2,8 @@
 
 Quickly change and save network IPv4 settings
 
+Inspired by [Simple-IP-Config](https://github.com/KurtisLiggett/Simple-IP-Config)
+
 
 ## Download
 
