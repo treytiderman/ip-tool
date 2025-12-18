@@ -7,7 +7,7 @@ Inspired by [Simple-IP-Config](https://github.com/KurtisLiggett/Simple-IP-Config
 
 ## Download
 
-Windows (portable): [ip-tool-v0.4.exe](https://github.com/treytiderman/ip-tool/releases/download/v0.4/ip-tool-v0.4.exe)
+Windows (portable): [ip-tool-v0.4.1.exe](https://github.com/treytiderman/ip-tool/releases/download/v0.4/ip-tool-v0.4.1.exe)
 
 
 ## Screenshots
