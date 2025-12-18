@@ -193,6 +193,17 @@
         />
         <label for="show_poll_animation" class="text-dark thin">Show Poll Animation</label>
     </div>
+    
+    <div class="flex center-y gap-1">
+        <input
+            type="checkbox"
+            name="fold_if_not_focued"
+            id="fold_if_not_focued"
+            class="border shadow-inset"
+            bind:checked={$settingsStore.foldIfNotFocued}
+        />
+        <label for="fold_if_not_focued" class="text-dark thin">Fold If Not Focused</label>
+    </div>
 
     <div class="flex center-y gap-1">
         <input
@@ -215,4 +226,5 @@
         />
         <label for="poll_if_minimised" class="text-dark thin">Poll If Minimised</label>
     </div> -->
+
 </div>

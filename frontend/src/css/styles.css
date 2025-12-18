@@ -702,6 +702,7 @@ button:active:not(:disabled) {
 :disabled,
 :disabled+label {
     color: var(--text-dark);
+    background-color: var(--bg);
     cursor: not-allowed;
 }
 

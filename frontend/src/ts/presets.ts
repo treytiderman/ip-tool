@@ -293,7 +293,7 @@ async function setPresetToInterface(interface_name: string, preset_name: string)
         interface_name,
         p.ips[0].ip_address,
         p.ips[0].subnet_mask,
-        p.gateways[0].gateway_address,
+        p.gateways[0]?.gateway_address || "",
         p.dns_servers[0]
     )
     if (p.ips.length > 1) {

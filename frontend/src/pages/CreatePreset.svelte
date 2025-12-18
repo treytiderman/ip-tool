@@ -19,7 +19,9 @@
     }
     function setGateway(index: number, event: any) {
         const val = event.target.value;
-        $presetTemp.gateways[index].gateway_address = val;
+        $presetTemp.gateways[index] = {
+            gateway_address: val
+        };
         console.log("Temp Preset", $presetTemp);
     }
     function setDnsServer(index: number, event: any) {

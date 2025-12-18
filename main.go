@@ -38,7 +38,7 @@ func main() {
 		Width:       300,
 		Height:      500,
 		MinWidth:    100,
-		MinHeight:   100,
+		MinHeight:   20,
 		Frameless:   true,
 		AlwaysOnTop: false,
 	})

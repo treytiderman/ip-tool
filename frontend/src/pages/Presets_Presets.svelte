@@ -1,8 +1,8 @@
 <script lang="ts">
+    import * as app from "../../wailsjs/go/main/App.js";
     import { setPage } from "../ts/router";
     import { nics, setNic, currentNicIndex } from "../ts/nic";
     import { presets, setPresetToInterface, selectPreset } from "../ts/presets";
-    import * as app from "../../wailsjs/go/main/App.js";
 </script>
 
 <div class="flex bottom">
@@ -113,7 +113,7 @@ WARNING: affects all interfaces"
 Preset: {preset.name}
 IP: {preset.ips[0].ip_address}
 Mask: {preset.ips[0].subnet_mask}
-Gate: {preset.gateways[0].gateway_address}
+Gate: {preset.gateways[0]?.gateway_address}
 DNS: {preset.dns_servers[0]}
 "
             >
