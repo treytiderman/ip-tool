@@ -39,6 +39,9 @@
         console.log("submit", $nicTemp);
         setPage("IPv4 Presets");
         if ($nicTemp.ip_is_dhcp) {
+            if ($nics[$currentNicIndex].interface_name !== $nicTemp.interface_name) {
+                await app.SetInterfaceName($nics[$currentNicIndex].interface_name, $nicTemp.interface_name);
+            }
             await app.SetDhcp($nics[$currentNicIndex].interface_name)
         } else {
             await setNicToInterface($nics[$currentNicIndex].interface_name, $nicTemp);

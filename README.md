@@ -56,7 +56,7 @@ Run `wails dev`
 # Run 
 wails build
 
-wails build -clean -devtools -o ip-tool-v0.4.exe
+wails build -clean -devtools -o ip-tool-v0.4.1.exe
 
 # deletes build/bin
 wails build -clean
