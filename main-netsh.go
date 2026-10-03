@@ -68,8 +68,12 @@ func Cmd(prog string, args ...string) ([]string, error) {
 	cmd := exec.Command(prog, args...)
 	// cmd.SysProcAttr = &syscall.SysProcAttr{CreationFlags: 0x08000000} // CREATE_NO_WINDOW
 	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-	out, err := cmd.Output()
+	out, err := cmd.CombinedOutput()
 	if err != nil {
+		outputText := strings.TrimSpace(string(out))
+		if outputText != "" {
+			return nil, fmt.Errorf("%w: %s", err, outputText)
+		}
 		return nil, err
 	}
 	scanner := bufio.NewScanner(strings.NewReader(string(out)))
@@ -265,14 +269,13 @@ func GetInterfaceStates() ([]InterfaceState, error) {
 	return ParseInterfaceStates(lines)
 }
 
-
 // get full interface object. only ones returned in GetInterfaceStates()
 func GetInterfaces() ([]Interface, error) {
 	interfaceConfigs, err := GetInterfaceConfigs()
 	if err != nil {
 		return nil, err
 	}
-	
+
 	interfaceStates, err := GetInterfaceStates()
 	if err != nil {
 		return nil, err

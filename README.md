@@ -33,6 +33,7 @@ Windows (portable): [ip-tool-v0.4.exe](https://github.com/treytiderman/ip-tool/r
 - [ ] Add set interface metric
 - [ ] Add set routes like netrouteview
 - [ ] Add confirm dialog to replace built-in window.confirm()
+- [ ] Add LLDP information for each interface
 - [ ] Add network scanner
 - [ ] Add mDNS discovery
 - [ ] [Auto Update](https://github.com/wailsapp/wails/issues/1178#issuecomment-3448430708)
@@ -44,6 +45,21 @@ Windows (portable): [ip-tool-v0.4.exe](https://github.com/treytiderman/ip-tool/r
     - [x] Add export/import presets button
     - [ ] Add export logs button
 
+
+## Bootstrap
+
+From a fresh clone, build the frontend before running Go tests or packaging the app:
+
+```sh
+cd frontend
+npm install
+npm run build
+cd ..
+
+go test ./...
+```
+
+The Go app embeds the generated frontend bundle from `frontend/dist`, so the frontend must be built first or `go test` and `wails build` will fail with a missing asset error.
 
 ## Dev
 

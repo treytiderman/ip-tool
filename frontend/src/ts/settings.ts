@@ -38,13 +38,14 @@ function saveSettings() {
 
 function loadSettings() {
     const localStorageSettings = localStorage.getItem("settings");
-    console.log(
-        "localStorage: settings",
-        JSON.parse(localStorageSettings) || undefined,
-    );
     if (localStorageSettings) {
-        settingsStore.set(JSON.parse(localStorageSettings));
-        windowSetSize();
+        try {
+            settingsStore.set(JSON.parse(localStorageSettings));
+            windowSetSize();
+        } catch (error) {
+            console.warn("Failed to load saved settings:", error);
+            settingsStore.set(JSON.parse(JSON.stringify(defaultSettings)));
+        }
     }
     settingsStore.subscribe(onSettingsChange);
 }

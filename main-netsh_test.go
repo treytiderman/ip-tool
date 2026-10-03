@@ -18,6 +18,16 @@ func Test_Cmd(t *testing.T) {
 	}
 }
 
+func Test_Cmd_IncludesCommandOutputInError(t *testing.T) {
+	_, err := Cmd("cmd", "/C", "this-command-should-not-exist")
+	if err == nil {
+		t.Fatal("expected error for unknown command")
+	}
+	if !strings.Contains(err.Error(), "not recognized") && !strings.Contains(err.Error(), "not recognized as an internal or external command") {
+		t.Fatalf("expected command output in error, got: %v", err)
+	}
+}
+
 func Test_IsAdmin(t *testing.T) {
 	adminStatus := IsAdmin()
 	fmt.Println("adminStatus", adminStatus)
@@ -524,8 +534,8 @@ Enabled        Disconnected   Dedicated        Ethernet 3
 
 func Test_Manual(t *testing.T) {
 	adminStatus := IsAdmin()
-	if adminStatus == false {
-		t.Error("Not administrator")
+	if !adminStatus {
+		t.Skip("requires Administrator privileges")
 	}
 
 	// Static Series
