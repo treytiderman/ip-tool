@@ -163,6 +163,31 @@ Every pulse indicates the interfaces were polled"
                         <span class="mono">{dns_server}</span>
                     </div>
                 {/each}
+
+                {#if nic.lldp?.system_name || nic.lldp?.port_id || nic.lldp?.chassis_id || nic.lldp?.system_description || nic.lldp?.management_address}
+                    <div class="grid center-y gap-2" style="grid-template-columns: 2.6rem 1fr;">
+                        <span class="text-dark thin grid right small">lldp:</span>
+                        <div class="grid gap-1">
+                            {#if nic.lldp.system_name}
+                                <span class="mono">{nic.lldp.system_name}</span>
+                            {/if}
+                            {#if nic.lldp.port_id}
+                                <span class="mono small">port: {nic.lldp.port_id}</span>
+                            {/if}
+                            {#if nic.lldp.system_description}
+                                <span class="mono small">{nic.lldp.system_description}</span>
+                            {/if}
+                            {#if nic.lldp.management_address}
+                                <span class="mono small">mgmt: {nic.lldp.management_address}</span>
+                            {/if}
+                        </div>
+                    </div>
+                {:else}
+                    <div class="grid center-y gap-2" style="grid-template-columns: 2.6rem 1fr;">
+                        <span class="text-dark thin grid right small">lldp:</span>
+                        <span class="mono small">not available</span>
+                    </div>
+                {/if}
             </div>
         </section>
         <div></div>

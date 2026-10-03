@@ -40,6 +40,13 @@ const blankNic: any = {
     ],
     dns_is_dhcp: false,
     dns_servers: ["xxx.xxx.xxx.xxx"],
+    lldp: {
+        system_name: "",
+        port_id: "",
+        chassis_id: "",
+        system_description: "",
+        management_address: "",
+    },
 };
 
 const nics = writable<main.Interface[]>([blankNic]);

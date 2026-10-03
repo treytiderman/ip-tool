@@ -24,6 +24,15 @@ type Gateway struct {
 	GatewayMetric  int    `json:"gateway_metric"`
 }
 
+type LldpInfo struct {
+	SystemName        string `json:"system_name"`
+	PortID            string `json:"port_id"`
+	ChassisID         string `json:"chassis_id"`
+	SystemDescription string `json:"system_description"`
+	ManagementAddress string `json:"management_address"`
+	Raw               string `json:"raw"`
+}
+
 type Interface struct {
 	InterfaceName   string    `json:"interface_name"`
 	InterfaceMetric int       `json:"interface_metric"`
@@ -35,6 +44,7 @@ type Interface struct {
 	Gateways        []Gateway `json:"gateways"`
 	DnsIsDhcp       bool      `json:"dns_is_dhcp"`
 	DnsServers      []string  `json:"dns_servers"`
+	Lldp            LldpInfo  `json:"lldp"`
 }
 
 type InterfaceConfig struct {
@@ -198,6 +208,68 @@ func ParseInterfaces(lines []string) ([]InterfaceConfig, error) {
 	return nics, nil
 }
 
+func ParseLldpInfo(lines []string) LldpInfo {
+	info := LldpInfo{}
+	for _, raw := range lines {
+		line := strings.TrimSpace(raw)
+		if line == "" {
+			continue
+		}
+		if strings.HasPrefix(line, "System Name:") {
+			info.SystemName = strings.TrimSpace(strings.TrimPrefix(line, "System Name:"))
+			continue
+		}
+		if strings.HasPrefix(line, "System Description:") {
+			info.SystemDescription = strings.TrimSpace(strings.TrimPrefix(line, "System Description:"))
+			continue
+		}
+		if strings.HasPrefix(line, "Port ID:") {
+			info.PortID = strings.TrimSpace(strings.TrimPrefix(line, "Port ID:"))
+			continue
+		}
+		if strings.HasPrefix(line, "Chassis ID:") {
+			info.ChassisID = strings.TrimSpace(strings.TrimPrefix(line, "Chassis ID:"))
+			continue
+		}
+		if strings.HasPrefix(line, "Management Address:") {
+			info.ManagementAddress = strings.TrimSpace(strings.TrimPrefix(line, "Management Address:"))
+			continue
+		}
+		if strings.HasPrefix(line, "LLDP neighbor:") {
+			info.SystemName = strings.TrimSpace(strings.TrimPrefix(line, "LLDP neighbor:"))
+			continue
+		}
+		if strings.HasPrefix(line, "Local Interface:") || strings.HasPrefix(line, "Interface:") {
+			continue
+		}
+	}
+	if info.SystemName == "" && info.PortID == "" && info.ChassisID == "" && info.SystemDescription == "" && info.ManagementAddress == "" {
+		info.Raw = strings.Join(lines, "\n")
+	}
+	return info
+}
+
+func GetInterfaceLldp(iface string) LldpInfo {
+	candidates := []string{
+		fmt.Sprintf(`Get-NetAdapterLldp -Name "%s" -ErrorAction SilentlyContinue | Select-Object -Property * | ConvertTo-Json -Compress`, iface),
+		fmt.Sprintf(`Get-CimInstance -Namespace root/standardcimv2 -ClassName MSFT_NetAdapterLldpInfo -Filter "Name='%s'" -ErrorAction SilentlyContinue | Select-Object -Property * | ConvertTo-Json -Compress`, iface),
+		fmt.Sprintf(`Get-CimInstance -Namespace root/standardcimv2 -ClassName MSFT_NetLldpNeighbor -Filter "InterfaceAlias='%s'" -ErrorAction SilentlyContinue | Select-Object -Property * | ConvertTo-Json -Compress`, iface),
+	}
+
+	for _, script := range candidates {
+		lines, err := Cmd("powershell", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", script)
+		if err != nil || len(lines) == 0 {
+			continue
+		}
+		info := ParseLldpInfo(lines)
+		if info.SystemName != "" || info.PortID != "" || info.ChassisID != "" || info.SystemDescription != "" || info.ManagementAddress != "" {
+			return info
+		}
+	}
+
+	return LldpInfo{}
+}
+
 func ParseInterfaceStates(lines []string) ([]InterfaceState, error) {
 	states := []InterfaceState{}
 
@@ -290,6 +362,7 @@ func GetInterfaces() ([]Interface, error) {
 				break
 			}
 		}
+		lldp := GetInterfaceLldp(state.InterfaceName)
 		if configIdx == -1 {
 			iface := Interface{
 				InterfaceName:   state.InterfaceName,
@@ -302,6 +375,7 @@ func GetInterfaces() ([]Interface, error) {
 				Gateways:        []Gateway{},
 				DnsIsDhcp:       false,
 				DnsServers:      []string{},
+				Lldp:            lldp,
 			}
 			interfaces = append(interfaces, iface)
 		} else {
@@ -316,6 +390,7 @@ func GetInterfaces() ([]Interface, error) {
 				Gateways:        interfaceConfigs[configIdx].Gateways,
 				DnsIsDhcp:       interfaceConfigs[configIdx].DnsIsDhcp,
 				DnsServers:      interfaceConfigs[configIdx].DnsServers,
+				Lldp:            lldp,
 			}
 			interfaces = append(interfaces, iface)
 		}

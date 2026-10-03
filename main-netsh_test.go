@@ -28,6 +28,27 @@ func Test_Cmd_IncludesCommandOutputInError(t *testing.T) {
 	}
 }
 
+func Test_ParseLldpInfo(t *testing.T) {
+	input := []string{
+		"System Name: SW-CORE-01",
+		"Port ID: 1/0/12",
+		"Chassis ID: 00:1b:54:00:ff:aa",
+		"System Description: Cisco Catalyst 9300",
+		"Management Address: 10.0.0.2",
+	}
+
+	info := ParseLldpInfo(input)
+	if info.SystemName != "SW-CORE-01" {
+		t.Fatalf("expected system name to be parsed, got %q", info.SystemName)
+	}
+	if info.PortID != "1/0/12" {
+		t.Fatalf("expected port id to be parsed, got %q", info.PortID)
+	}
+	if info.SystemDescription != "Cisco Catalyst 9300" {
+		t.Fatalf("expected system description to be parsed, got %q", info.SystemDescription)
+	}
+}
+
 func Test_IsAdmin(t *testing.T) {
 	adminStatus := IsAdmin()
 	fmt.Println("adminStatus", adminStatus)

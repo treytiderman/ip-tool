@@ -33,9 +33,10 @@ Windows (portable): [ip-tool-v0.4.exe](https://github.com/treytiderman/ip-tool/r
 - [ ] Add set interface metric
 - [ ] Add set routes like netrouteview
 - [ ] Add confirm dialog to replace built-in window.confirm()
-- [ ] Add LLDP information for each interface
+- [ ] Add LLDP information for each interface (like PSDiscoveryProtocol or LDWin)
 - [ ] Add network scanner
 - [ ] Add mDNS discovery
+- [ ] Add DHCP server
 - [ ] [Auto Update](https://github.com/wailsapp/wails/issues/1178#issuecomment-3448430708)
 - [x] Add settings page
     - [ ] Be able to change/add filters to interfaces

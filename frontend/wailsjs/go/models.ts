@@ -14,6 +14,28 @@ export namespace main {
 	        this.gateway_metric = source["gateway_metric"];
 	    }
 	}
+	export class LldpInfo {
+	    system_name: string;
+	    port_id: string;
+	    chassis_id: string;
+	    system_description: string;
+	    management_address: string;
+	    raw: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new LldpInfo(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.system_name = source["system_name"];
+	        this.port_id = source["port_id"];
+	        this.chassis_id = source["chassis_id"];
+	        this.system_description = source["system_description"];
+	        this.management_address = source["management_address"];
+	        this.raw = source["raw"];
+	    }
+	}
 	export class Ip {
 	    ip_address: string;
 	    subnet_mask: string;
@@ -41,6 +63,7 @@ export namespace main {
 	    gateways: Gateway[];
 	    dns_is_dhcp: boolean;
 	    dns_servers: string[];
+	    lldp: LldpInfo;
 	
 	    static createFrom(source: any = {}) {
 	        return new Interface(source);
@@ -58,6 +81,7 @@ export namespace main {
 	        this.gateways = this.convertValues(source["gateways"], Gateway);
 	        this.dns_is_dhcp = source["dns_is_dhcp"];
 	        this.dns_servers = source["dns_servers"];
+	        this.lldp = this.convertValues(source["lldp"], LldpInfo);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -138,6 +162,7 @@ export namespace main {
 	        this.disabled = source["disabled"];
 	    }
 	}
+	
 
 }
 
