@@ -46,6 +46,10 @@ export function RenewDhcp() {
   return window['go']['main']['App']['RenewDhcp']();
 }
 
+export function ScanSubnet(arg1, arg2, arg3) {
+  return window['go']['main']['App']['ScanSubnet'](arg1, arg2, arg3);
+}
+
 export function SetDhcp(arg1) {
   return window['go']['main']['App']['SetDhcp'](arg1);
 }

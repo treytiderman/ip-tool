@@ -5,7 +5,25 @@
 </script>
 
 <div class="flex bottom">
-    <div class="grow text-dark thin thin">Interface</div>
+    <div class="grow text-dark thin">Interface</div>
+    <button class="transparent text-dark thin" on:click={() => setPage("Scanner")} title="Scan network">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="var(--border-width)"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M3 12h18" />
+            <path d="M12 3a14 14 0 0 1 0 18" />
+            <path d="M12 3a14 14 0 0 0 0 18" />
+        </svg>
+    </button>
     <button class="transparent text-dark thin" title="Change Interface" on:click={() => setPage("Interfaces")}>
         <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -15,6 +15,7 @@
     import EditPreset from "./pages/EditPreset.svelte";
     import CreatePreset from "./pages/CreatePreset.svelte";
     import EditInterface from "./pages/EditInterface.svelte";
+    import Scanner from "./pages/Scanner.svelte";
     import Settings from "./pages/Settings.svelte";
 
     // App start up
@@ -76,6 +77,8 @@
             <CreatePreset />
         {:else if $pageStore.name === "Edit Interface"}
             <EditInterface />
+        {:else if $pageStore.name === "Scanner"}
+            <Scanner />
         {:else if $pageStore.name === "Settings"}
             <Settings />
         {/if}

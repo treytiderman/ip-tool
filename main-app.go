@@ -49,6 +49,10 @@ func (a *App) GetInterfaces() []Interface {
 	return ifaces
 }
 
+func (a *App) ScanSubnet(interfaceName, ipAddress, subnetMask string) ([]ScanResult, error) {
+	return ScanSubnet(interfaceName, ipAddress, subnetMask)
+}
+
 func (a *App) SetIpDhcp(iface string) bool {
 	return SetIpDhcp(iface)
 }

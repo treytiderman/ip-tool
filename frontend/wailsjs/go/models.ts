@@ -163,6 +163,27 @@ export namespace main {
 	    }
 	}
 	
+	
+	export class ScanResult {
+	    ip_address: string;
+	    latency_ms: number;
+	    is_local: boolean;
+	    mac_address: string;
+	    vendor: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ScanResult(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.ip_address = source["ip_address"];
+	        this.latency_ms = source["latency_ms"];
+	        this.is_local = source["is_local"];
+	        this.mac_address = source["mac_address"];
+	        this.vendor = source["vendor"];
+	    }
+	}
 
 }
 
