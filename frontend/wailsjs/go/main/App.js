@@ -10,6 +10,10 @@ export function AddIpStatic(arg1, arg2, arg3) {
   return window['go']['main']['App']['AddIpStatic'](arg1, arg2, arg3);
 }
 
+export function CancelScan() {
+  return window['go']['main']['App']['CancelScan']();
+}
+
 export function DisableInterface(arg1) {
   return window['go']['main']['App']['DisableInterface'](arg1);
 }

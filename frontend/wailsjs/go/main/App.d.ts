@@ -6,6 +6,8 @@ export function AddDnsStatic(arg1:string,arg2:string,arg3:string):Promise<boolea
 
 export function AddIpStatic(arg1:string,arg2:string,arg3:string):Promise<boolean>;
 
+export function CancelScan():Promise<boolean>;
+
 export function DisableInterface(arg1:string):Promise<boolean>;
 
 export function EnableInterface(arg1:string):Promise<boolean>;

@@ -2,23 +2,23 @@
     import { onDestroy, onMount, tick } from "svelte";
     import { main } from "../../wailsjs/go/models";
     import * as app from "../../wailsjs/go/main/App.js";
+    import { EventsOn } from "../../wailsjs/runtime/runtime.js";
     import { setPage } from "../ts/router";
     import { currentNicIndex, initNics, nics, nicsUpdateTrigger } from "../ts/nic";
     import { settingsStore } from "../ts/settings";
 
-    const maxConcurrentPings = 256;
-    const pingTimeoutMs = 300;
-
     let scanning = false;
     let scanComplete = false;
+    let scanCancelled = false;
+    let cancelRequested = false;
     let loadError = "";
     let scanError = "";
     let results: main.ScanResult[] = [];
     let scanIPAddress = "";
     let scanSubnetMask = "";
-    let remainingScanMs = 0;
-    let scanDeadline = 0;
-    let countdownInterval: number | undefined;
+    let scannedHosts = 0;
+    let totalHosts = 0;
+    let unsubscribeScanProgress: (() => void) | undefined;
 
     $: selectedInterface = $nics[$currentNicIndex];
     $: scanAddress = selectedInterface?.ips?.find(
@@ -29,13 +29,7 @@
         ? `${getNetworkAddress(scanIPAddress, scanSubnetMask)}/${maskPrefix}`
         : "";
     $: canScan = !!selectedInterface && isIPv4Address(scanIPAddress) && maskPrefix !== null && maskPrefix >= 16;
-    $: scanEstimateMs = maskPrefix === null
-        ? 0
-        : Math.ceil(
-              (Math.pow(2, 32 - maskPrefix) - (maskPrefix <= 30 ? 2 : 0)) / maxConcurrentPings,
-          ) * pingTimeoutMs;
-
-    onDestroy(() => clearInterval(countdownInterval));
+    onDestroy(() => unsubscribeScanProgress?.());
 
     function isIPv4Address(address: string) {
         const octets = address.split(".");
@@ -68,13 +62,11 @@
             .join(".");
     }
 
-    function formatDuration(milliseconds: number) {
-        const seconds = Math.ceil(milliseconds / 1000);
-        const minutes = Math.floor(seconds / 60);
-        return `${minutes}:${String(seconds % 60).padStart(2, "0")}`;
-    }
-
     onMount(async () => {
+        unsubscribeScanProgress = EventsOn("lan-scan-progress", (progress: { scanned: number; total: number }) => {
+            scannedHosts = progress.scanned;
+            totalHosts = progress.total;
+        });
         try {
             await initNics();
             await tick();
@@ -90,14 +82,12 @@
 
         scanning = true;
         scanComplete = false;
+        scanCancelled = false;
+        cancelRequested = false;
         scanError = "";
         results = [];
-        scanDeadline = Date.now() + scanEstimateMs;
-        remainingScanMs = scanEstimateMs;
-        clearInterval(countdownInterval);
-        countdownInterval = window.setInterval(() => {
-            remainingScanMs = Math.max(0, scanDeadline - Date.now());
-        }, 1000);
+        scannedHosts = 0;
+        totalHosts = 0;
         try {
             results = await app.ScanSubnet(
                 selectedInterface.interface_name,
@@ -106,11 +96,29 @@
             );
             scanComplete = true;
         } catch (error) {
-            scanError = error instanceof Error ? error.message : String(error);
+            if (cancelRequested) {
+                scanCancelled = true;
+            } else {
+                scanError = error instanceof Error ? error.message : String(error);
+            }
         } finally {
             scanning = false;
-            clearInterval(countdownInterval);
-            countdownInterval = undefined;
+            cancelRequested = false;
+        }
+    }
+
+    async function cancelScan() {
+        if (!scanning || cancelRequested) return;
+        cancelRequested = true;
+        try {
+            const cancelled = await app.CancelScan();
+            if (!cancelled) {
+                cancelRequested = false;
+                scanError = "The scan could not be cancelled.";
+            }
+        } catch (error) {
+            cancelRequested = false;
+            scanError = error instanceof Error ? error.message : String(error);
         }
     }
 </script>
@@ -298,9 +306,18 @@
     
     <div></div>
     
-    <button class="accent accent-bg accent-border" on:click={scan} disabled={scanning || !canScan}>
+    <button
+        class:error={scanning}
+        class:error-bg={scanning}
+        class:error-border={scanning}
+        class="accent accent-bg accent-border"
+        on:click={scanning ? cancelScan : scan}
+        disabled={(!scanning && !canScan) || cancelRequested}
+    >
         {#if scanning}
-            Scanning {subnet}... {formatDuration(remainingScanMs)}
+            {cancelRequested
+                ? `Cancelling...`
+                : `Cancel scan... ${scannedHosts.toLocaleString()} / ${totalHosts.toLocaleString()} hosts`}
         {:else if scanComplete}
             Scanned {results.length} {results.length === 1 ? "device" : "devices"}
         {:else}
@@ -315,12 +332,14 @@
     
     <div></div>
 
-    <section class="grow overflow-y bg border radius shadow pad-1 flex column gap-1" aria-label="Scan results">
+    <section class="grow overflow-y bg border radius shadow pad-2 flex column gap-1" aria-label="Scan results">
         {#if results.length > 0}
 
             {#each results as result, index}
                 {#if index > 0}
+                    <div></div>
                     <hr>
+                    <div></div>
                 {/if}
                 <div class="grid center-y gap-2" style="grid-template-columns: 2.6rem 1fr auto;">
                     <div class="flex">

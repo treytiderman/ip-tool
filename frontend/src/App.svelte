@@ -77,7 +77,7 @@
             <CreatePreset />
         {:else if $pageStore.name === "Edit Interface"}
             <EditInterface />
-        {:else if $pageStore.name === "Scanner"}
+        {:else if $pageStore.name === "Ping Scanner"}
             <Scanner />
         {:else if $pageStore.name === "Settings"}
             <Settings />

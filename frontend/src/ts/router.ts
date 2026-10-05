@@ -13,7 +13,7 @@ let pages = [
     { name: "Create Preset" },
     { name: "Edit Preset" },
     { name: "Edit Interface" },
-    { name: "Scanner" },
+    { name: "Ping Scanner" },
     { name: "Settings" },
 ]
 

@@ -2,10 +2,16 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"sync"
+
+	wailsruntime "github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type App struct {
-	ctx context.Context
+	ctx        context.Context
+	scanMu     sync.Mutex
+	scanCancel context.CancelFunc
 }
 
 func NewApp() *App {
@@ -50,7 +56,39 @@ func (a *App) GetInterfaces() []Interface {
 }
 
 func (a *App) ScanSubnet(interfaceName, ipAddress, subnetMask string) ([]ScanResult, error) {
-	return ScanSubnet(interfaceName, ipAddress, subnetMask)
+	a.scanMu.Lock()
+	if a.scanCancel != nil {
+		a.scanMu.Unlock()
+		return nil, fmt.Errorf("a scan is already in progress")
+	}
+	parent := a.ctx
+	if parent == nil {
+		parent = context.Background()
+	}
+	ctx, cancel := context.WithCancel(parent)
+	a.scanCancel = cancel
+	a.scanMu.Unlock()
+
+	defer func() {
+		cancel()
+		a.scanMu.Lock()
+		a.scanCancel = nil
+		a.scanMu.Unlock()
+	}()
+
+	return ScanSubnet(ctx, interfaceName, ipAddress, subnetMask, func(progress ScanProgress) {
+		wailsruntime.EventsEmit(a.ctx, "lan-scan-progress", progress)
+	})
+}
+
+func (a *App) CancelScan() bool {
+	a.scanMu.Lock()
+	defer a.scanMu.Unlock()
+	if a.scanCancel == nil {
+		return false
+	}
+	a.scanCancel()
+	return true
 }
 
 func (a *App) SetIpDhcp(iface string) bool {

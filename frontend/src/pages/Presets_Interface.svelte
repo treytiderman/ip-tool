@@ -6,7 +6,7 @@
 
 <div class="flex bottom">
     <div class="grow text-dark thin">Interface</div>
-    <button class="transparent text-dark thin" on:click={() => setPage("Scanner")} title="Scan network">
+    <button class="transparent text-dark thin" on:click={() => setPage("Ping Scanner")} title="Scan network">
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

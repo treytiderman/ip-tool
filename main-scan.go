@@ -47,6 +47,11 @@ type ScanResult struct {
 	Vendor     string `json:"vendor"`
 }
 
+type ScanProgress struct {
+	Scanned int `json:"scanned"`
+	Total   int `json:"total"`
+}
+
 type neighborEntry struct {
 	IPAddress        string `json:"IPAddress"`
 	LinkLayerAddress string `json:"LinkLayerAddress"`
@@ -58,7 +63,7 @@ var (
 	macVendorsErr  error
 )
 
-func ScanSubnet(interfaceName, ipAddress, subnetMask string) ([]ScanResult, error) {
+func ScanSubnet(ctx context.Context, interfaceName, ipAddress, subnetMask string, progress func(ScanProgress)) ([]ScanResult, error) {
 	if interfaceName == "" {
 		return nil, fmt.Errorf("interface name is required")
 	}
@@ -126,37 +131,58 @@ func ScanSubnet(interfaceName, ipAddress, subnetMask string) ([]ScanResult, erro
 
 	results := make([]ScanResult, 0)
 	var resultsMu sync.Mutex
+	var progressMu sync.Mutex
+	completedHosts := 0
+	if progress != nil {
+		progress(ScanProgress{Scanned: 0, Total: len(targets)})
+	}
 	var scanErr error
 	var scanErrOnce sync.Once
-	scanCtx, cancel := context.WithCancel(context.Background())
-	defer cancel()
 	semaphore := make(chan struct{}, maxConcurrentPings)
 	var workers sync.WaitGroup
 
 	for _, host := range targets {
-		if scanCtx.Err() != nil {
+		if ctx.Err() != nil {
 			break
 		}
-		semaphore <- struct{}{}
+		acquired := false
+		select {
+		case semaphore <- struct{}{}:
+			acquired = true
+		case <-ctx.Done():
+		}
+		if ctx.Err() != nil {
+			if acquired {
+				<-semaphore
+			}
+			break
+		}
 		workers.Add(1)
 		go func(host target) {
 			defer workers.Done()
 			defer func() { <-semaphore }()
+			defer func() {
+				progressMu.Lock()
+				defer progressMu.Unlock()
+				completedHosts++
+				if progress != nil && (completedHosts%maxConcurrentPings == 0 || completedHosts == len(targets)) {
+					progress(ScanProgress{Scanned: completedHosts, Total: len(targets)})
+				}
+			}()
 
 			started := time.Now()
-			ctx, stop := context.WithTimeout(scanCtx, 2*time.Second)
+			pingCtx, stop := context.WithTimeout(ctx, 2*time.Second)
 			defer stop()
-			cmd := exec.CommandContext(ctx, "ping", "-n", "1", "-w", strconv.Itoa(int(pingTimeout/time.Millisecond)), host.ip)
+			cmd := exec.CommandContext(pingCtx, "ping", "-n", "1", "-w", strconv.Itoa(int(pingTimeout/time.Millisecond)), host.ip)
 			cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 			err := cmd.Run()
 			if err != nil {
 				var exitErr *exec.ExitError
-				if errors.Is(err, context.DeadlineExceeded) || errors.As(err, &exitErr) {
+				if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) || errors.As(err, &exitErr) {
 					return
 				}
 				scanErrOnce.Do(func() {
 					scanErr = fmt.Errorf("ping %s: %w", host.ip, err)
-					cancel()
 				})
 				return
 			}
@@ -173,8 +199,16 @@ func ScanSubnet(interfaceName, ipAddress, subnetMask string) ([]ScanResult, erro
 	}
 
 	workers.Wait()
+	if progress != nil {
+		progressMu.Lock()
+		progress(ScanProgress{Scanned: completedHosts, Total: len(targets)})
+		progressMu.Unlock()
+	}
 	if scanErr != nil {
 		return nil, scanErr
+	}
+	if err := ctx.Err(); err != nil {
+		return nil, err
 	}
 
 	neighbors, err := getIPv4Neighbors(iface.Index)
