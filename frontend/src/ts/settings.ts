@@ -14,13 +14,14 @@ export {
     windowGetSize,
     windowUpdateSize,
     windowSetSize,
+    requestWindowRestore,
 };
 
 const defaultSettings = {
     theme: "auto",
     fontSize: 16,
-    windowSizeWidth: 300,
-    windowSizeHeight: 500,
+    windowSizeWidth: 380,
+    windowSizeHeight: 600,
     windowAlwaysOnTop: false,
     interfacePollRateMs: 3000,
     showPollAnimation: true,
@@ -127,6 +128,8 @@ function onSettingsChange() {
 
 // Shrink Window on Blur. Go back to normal on Hover'
 let blurTimer = null;
+let shrinkTimer: ReturnType<typeof setTimeout> | null = null;
+let isWindowFolded = false;
 let lastWindowSize = {
     windowSizeWidth: settingsStore.windowSizeWidth,
     windowSizeHeight: settingsStore.windowSizeHeight,
@@ -138,36 +141,59 @@ async function shrinkWindow() {
     if (s.foldIfNotFocued) {
         lastWindowSize.windowSizeWidth = s.windowSizeWidth;
         lastWindowSize.windowSizeHeight = s.windowSizeHeight;
+        const header = document.querySelector("header");
+        if (!header) {
+            console.error("Could not fold window: header element was not found.");
+            return;
+        }
+        const headerHeight = Math.ceil(header.getBoundingClientRect().bottom + 4);
         console.log("Window blurred", lastWindowSize);
-        window.runtime.WindowSetSize(lastWindowSize.windowSizeWidth, 10);
+        window.runtime.WindowSetSize(lastWindowSize.windowSizeWidth, headerHeight);
+        isWindowFolded = true;
     }
+}
+
+function debounceShrinkWindow() {
+    if (shrinkTimer) clearTimeout(shrinkTimer);
+    shrinkTimer = setTimeout(() => {
+        shrinkTimer = null;
+        shrinkWindow();
+    }, 100);
 }
 
 async function restoreWindow() {
     const s = get(settingsStore);
 
-    if (s.foldIfNotFocued) {
+    if (s.foldIfNotFocued && isWindowFolded) {
         console.log("Window focused", s.windowSizeWidth, s.windowSizeHeight);
         window.runtime.WindowSetSize(
             lastWindowSize.windowSizeWidth,
             lastWindowSize.windowSizeHeight,
         );
+        isWindowFolded = false;
     }
 }
 
+function requestWindowRestore() {
+    if (blurTimer) {
+        clearTimeout(blurTimer);
+        blurTimer = null;
+    }
+    if (shrinkTimer) {
+        clearTimeout(shrinkTimer);
+        shrinkTimer = null;
+    }
+    restoreWindow();
+}
+
 window.addEventListener("blur", () => {
+    if (blurTimer) clearTimeout(blurTimer);
     blurTimer = setTimeout(() => {
         blurTimer = null;
-        shrinkWindow();
+        debounceShrinkWindow();
     }, 10);
 });
 
 window.addEventListener("focus", () => {
-    if (blurTimer) {
-        clearTimeout(blurTimer);
-        blurTimer = null;
-        return;
-    }
-
-    restoreWindow();
+    requestWindowRestore();
 });

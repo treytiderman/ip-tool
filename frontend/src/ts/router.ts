@@ -14,6 +14,7 @@ let pages = [
     { name: "Edit Preset" },
     { name: "Edit Interface" },
     { name: "Ping Scanner" },
+    { name: "mDNS Scanner" },
     { name: "Settings" },
 ]
 

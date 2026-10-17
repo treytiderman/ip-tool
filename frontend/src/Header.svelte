@@ -1,10 +1,18 @@
 <script lang="ts">
     export let title: string = "Title";
-    import { setPage } from "./ts/router";
-    import { settingsStore, quitApp, windowSetMinimise } from "./ts/settings";
+    import { pages, setPage } from "./ts/router";
+    import { settingsStore, quitApp, windowSetMinimise, requestWindowRestore } from "./ts/settings";
+
+    function navigateToPage(event: Event) {
+        setPage((event.currentTarget as HTMLSelectElement).value);
+    }
 </script>
 
-<header class="flex center-y gap-1">
+<header
+    class="flex center-y gap-1 pad-1"
+    on:pointerdown|capture={requestWindowRestore}
+    on:pointerup|capture={requestWindowRestore}
+>
     {#if title !== "IPv4 Presets"}
         <button class="transparent" on:click={() => setPage("IPv4 Presets")} title="Back to IPv4 Presets">
             <svg
@@ -36,9 +44,24 @@
         </button>
     {/if}
 
-    <div class="grow" style="--wails-draggable:drag; cursor: pointer; user-select: none; white-space: nowrap;">
-        {title}
+    <div class="page-nav-wrap ">
+        <select
+            class="page-nav"
+            style="line-height: 1.2;"
+            aria-label="Navigate to page"
+            value={title}
+            on:change={navigateToPage}
+        >
+            {#each pages.filter((page) => page.name !== "Edit Preset") as page}
+                <option value={page.name}>{page.name}</option>
+            {/each}
+        </select>
     </div>
+
+    <div
+        class="header-drag-region"
+        aria-hidden="true"
+    ></div>
 
     {#if $settingsStore.windowAlwaysOnTop}
         <button
@@ -122,3 +145,31 @@
         </svg>
     </button>
 </header>
+
+<style>
+    .page-nav {
+        appearance: none;
+        border: none;
+        box-shadow: none;
+        background-color: transparent;
+        background-image: none;
+        padding-right: var(--padding-x);
+        width: 11rem;
+        max-width: 35vw;
+    }
+
+    .page-nav-wrap {
+        position: relative;
+        min-width: 0;
+    }
+
+    .header-drag-region {
+        --wails-draggable: drag;
+        flex: 1 1 auto;
+        align-self: stretch;
+        min-width: 1rem;
+        cursor: pointer;
+        user-select: none;
+    }
+
+</style>

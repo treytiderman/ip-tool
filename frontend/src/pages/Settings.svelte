@@ -120,6 +120,7 @@
                 <option value="auto">Auto</option>
                 <option value="black">Black</option>
                 <option value="dark">Dark</option>
+                <option value="fun">Fun</option>
                 <option value="white">White</option>
             </select>
         </div>

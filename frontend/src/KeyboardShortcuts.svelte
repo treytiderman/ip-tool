@@ -66,8 +66,8 @@
             console.log("KeyboardShortcut: Large font size and window size");
             settingsStore.update(store => {
                 store.fontSize = 36
-                store.windowSizeWidth = 700
-                store.windowSizeHeight = 1100
+                store.windowSizeWidth = 900
+                store.windowSizeHeight = 1200
                 windowSetSize()
                 return store
             })
@@ -110,6 +110,7 @@
         const size = await windowGetSize()
         windowUpdateSize(size.w, size.h)
     }
+
 </script>
 
 <svelte:window

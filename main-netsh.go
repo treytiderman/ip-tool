@@ -45,6 +45,7 @@ type Interface struct {
 	DnsIsDhcp       bool      `json:"dns_is_dhcp"`
 	DnsServers      []string  `json:"dns_servers"`
 	Lldp            LldpInfo  `json:"lldp"`
+	Cdp             CDPInfo   `json:"cdp"`
 }
 
 type InterfaceConfig struct {
@@ -363,6 +364,12 @@ func GetInterfaces() ([]Interface, error) {
 			}
 		}
 		lldp := GetInterfaceLldp(state.InterfaceName)
+		cdp := CDPInfo{}
+		if state.Connected {
+			cdp = GetInterfaceCDP(state.InterfaceName)
+		} else {
+			stopInterfaceCDPMonitor(state.InterfaceName)
+		}
 		if configIdx == -1 {
 			iface := Interface{
 				InterfaceName:   state.InterfaceName,
@@ -376,6 +383,7 @@ func GetInterfaces() ([]Interface, error) {
 				DnsIsDhcp:       false,
 				DnsServers:      []string{},
 				Lldp:            lldp,
+				Cdp:             cdp,
 			}
 			interfaces = append(interfaces, iface)
 		} else {
@@ -391,6 +399,7 @@ func GetInterfaces() ([]Interface, error) {
 				DnsIsDhcp:       interfaceConfigs[configIdx].DnsIsDhcp,
 				DnsServers:      interfaceConfigs[configIdx].DnsServers,
 				Lldp:            lldp,
+				Cdp:             cdp,
 			}
 			interfaces = append(interfaces, iface)
 		}

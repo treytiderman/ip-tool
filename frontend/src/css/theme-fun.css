@@ -1,0 +1,99 @@
+html.fun {
+    --color-scheme: dark;
+
+    --text-light: hsl(38, 100%, 96%);
+    --text: hsl(195, 58%, 88%);
+    --text-dark: hsl(206, 36%, 72%);
+
+    --bg-light: hsl(218, 58%, 22%);
+    --bg: hsl(224, 68%, 14%);
+    --bg-dark: hsl(230, 78%, 7%);
+
+    --border-color: hsl(194, 100%, 62%);
+    --border-radius: 0.15rem;
+    --shadow: 0 3px 14px 0 rgb(0 0 0 / 0.55), 0 0 18px 0 hsl(28 100% 55% / 0.28), 0 0 30px 0 hsl(194 100% 55% / 0.12);
+    --shadow-inset: inset 0 1px 3px 0 rgb(8 3 20 / 0.45);
+
+    --accent: hsl(27, 100%, 70%);
+    --error: hsl(340, 100%, 76%);
+    --warning: hsl(62, 100%, 70%);
+    --success: hsl(139, 100%, 67%);
+    --info: hsl(190, 100%, 73%);
+
+    --accent-bg: hsl(25, 88%, 22%);
+    --error-bg: hsl(340, 78%, 22%);
+    --warning-bg: hsl(62, 85%, 20%);
+    --success-bg: hsl(139, 75%, 17%);
+    --info-bg: hsl(190, 85%, 19%);
+
+    --accent-border: hsl(27, 100%, 54%);
+    --error-border: hsl(340, 100%, 55%);
+    --warning-border: hsl(62, 100%, 48%);
+    --success-border: hsl(139, 100%, 43%);
+    --info-border: hsl(190, 100%, 49%);
+
+    --hover-mix-color: white;
+    --active-mix-color: black;
+    --hover-percent: 15%;
+    --active-percent: 22%;
+}
+
+html.fun body {
+    background-image:
+        radial-gradient(ellipse at 0% 0%, hsl(27 100% 55% / 0.48), transparent 26rem),
+        radial-gradient(ellipse at 100% 15%, hsl(190 100% 48% / 0.4), transparent 28rem),
+        radial-gradient(ellipse at 78% 100%, hsl(62 100% 48% / 0.25), transparent 24rem),
+        radial-gradient(ellipse at 55% 48%, hsl(300 100% 55% / 0.2), transparent 30rem),
+        linear-gradient(145deg, hsl(230 78% 7%), hsl(218 75% 12%) 55%, hsl(194 70% 8%));
+    background-size: 180% 180%, 180% 180%, 180% 180%, 180% 180%, 100% 100%;
+    background-position: 0% 0%, 100% 15%, 78% 100%, 55% 48%, center;
+    background-attachment: fixed;
+    animation: fun-aurora 20s ease-in-out infinite alternate;
+}
+
+html.fun .bg {
+    background-image: linear-gradient(125deg, hsl(27 100% 48% / 0.22), hsl(300 100% 48% / 0.16) 50%, hsl(190 100% 42% / 0.2));
+}
+
+html.fun .bg-light {
+    background-image: linear-gradient(115deg, hsl(27 100% 55% / 0.23), hsl(62 100% 50% / 0.16), hsl(190 100% 50% / 0.2));
+}
+
+html.fun button {
+    transition: filter 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+}
+
+html.fun button:hover:not(:disabled) {
+    filter: saturate(1.7) brightness(1.12);
+    box-shadow: 0 0 7px hsl(27 100% 60% / 0.3), 0 0 11px hsl(190 100% 60% / 0.14);
+    transform: translateY(-2px) rotate(-0.5deg);
+}
+
+html.fun button:active:not(:disabled) {
+    transform: translateY(1px) scale(0.97);
+}
+
+html.fun button:focus-visible {
+    outline: 2px solid var(--warning);
+    outline-offset: 2px;
+}
+
+@keyframes fun-aurora {
+    from {
+        background-position: 0% 0%, 100% 15%, 78% 100%, 55% 48%, center;
+    }
+    to {
+        background-position: 100% 40%, 15% 90%, 0% 15%, 100% 0%, center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.fun body {
+        animation: none;
+    }
+
+    html.fun button {
+        transition: none;
+    }
+
+}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -47,6 +48,81 @@ func Test_ParseLldpInfo(t *testing.T) {
 	if info.SystemDescription != "Cisco Catalyst 9300" {
 		t.Fatalf("expected system description to be parsed, got %q", info.SystemDescription)
 	}
+}
+
+func Test_ParseCDPFrame(t *testing.T) {
+	frame := makeCDPFrame(
+		cdpTestTLV(0x0001, []byte("SW-CORE-01")),
+		cdpTestTLV(0x0002, []byte{0, 0, 0, 1, 1, 1, 0xcc, 0, 4, 10, 0, 0, 2}),
+		cdpTestTLV(0x0003, []byte("GigabitEthernet1/0/12")),
+		cdpTestTLV(0x0004, []byte{0, 0, 0, 0x29}),
+		cdpTestTLV(0x0005, []byte("Cisco IOS Software")),
+		cdpTestTLV(0x0006, []byte("Cisco Catalyst 9300")),
+		cdpTestTLV(0x000a, []byte{0, 42}),
+	)
+
+	info, ok := ParseCDPFrame(frame)
+	if !ok {
+		t.Fatal("ParseCDPFrame() did not recognize a valid CDP frame")
+	}
+	if info.DeviceID != "SW-CORE-01" {
+		t.Errorf("device ID = %q, want SW-CORE-01", info.DeviceID)
+	}
+	if info.PortID != "GigabitEthernet1/0/12" {
+		t.Errorf("port ID = %q, want GigabitEthernet1/0/12", info.PortID)
+	}
+	if info.Platform != "Cisco Catalyst 9300" {
+		t.Errorf("platform = %q, want Cisco Catalyst 9300", info.Platform)
+	}
+	if info.SoftwareVersion != "Cisco IOS Software" {
+		t.Errorf("software version = %q, want Cisco IOS Software", info.SoftwareVersion)
+	}
+	if info.NativeVLAN != "42" {
+		t.Errorf("native VLAN = %q, want 42", info.NativeVLAN)
+	}
+	if info.ManagementAddress != "10.0.0.2" {
+		t.Errorf("management address = %q, want 10.0.0.2", info.ManagementAddress)
+	}
+	if info.Raw == "" {
+		t.Error("expected raw summary to be populated")
+	}
+}
+
+func Test_ParseCDPFrameRejectsInvalidFrames(t *testing.T) {
+	if _, ok := ParseCDPFrame([]byte{0, 1, 2}); ok {
+		t.Fatal("ParseCDPFrame() accepted a truncated frame")
+	}
+
+	frame := makeCDPFrame(cdpTestTLV(0x0001, []byte("SW-CORE-01")))
+	frame[19] = 0x0d
+	if _, ok := ParseCDPFrame(frame); ok {
+		t.Fatal("ParseCDPFrame() accepted a non-CDP SNAP OUI")
+	}
+
+	frame = makeCDPFrame(cdpTestTLV(0x0001, []byte("SW-CORE-01")))
+	binary.BigEndian.PutUint16(frame[28:30], 0xffff)
+	if _, ok := ParseCDPFrame(frame); ok {
+		t.Fatal("ParseCDPFrame() accepted a TLV extending beyond the frame")
+	}
+}
+
+func makeCDPFrame(tlvs ...[]byte) []byte {
+	frame := make([]byte, 26)
+	copy(frame[14:22], []byte{0xaa, 0xaa, 0x03, 0x00, 0x00, 0x0c, 0x20, 0x00})
+	frame[22] = 2
+	frame[23] = 180
+	for _, tlv := range tlvs {
+		frame = append(frame, tlv...)
+	}
+	return frame
+}
+
+func cdpTestTLV(tlvType uint16, value []byte) []byte {
+	tlv := make([]byte, 4+len(value))
+	binary.BigEndian.PutUint16(tlv[:2], tlvType)
+	binary.BigEndian.PutUint16(tlv[2:4], uint16(len(tlv)))
+	copy(tlv[4:], value)
+	return tlv
 }
 
 func Test_IsAdmin(t *testing.T) {

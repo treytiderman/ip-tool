@@ -7,6 +7,8 @@
     import { currentNicIndex, initNics, nics, nicsUpdateTrigger } from "../ts/nic";
     import { settingsStore } from "../ts/settings";
 
+    export let scanMode: "ping" | "mdns" = "ping";
+
     let scanning = false;
     let scanComplete = false;
     let scanCancelled = false;
@@ -14,11 +16,14 @@
     let loadError = "";
     let scanError = "";
     let results: main.ScanResult[] = [];
+    let mdnsResults: main.MDNSResult[] = [];
     let scanIPAddress = "";
     let scanSubnetMask = "";
     let scannedHosts = 0;
     let totalHosts = 0;
+    let mdnsDevicesFound = 0;
     let unsubscribeScanProgress: (() => void) | undefined;
+    let unsubscribeMDNSProgress: (() => void) | undefined;
 
     $: selectedInterface = $nics[$currentNicIndex];
     $: scanAddress = selectedInterface?.ips?.find(
@@ -28,8 +33,14 @@
     $: subnet = maskPrefix !== null && isIPv4Address(scanIPAddress)
         ? `${getNetworkAddress(scanIPAddress, scanSubnetMask)}/${maskPrefix}`
         : "";
-    $: canScan = !!selectedInterface && isIPv4Address(scanIPAddress) && maskPrefix !== null && maskPrefix >= 16;
-    onDestroy(() => unsubscribeScanProgress?.());
+    $: canScan = !!selectedInterface && (
+        scanMode === "mdns" ||
+        (isIPv4Address(scanIPAddress) && maskPrefix !== null && maskPrefix >= 16)
+    );
+    onDestroy(() => {
+        unsubscribeScanProgress?.();
+        unsubscribeMDNSProgress?.();
+    });
 
     function isIPv4Address(address: string) {
         const octets = address.split(".");
@@ -67,6 +78,9 @@
             scannedHosts = progress.scanned;
             totalHosts = progress.total;
         });
+        unsubscribeMDNSProgress = EventsOn("lan-mdns-progress", (found: number) => {
+            mdnsDevicesFound = found;
+        });
         try {
             await initNics();
             await tick();
@@ -86,14 +100,20 @@
         cancelRequested = false;
         scanError = "";
         results = [];
+        mdnsResults = [];
         scannedHosts = 0;
         totalHosts = 0;
+        mdnsDevicesFound = 0;
         try {
-            results = await app.ScanSubnet(
-                selectedInterface.interface_name,
-                scanIPAddress,
-                scanSubnetMask,
-            );
+            if (scanMode === "ping") {
+                results = await app.ScanSubnet(
+                    selectedInterface.interface_name,
+                    scanIPAddress,
+                    scanSubnetMask,
+                );
+            } else {
+                mdnsResults = await app.ScanMDNS(selectedInterface.interface_name);
+            }
             scanComplete = true;
         } catch (error) {
             if (cancelRequested) {
@@ -121,12 +141,27 @@
             scanError = error instanceof Error ? error.message : String(error);
         }
     }
+
 </script>
 
 <div class="grow flex column gap-1 pad-1 overflow-hidden">
 
     <div class="flex bottom">
         <div class="grow text-dark thin">Interface</div>
+        <button
+            class="transparent text-dark thin"
+            on:click={() => setPage("Ping Scanner")}
+            title="Ping Scanner"
+        >
+            Ping
+        </button>
+        <button
+            class="transparent text-dark thin "
+            on:click={() => setPage("mDNS Scanner")}
+            title="mDNS Scanner"
+        >
+            mDNS
+        </button>
         <button class="transparent text-dark thin" title="Change Interface" on:click={() => setPage("Interfaces")}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -147,6 +182,8 @@
             </svg>
         </button>
     </div>
+
+    <!-- <div></div> -->
 
     <section class="bg border radius shadow">
         <div class="flex center-y gap-2 pad-2">
@@ -240,7 +277,7 @@
                         {:else}
                             <span class="text-dark thin grid right small" title="Static">ip:</span>
                         {/if}
-                        {#if index === 0 && scanAddress}
+                        {#if scanMode === "ping" && index === 0 && scanAddress}
                             <div style="padding-bottom: var(--gap);">
                                 <input
                                     class="mono"
@@ -259,7 +296,7 @@
                     </div>
                     <div class="grid center-y gap-2" style="grid-template-columns: 2.6rem 1fr;">
                         <span class="text-dark thin grid right small">mask:</span>
-                        {#if index === 0 && scanAddress}
+                        {#if scanMode === "ping" && index === 0 && scanAddress}
                             <div>
                                 <input
                                     class="mono"
@@ -315,16 +352,30 @@
         disabled={(!scanning && !canScan) || cancelRequested}
     >
         {#if scanning}
-            {cancelRequested
-                ? `Cancelling...`
-                : `Cancel scan... ${scannedHosts.toLocaleString()} / ${totalHosts.toLocaleString()} hosts`}
+            {#if cancelRequested}
+                Cancelling...
+            {:else if scanMode === "ping"}
+                Cancel scan... {scannedHosts.toLocaleString()} / {totalHosts.toLocaleString()} hosts
+            {:else}
+                Cancel mDNS listen... {mdnsDevicesFound.toLocaleString()} found
+            {/if}
         {:else if scanComplete}
-            Scanned {results.length} {results.length === 1 ? "device" : "devices"}
-        {:else}
+            {#if scanCancelled}
+                Scan cancelled
+            {:else if scanMode === "ping"}
+                Scanned {results.length} {results.length === 1 ? "device" : "devices"}
+            {:else}
+                Found {mdnsResults.length} mDNS {mdnsResults.length === 1 ? "device" : "devices"}
+            {/if}
+        {:else if scanCancelled}
+            Scan cancelled
+        {:else if scanMode === "ping"}
             Scan {subnet}
+        {:else}
+            Listen for mDNS
         {/if}
     </button>
-    {#if scanIPAddress && (!isIPv4Address(scanIPAddress) || maskPrefix === null || maskPrefix < 16)}
+    {#if scanMode === "ping" && scanIPAddress && (!isIPv4Address(scanIPAddress) || maskPrefix === null || maskPrefix < 16)}
         <div class="warning small">
             Enter a valid IPv4 address and contiguous subnet mask. The scan is limited to 65,536 addresses (/16 or narrower).
         </div>
@@ -333,7 +384,7 @@
     <div></div>
 
     <section class="grow overflow-y bg border radius shadow pad-2 flex column gap-1" aria-label="Scan results">
-        {#if results.length > 0}
+        {#if scanMode === "ping" && results.length > 0}
 
             {#each results as result, index}
                 {#if index > 0}
@@ -369,10 +420,93 @@
                 </div>
             {/each}
 
+        {:else if scanMode === "mdns" && mdnsResults.length > 0}
+            {#each mdnsResults as result, index}
+                {#if index > 0}
+                    <div></div>
+                    <hr>
+                    <div></div>
+                {/if}
+                <details class="mdns-details">
+                    <summary class="mdns-summary">
+                        <div>
+                            <div class="grid center-y gap-2" style="grid-template-columns: 2.6rem 1fr auto;">
+                                <span class="text-dark thin grid right small">host:</span>
+                                <div class="mono text-light grow">{result.hostname}</div>
+                            </div>
+                            <div class="grid center-y gap-2" style="grid-template-columns: 2.6rem 1fr auto;">
+                                <span class="text-dark thin grid right small">ip:</span>
+                                <div class="mono grow">
+                                    {(result.ip_addresses || []).join(", ") || "Not available"}
+                                </div>
+                            </div>
+                        </div>
+                    </summary>
+                    {#each (result.services || []) as service}
+                        <div class="grid center-y gap-2" style="grid-template-columns: 2.6rem 1fr auto;">
+                            <span class="text-dark thin grid right small">serv:</span>
+                            <div class="mono grow">{service}</div>
+                        </div>
+                    {/each}
+                    {#each (result.details || []) as detail}
+                        <div class="grid center-y gap-2" style="grid-template-columns: 2.6rem 1fr auto;">
+                            <span class="text-dark thin grid right small">info:</span>
+                            <div
+                                class="mono grow"
+                                title={detail}
+                                style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                            >
+                                {detail}
+                            </div>
+                        </div>
+                    {/each}
+                </details>
+            {/each}
         {:else if scanComplete}
-            <div class="pad-1 text-dark small">No hosts responded to ping.</div>
+            <div class="pad-1 text-dark small">
+                {#if scanMode === "ping"}
+                    No hosts responded to ping.
+                {:else}
+                    No mDNS services were discovered.
+                {/if}
+            </div>
+        {:else if scanCancelled}
+            <div class="pad-1 text-dark small">Scan cancelled.</div>
         {:else if !scanning}
-            <div class="pad-1 text-dark small">Run a scan to discover devices...</div>
+            <div class="pad-1 text-dark small">
+                {#if scanMode === "ping"}
+                    Run a scan to discover devices...
+                {:else}
+                    Listen for mDNS service announcements on the selected interface...
+                {/if}
+            </div>
         {/if}
+
     </section>
 </div>
+
+<style>
+    .mdns-summary {
+        position: relative;
+        padding-right: 1.25rem;
+    }
+
+    .mdns-summary:before {
+        content: "";
+        position: absolute;
+        top: 0.45rem;
+        right: 0.25rem;
+        width: 0.45rem;
+        height: 0.45rem;
+        padding: 0;
+        border-right: 2px solid var(--text-dark);
+        border-bottom: 2px solid var(--text-dark);
+        transform: rotate(45deg);
+    }
+
+    .mdns-details[open] .mdns-summary:before {
+        content: "";
+        top: 0.65rem;
+        transform: rotate(225deg);
+    }
+</style>

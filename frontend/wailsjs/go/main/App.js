@@ -50,6 +50,10 @@ export function RenewDhcp() {
   return window['go']['main']['App']['RenewDhcp']();
 }
 
+export function ScanMDNS(arg1) {
+  return window['go']['main']['App']['ScanMDNS'](arg1);
+}
+
 export function ScanSubnet(arg1, arg2, arg3) {
   return window['go']['main']['App']['ScanSubnet'](arg1, arg2, arg3);
 }

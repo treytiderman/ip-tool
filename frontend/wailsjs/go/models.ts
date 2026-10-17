@@ -1,5 +1,33 @@
 export namespace main {
 	
+	export class CDPInfo {
+	    device_id: string;
+	    port_id: string;
+	    platform: string;
+	    software_version: string;
+	    capabilities: string;
+	    native_vlan: string;
+	    management_address: string;
+	    raw: string;
+	    status: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new CDPInfo(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.device_id = source["device_id"];
+	        this.port_id = source["port_id"];
+	        this.platform = source["platform"];
+	        this.software_version = source["software_version"];
+	        this.capabilities = source["capabilities"];
+	        this.native_vlan = source["native_vlan"];
+	        this.management_address = source["management_address"];
+	        this.raw = source["raw"];
+	        this.status = source["status"];
+	    }
+	}
 	export class Gateway {
 	    gateway_address: string;
 	    gateway_metric: number;
@@ -64,6 +92,7 @@ export namespace main {
 	    dns_is_dhcp: boolean;
 	    dns_servers: string[];
 	    lldp: LldpInfo;
+	    cdp: CDPInfo;
 	
 	    static createFrom(source: any = {}) {
 	        return new Interface(source);
@@ -82,6 +111,7 @@ export namespace main {
 	        this.dns_is_dhcp = source["dns_is_dhcp"];
 	        this.dns_servers = source["dns_servers"];
 	        this.lldp = this.convertValues(source["lldp"], LldpInfo);
+	        this.cdp = this.convertValues(source["cdp"], CDPInfo);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -164,6 +194,24 @@ export namespace main {
 	}
 	
 	
+	export class MDNSResult {
+	    hostname: string;
+	    ip_addresses: string[];
+	    services: string[];
+	    details: string[];
+	
+	    static createFrom(source: any = {}) {
+	        return new MDNSResult(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.hostname = source["hostname"];
+	        this.ip_addresses = source["ip_addresses"];
+	        this.services = source["services"];
+	        this.details = source["details"];
+	    }
+	}
 	export class ScanResult {
 	    ip_address: string;
 	    latency_ms: number;

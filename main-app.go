@@ -12,6 +12,7 @@ type App struct {
 	ctx        context.Context
 	scanMu     sync.Mutex
 	scanCancel context.CancelFunc
+	scanID     uint64
 }
 
 func NewApp() *App {
@@ -23,6 +24,7 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) shutdown(ctx context.Context) {
+	StopCDPMonitors()
 }
 
 // IPv4 functions
@@ -56,10 +58,34 @@ func (a *App) GetInterfaces() []Interface {
 }
 
 func (a *App) ScanSubnet(interfaceName, ipAddress, subnetMask string) ([]ScanResult, error) {
+	ctx, finish, err := a.beginScan()
+	if err != nil {
+		return nil, err
+	}
+	defer finish()
+
+	return ScanSubnet(ctx, interfaceName, ipAddress, subnetMask, func(progress ScanProgress) {
+		wailsruntime.EventsEmit(a.ctx, "lan-scan-progress", progress)
+	})
+}
+
+func (a *App) ScanMDNS(interfaceName string) ([]MDNSResult, error) {
+	ctx, finish, err := a.beginScan()
+	if err != nil {
+		return nil, err
+	}
+	defer finish()
+
+	return ScanMDNS(ctx, interfaceName, func(found int) {
+		wailsruntime.EventsEmit(a.ctx, "lan-mdns-progress", found)
+	})
+}
+
+func (a *App) beginScan() (context.Context, func(), error) {
 	a.scanMu.Lock()
 	if a.scanCancel != nil {
 		a.scanMu.Unlock()
-		return nil, fmt.Errorf("a scan is already in progress")
+		return nil, nil, fmt.Errorf("a scan is already in progress")
 	}
 	parent := a.ctx
 	if parent == nil {
@@ -67,18 +93,19 @@ func (a *App) ScanSubnet(interfaceName, ipAddress, subnetMask string) ([]ScanRes
 	}
 	ctx, cancel := context.WithCancel(parent)
 	a.scanCancel = cancel
+	a.scanID++
+	scanID := a.scanID
 	a.scanMu.Unlock()
 
-	defer func() {
+	finish := func() {
 		cancel()
 		a.scanMu.Lock()
-		a.scanCancel = nil
+		if a.scanID == scanID {
+			a.scanCancel = nil
+		}
 		a.scanMu.Unlock()
-	}()
-
-	return ScanSubnet(ctx, interfaceName, ipAddress, subnetMask, func(progress ScanProgress) {
-		wailsruntime.EventsEmit(a.ctx, "lan-scan-progress", progress)
-	})
+	}
+	return ctx, finish, nil
 }
 
 func (a *App) CancelScan() bool {

@@ -35,8 +35,8 @@ func main() {
 			IsZoomControlEnabled: false,
 		},
 
-		Width:       300,
-		Height:      500,
+		Width:       380,
+		Height:      600,
 		MinWidth:    100,
 		MinHeight:   20,
 		Frameless:   true,

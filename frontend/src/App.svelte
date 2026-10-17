@@ -16,6 +16,7 @@
     import CreatePreset from "./pages/CreatePreset.svelte";
     import EditInterface from "./pages/EditInterface.svelte";
     import Scanner from "./pages/Scanner.svelte";
+    import MDNSScanner from "./pages/MDNSScanner.svelte";
     import Settings from "./pages/Settings.svelte";
 
     // App start up
@@ -79,6 +80,8 @@
             <EditInterface />
         {:else if $pageStore.name === "Ping Scanner"}
             <Scanner />
+        {:else if $pageStore.name === "mDNS Scanner"}
+            <MDNSScanner />
         {:else if $pageStore.name === "Settings"}
             <Settings />
         {/if}

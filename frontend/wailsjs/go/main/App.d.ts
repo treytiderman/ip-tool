@@ -26,6 +26,8 @@ export function ReleaseDhcp():Promise<boolean>;
 
 export function RenewDhcp():Promise<boolean>;
 
+export function ScanMDNS(arg1:string):Promise<Array<main.MDNSResult>>;
+
 export function ScanSubnet(arg1:string,arg2:string,arg3:string):Promise<Array<main.ScanResult>>;
 
 export function SetDhcp(arg1:string):Promise<boolean>;
